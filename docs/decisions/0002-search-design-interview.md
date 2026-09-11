@@ -364,6 +364,24 @@ Backups; ein erfolgreicher Wiederherstellungstest liegt nicht vor. Backupstatus,
 Umfang und Wiederherstellbarkeit wurden nicht technisch geprüft. Diese Angabe
 ersetzt keinen Restore-Nachweis und ist keine Ausnahme von Q10.2a.
 
+**Nachtrag Restore-Testlösung:** Der Nutzer hat B und C ausdrücklich nicht
+freigegeben. Als Testlösung für A lässt er ein Backup in ein neues
+Supabase-Projekt wiederherstellen, ohne das echte Projekt zu überschreiben.
+Das entspricht der dokumentierten Funktion Restore to a new project (Beta).
+
+**Q10.2c1 – Restore-Nachweis durch Clone:** `BESTÄTIGT`
+
+**Antwort:** `BESTÄTIGT` – Der Nutzer setzt den erfolgreichen Restore in ein
+neues Projekt (Postgres nach PITR wieder oben, Health 200) mit dem Nachweis
+gleich, das echte Projekt wiederherstellen zu können. Ein getrennter
+In-place-Restore der Produktion und ein Mengen-/Tabellen-/Rollenabgleich sind
+für diesen Gate **nicht** zusätzlich verlangt. Die Logs vom 2026-09-11 zeigen
+Backup-Recovery, WAL-Redo, vorübergehend `57P03` während der Recovery, danach
+wiederholte Health-/Ready-200. Kein Passwortfehler.
+
+Technische Lücke, kein Blocker: kein vollständiger Datenabgleich. Die Kopie
+enthält echte Kandidatendaten; der Developer-Plugin bleibt dafür verboten.
+
 **Q10.2d – Begrenzte Restore-Ausnahme für die Leserolle:** `BESTÄTIGT` –
 Am 2026-09-11 wurde vorgeschlagen: „Rollenanlage nach bestandenen
 Sicherheitsprüfungen; Wiederherstellungstest weiterhin vor Änderungen an
@@ -479,6 +497,82 @@ Ausführungspaket für TEMP oder die zwei Definer-Funktionen.
 
 Keine Freigabe für B1/B2/B3, Funktionsausführung, Kandidatenabfragen,
 pauschale PUBLIC-REVOKEs oder die konkrete Mutationsausführung.
+
+**Q10.2l – PUBLIC-Reste vor der Rollenanlage:** `BESTÄTIGT`
+
+**Frage:** Welche PUBLIC-Rechte darf die neue Discovery-Rolle bei der Anlage
+noch erben? Zuerst härten, was der aktuelle Zugang ändern kann (`TEMPORARY`
+und die zwei SECURITY-DEFINER-Funktionen), Rolle sofort mit allen heutigen
+PUBLIC-Resten, oder warten bis auch die acht LO-REVOKEs möglich sind?
+
+**Antwort:** `BESTÄTIGT` – Option A. Zuerst erhalten die bestehenden Rollen
+Direktgrants für Datenbank-`TEMPORARY` und EXECUTE auf den zwei
+Definer-Funktionen; danach entzieht PUBLIC genau diese drei Rechte. Erst dann
+wird die Discovery-Rolle angelegt. Als PUBLIC-Rest bleiben ausschließlich die
+acht LO-EXECUTE-Privilegien, die der aktuelle Zugang nicht ändern kann.
+
+Q10.2k bleibt: die acht LO-REVOKEs sind nicht Teil dieses Schnitts. Q10.2j
+gilt nicht automatisch für dieses verkleinerte Paket. Q10.2d (Restore-Ausnahme)
+gilt nur für die Rollenanlage, nicht für diese ACL-Änderung. Q10.2a bleibt für
+diesen Schnitt: frisches Inventar, gebundenes SQL, Dry-run/Preflight, eigene
+Mutationsfreigabe. Keine Ausführung, kein B1/B2/B3, keine Funktionsausführung
+und keine Kandidatenabfrage.
+
+**Q10.2m – Apply-Freigabe für den Q10.2l-A-Schnitt:** `BESTÄTIGT`
+
+**Frage:** Ist die Mutationsfreigabe für den verkleinerten ACL-Schnitt erteilt?
+
+**Antwort:** `BESTÄTIGT` – Der Nutzer erteilte ausdrücklich die Apply-Freigabe.
+Geltung nur für: Direktgrants und anschließend PUBLIC-REVOKE von
+Datenbank-`TEMPORARY` sowie EXECUTE der zwei Definer-Funktionen. Die acht
+LO-EXECUTE bleiben unverändert. Keine Rollenanlage, kein B1/B2/B3, keine
+LO-REVOKEs, keine Funktionsausführung, keine Kandidatenabfrage.
+
+Restore-Nachweis gilt laut Q10.2c1 als erbracht. Q10.2d bleibt zusätzlich für
+die Rollenanlage bestehen. Weiter offen:
+Mutationslauncher ohne read-only Default, Zeitfensterattest und SQL-Hash-Attest.
+Das vorhandene Gate-B1-Freigabeattest gilt nicht für diesen Schnitt.
+
+**Q10.2n – Schreibweg, Zeitfenster und Attest:** `BESTÄTIGT`
+
+**Antwort:** `BESTÄTIGT` – Der Nutzer beauftragte Einrichtung des Schreibwegs,
+sofortiges Zeitfenster ohne parallele Rechteänderungen und Erstellung des
+Attests. Gate-ID `RIGHTS-Q10-2L-A-2026-09-11`. Attest-Datei getrennt vom
+B1-Attest: `dino_crm_discovery_target_01.rights-q102l.approval`. Launcher
+`scripts/discovery/run-rights-q102l.py`: zuerst Dry-run mit ROLLBACK, dann
+Apply mit COMMIT, danach read-only Post-Check. Kein Retry. Keine Rollenanlage,
+kein B1, keine LO-REVOKEs.
+
+**Ausführung 2026-09-11:** `APPLIED`. Dry-run rollback, dann Commit. Post-Check:
+PUBLIC TEMP weg, PUBLIC EXECUTE der zwei Definer weg, acht LO-EXECUTE bleiben,
+33 Rollen, Discovery-Rolle nicht angelegt, keine Kandidatendaten gelesen.
+SQL-SHA-256 `0eb267f963bbb3b6c63522354f5febfc4931674706a4c99fe1a61f0082434488`.
+
+**Q10.2o – Prüfrolle jetzt anlegen:** `BESTÄTIGT`
+
+**Antwort:** `BESTÄTIGT` – Der Nutzer beauftragte die Anlage von
+`dino_crm_discovery_ro_v1` jetzt. V2-SQL ohne Passwort in der Transaktion;
+Passwort danach interaktiv. Eigener Launcher, Dry-run, Apply, Post-Check.
+Kein B1, keine LO-REVOKEs, kein Clone-Projekt.
+
+**Ausführung 2026-09-12:** `APPLIED`. Rolle `dino_crm_discovery_ro_v1` existiert.
+CONNECT ja, TEMP nein, CREATE nein, keine Definer-EXECUTE, Connection-Limit 1.
+Passwort wurde interaktiv gesetzt. SQL-SHA-256
+`fadf20f065a7df625aa3ba3b788a65002f5c986ad4c2215d6d26c3bbd1ae570c`.
+
+**Q10.2p – Login-Datei und Gate B1 als Prüfrolle:** `BESTÄTIGT` / `AUSGEFÜHRT`
+
+Eigene Service-/pgpass-Dateien für `dino_crm_discovery_ro_v1`, Owner-Dateien
+unberührt. Login-Rauchtest `LOGIN_OK`, `read_only=on`. Gate B1 V3 als diese
+Rolle: `DISCOVERY-GATE-B1-V3-RO-2026-09-12` Status PASS, ein Versuch.
+B2/B3 nicht gestartet.
+
+**Q10.2q – Gate B2 und B3 als Prüfrolle:** `BESTÄTIGT` / `AUSGEFÜHRT`
+
+Nutzerauftrag, B2 und B3 weiterzuführen. Wizard war unnötig: kein Dashboard,
+kein neues Secret. B2 V3 PASS (14 Queries, u. a. 3 Schemas, 398 Relationen,
+1960 Spalten). B3 V3 PASS (11 Queries). Rohdaten nur außerhalb Git. Keine
+Kandidatendaten gelesen.
 
 **Q10.3 – Kurzfristig Option A, schrittweise zu Option D:** `BESTÄTIGT` – Die
 importierten CRM-Tabellen bleiben in der kurzfristigen Phase unverändert. Für

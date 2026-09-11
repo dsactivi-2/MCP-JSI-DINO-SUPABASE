@@ -42,6 +42,12 @@ Pročitati [stanje projekta](docs/project.md), zatim
 | [Optimalni SQL i automatizacijski put](docs/research/optimaler-sql-und-automatisierungsweg.md) | Primarne reference, rangiranje alata i prihvaćeni native-first cilj. |
 | [Gate semantičke pretrage](docs/research/semantic-search-evaluation-gate.md) | Kriteriji, faze i stop-uslovi za poređenje FTS-a, `pgvector`-a i Vector Bucketa. |
 | [Objašnjenje Supabase skillsa](docs/research/supabase-agent-skills-einfach-erklaert.md) | Sadržaj, granice i postupak ažuriranja projektnih kopija skillsa. |
+| [Pristupni plan](docs/discovery/access-plan-consolidated.md) | Bootstrap, restore uslov, verzije gateova i naredna freigabe. |
+| [Registar verzija pristupa](docs/discovery/role-version-register.md) | Status rola V1-V3, Gate-B1-V3 i odobrenja Q10.2g-Q10.2m. |
+| [Plan PUBLIC prava](docs/discovery/public-rights-change-proposal.md) | Ciljni ACL rez Q10.2l A i residualnih osam LO privilegija. |
+| [Karta odluka](docs/discovery/project-decision-map.md) | Fakti, odluke, prijedlozi, annahme, gateovi i kritični put. |
+| [Gate B preflight](docs/discovery/security-read-only-discovery-preflight-b.md) | Aktivni read-only discovery gate i njegove granice. |
+| [docs/reviews/](docs/reviews/) i [docs/worklogs/](docs/worklogs/) | Datirani dokazi; historijski nalazi se ne prepravljaju. |
 | [Issue tracker](docs/agents/issue-tracker.md), [triage oznake](docs/agents/triage-labels.md), [domenska pravila](docs/agents/domain.md) | Lokalni Matt Pocock setup. |
 
 <!-- markdownlint-enable MD013 -->

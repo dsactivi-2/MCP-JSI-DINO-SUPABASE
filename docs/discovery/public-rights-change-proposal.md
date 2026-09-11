@@ -67,17 +67,21 @@ read-only izolacije svih funkcija niti produkcijskog rada aplikacija.
 
 Sadašnji pristup nema ni SET ovlast na vlasničku rolu ni EXECUTE WITH GRANT
 OPTION za osam LO funkcija. Generator zato odbija neizmijenjeni produkcijski
-snapshot. Izvršivi produkcijski forward/rollback SQL nije izdat; ovlast se ne
-simulira promjenom zastavica niti se preostala tri cilja primjenjuju zasebno.
+snapshot. Puni 11-ciljni paket i dalje nije izvršiv. Q10.2l A odvaja tri
+cilja koja sadašnji pristup smije mijenjati; to još nije produkcijski SQL.
+Osam LO ciljeva ostaje residualno. Superuser za discovery rolu nije odobren.
 
-Sljedeće treba potvrditi s administratorom/platformskim vlasnikom: postoji li
-podržan izvršitelj koji smije promijeniti ACL baš ovih osam sistemskih funkcija.
-Ako ne postoji, potrebno je odobriti drugi način strogo kontrolisanog pristupa.
-Ovaj nalaz ne opravdava dodjelu superusera novoj discovery roli.
+## Q10.2l A: izvršivi podskup
 
-Tek nakon rješavanja ovlasti slijede svjež preflight, konkretan vezani SQL,
-usaglašena backup/restore zaštita. Korisnička dozvola za opisani opseg je
-sada zabilježena u Q10.2j; proširenje opsega nije odobreno.
+Korisnik je 2026-09-11 potvrdio Option A: prije discovery role skinuti s
+PUBLIC-a samo ono što sadašnji pristup smije mijenjati (`TEMPORARY` i dvije
+Definer funkcije), uz Direktgrants postojećim rolama. Osam LO PUBLIC EXECUTE
+ostaje residualno i nije dio ovog reza.
+
+Q10.2j i dalje ne vrijedi automatski za ovaj manji paket. Generator smije
+lokalno pripremiti SQL samo sa `scope=q10_2l_a`. Produkcijski apply, B1 i
+kreiranje role nisu ovim odobreni. Q10.2d pokriva samo kasniju izradu role,
+ne ovu ACL promjenu.
 Ranija restore iznimka važi samo za kreiranje nove role; ne obuhvata PUBLIC
 prava. Q10.2i nije odobrenje za njihovu primjenu.
 

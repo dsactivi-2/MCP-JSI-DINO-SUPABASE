@@ -55,6 +55,11 @@ class PlanTest(unittest.TestCase):
     def test_generated_psql_stops_on_errors(self):
         d = MODULE["validate"](json.dumps(document()).encode(), TOKEN, [100])
         self.assertIn("\\set ON_ERROR_STOP on", MODULE["generate_sql"](d))
+        sql = MODULE["generate_sql"](d)
+        self.assertTrue(sql.strip().endswith("COMMIT;"))
+        dry = MODULE["generate_sql"](d, finish="rollback")
+        self.assertTrue(dry.strip().endswith("ROLLBACK;"))
+        self.assertIn("statement_timeout='5s'", sql)
 
     def test_generation_rejects_unavailable_authority_or_existing_discovery_role(self):
         d = MODULE["validate"](json.dumps(document()).encode(), TOKEN, [100])
@@ -67,6 +72,31 @@ class PlanTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 MODULE["generate_sql"](changed)
 
+
+    def mixed_document(self):
+        d = document()
+        d["functions"].append({
+            "oid": 101, "fingerprint": HASH, "source_hash": HASH,
+            "owner": 10, "owner_set": False, "grant_option": False,
+            "acl": [[10, 0, "EXECUTE", False], [10, 10, "EXECUTE", True]]})
+        return d
+
+    def test_reduced_scope_omits_unchangeable_function_from_grants(self):
+        d = MODULE["validate"](json.dumps(self.mixed_document()).encode(), TOKEN, [100, 101])
+        with self.assertRaises(ValueError):
+            MODULE["generate_sql"](d)
+        sql = MODULE["generate_sql"](d, scope="q10_2l_a")
+        self.assertIn('"oid":100', sql)
+        self.assertIn('"oid":101', sql)
+        self.assertIn('"residual"', sql)
+        changes = MODULE["select_changes"](d, "q10_2l_a")[0]
+        self.assertEqual([c["oid"] for c in changes if c["kind"] == "function"], [100])
+        self.assertTrue(any(c["kind"] == "database" for c in changes))
+
+    def test_reduced_scope_rejects_full_changeable_snapshot(self):
+        d = MODULE["validate"](json.dumps(document()).encode(), TOKEN, [100])
+        with self.assertRaises(ValueError):
+            MODULE["generate_sql"](d, scope="q10_2l_a")
 
 if __name__ == "__main__":
     unittest.main()

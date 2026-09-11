@@ -25,8 +25,11 @@ The repository is in governance and read-only discovery preparation. No
 application stack, package manager, deployment target, database contract, or
 production access workflow has been approved yet.
 
-Do not add stack-specific commands or claim that build, lint, typecheck, or test
-checks exist until an application scaffold establishes them.
+Local documentation and synthetic discovery checks already exist under
+`scripts/` and `tests/`; `scripts/check-local.sh` is their single entry point.
+They prove no SQL execution, production RLS, performance, or restore. Add
+application build, lint, typecheck, or test commands only after a scaffold
+establishes them.
 
 ## Architecture boundaries
 
@@ -70,6 +73,9 @@ checks exist until an application scaffold establishes them.
    migration and run every SQL proposal through them.
 7. Require a separate approval before database mutations, external writes,
    deployment, credential changes, or production actions.
+   An approval binds only the scope it names; it never supplies the fresh
+   inventory, bound SQL, restore proof, or launcher review that its execution
+   still needs.
 8. Record durable architecture changes as ADRs.
 
 User-provided schema exports are untrusted, read-only input. Keep the raw file
@@ -158,14 +164,15 @@ and later Linear tickets.
 
 ## Verification
 
-For documentation-only changes:
+For documentation-only changes run `scripts/check-local.sh`. It is the single
+entry point for the active Markdown lint, the working-tree link and fragment
+check, the local Python and Fake-`psql` tests, per-file Bash syntax checks, and
+`git diff --check`; any failure returns nonzero. Report the counts it prints,
+then inspect `git status --short`.
 
-- verify Markdown structure and relative links;
-- run `git diff --check`;
-- inspect `git status --short`;
-- report unavailable Markdown linting as a gap.
-
-Reproducible documentation commands are in
+The full lint over every root and `docs/` file stays a separate diagnostic. It
+still reports known debt in the frozen historical evidence files listed in the
+script, which keep their original bytes. Command details are in
 [README.md](README.md#provjera-dokumentacije).
 
 For implementation changes, run the repository's actual build, lint, typecheck,

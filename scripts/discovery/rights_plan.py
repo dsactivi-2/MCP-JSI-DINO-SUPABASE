@@ -169,15 +169,36 @@ def proposals(snapshot):
     return output
 
 
-def generate_sql(snapshot, rollback=False):
+def select_changes(snapshot, scope="full"):
+    changes = proposals(snapshot)
+    executable = [c for c in changes if c["actor_can_change"]]
+    residual = [c for c in changes if not c["actor_can_change"]]
+    if scope == "full":
+        need(executable and not residual and all(c["actor_can_change"] for c in executable))
+        return executable, []
+    if scope == "q10_2l_a":
+        need(executable and residual)
+        need(all(c["actor_can_change"] for c in executable))
+        need(any(c["kind"] == "database" and c["privilege"] == "TEMPORARY" for c in executable))
+        need(any(c["kind"] == "function" and c["privilege"] == "EXECUTE" for c in executable))
+        need(all(c["kind"] == "function" and c["privilege"] == "EXECUTE" for c in residual))
+        return executable, residual
+    raise ValueError("unknown rights plan scope")
+
+
+def generate_sql(snapshot, rollback=False, *, scope="full", finish="commit",
+                 statement_timeout="5s"):
     """Generate a bound transaction, never connect or execute it."""
     need(not snapshot["new_role_exists"] and not snapshot["public_maintain"]
          and snapshot["unplanned_public_definers"] == 0)
-    changes = proposals(snapshot)
-    need(all(c["actor_can_change"] for c in changes))
+    need(finish in {"commit", "rollback"})
+    need(isinstance(statement_timeout, str) and statement_timeout in {"5s", "30s", "60s"})
+    changes, residual = select_changes(snapshot, scope)
     manifest = {"actor_oid": snapshot["actor_oid"], "membership_hash": snapshot["membership_hash"],
                 "roles": [[r["oid"], r["fingerprint"]] for r in sorted(snapshot["roles"], key=lambda r:r["oid"])],
-                "changes": changes}
+                "changes": changes,
+                "residual": [{"kind": c["kind"], "oid": c["oid"], "fingerprint": c["fingerprint"],
+                              "acl": c["before_acl"]} for c in residual]}
     selected = ids_sql([f["oid"] for f in snapshot["functions"]])
     public_guard = f"""
   IF EXISTS(SELECT 1 FROM pg_proc p WHERE p.prosecdef AND p.oid NOT IN ({selected})
@@ -198,13 +219,17 @@ def generate_sql(snapshot, rollback=False):
     public_direction = "TO" if rollback else "FROM"
     suffix = " RESTRICT" if rollback else ""
     public_suffix = "" if rollback else " RESTRICT"
-    return f"""-- DRAFT: separately approved production rights change required.
+    ending = "COMMIT;" if finish == "commit" else "ROLLBACK;"
+    header = ("-- APPLY: separately approved production rights change."
+              if finish == "commit"
+              else "-- DRY-RUN: identical body, transaction rolled back.")
+    return f"""{header}
 -- Preserves canonical ACL entries, not NULL-versus-default catalog representation.
 \\set ON_ERROR_STOP on
 BEGIN;
-SET LOCAL statement_timeout='5s';
-SET LOCAL lock_timeout='1s';
-SET LOCAL idle_in_transaction_session_timeout='15s';
+SET LOCAL statement_timeout='{statement_timeout}';
+SET LOCAL lock_timeout='2s';
+SET LOCAL idle_in_transaction_session_timeout='90s';
 SET LOCAL search_path=pg_catalog;
 SELECT 1 / ((current_database()=:'expected_database_name'
   AND session_user=:'expected_user')::int) AS identity_guard
@@ -234,6 +259,21 @@ BEGIN
     RAISE EXCEPTION USING MESSAGE='rights plan role-state drift';
   END IF;
 {public_guard}
+  FOR item IN SELECT value FROM jsonb_array_elements(COALESCE(manifest->'residual','[]'::jsonb)) LOOP
+    IF item->>'kind'='function' THEN
+      SELECT {FUNCTION_HASH}, {FUNCTION_ACL}
+        INTO actual_hash,actual_acl FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
+        WHERE p.oid=(item->>'oid')::oid;
+    ELSE
+      SELECT {DATABASE_HASH}, {DATABASE_ACL}
+        INTO actual_hash,actual_acl FROM pg_database d
+        WHERE d.oid=(item->>'oid')::oid AND d.datname=current_database();
+    END IF;
+    IF actual_hash IS DISTINCT FROM item->>'fingerprint'
+      OR actual_acl IS DISTINCT FROM item->'acl' THEN
+      RAISE EXCEPTION USING MESSAGE='rights plan residual ACL drift';
+    END IF;
+  END LOOP;
   FOR item IN SELECT value FROM jsonb_array_elements(manifest->'changes') LOOP
     IF item->>'kind'='function' THEN
       SELECT {FUNCTION_HASH}, {FUNCTION_ACL}
@@ -305,10 +345,25 @@ BEGIN
     OR {MEMBERSHIP_HASH} IS DISTINCT FROM manifest->>'membership_hash' THEN
     RAISE EXCEPTION USING MESSAGE='rights plan concurrent role-state drift';
   END IF;
+  FOR item IN SELECT value FROM jsonb_array_elements(COALESCE(manifest->'residual','[]'::jsonb)) LOOP
+    IF item->>'kind'='function' THEN
+      SELECT {FUNCTION_HASH}, {FUNCTION_ACL}
+        INTO actual_hash,actual_acl FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
+        WHERE p.oid=(item->>'oid')::oid;
+    ELSE
+      SELECT {DATABASE_HASH}, {DATABASE_ACL}
+        INTO actual_hash,actual_acl FROM pg_database d
+        WHERE d.oid=(item->>'oid')::oid AND d.datname=current_database();
+    END IF;
+    IF actual_hash IS DISTINCT FROM item->>'fingerprint'
+      OR actual_acl IS DISTINCT FROM item->'acl' THEN
+      RAISE EXCEPTION USING MESSAGE='rights plan residual ACL drift';
+    END IF;
+  END LOOP;
 {public_guard}
 END
 $rights_plan$;
-COMMIT;
+{ending}
 """
 
 

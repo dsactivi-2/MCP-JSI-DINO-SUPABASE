@@ -74,7 +74,15 @@ ovlasti. Korisnik trenutno ne treba praviti novog administratora. Q10.2k
 potvrđuje: discovery rola se ipak postavlja bez osam LO PUBLIC opoziva; kasnije
 učvršćivanje tih osam ciljeva je zaseban put. PostgreSQL PUBLIC EXECUTE na tim
 funkcijama ostaje naslijeđeno residualno pravo, ne dokaz da ih nova rola ne
-smije izvršiti. Rola još nije kreirana; B1/B2/B3 nisu odobreni. Vidi
+smije izvršiti. Q10.2l potvrđuje: prije kreiranja role prvo se PUBLIC skida
+s `TEMPORARY` i dvije Definer funkcije, uz Direktgrants postojećim rolama.
+Q10.2m daje Apply-Freigabe za baš ovaj ACL rez. Q10.2c1 prihvaća restore u novo
+projekt kao restore-dokaz; in-place produkcijski restore nije zasebno tražen.
+Q10.2n je izvršen: Dry-run pa apply za TEMP i dvije Definer funkcije.
+PUBLIC TEMP i ta dva EXECUTE više nisu na PUBLIC. Osam LO-EXECUTE ostaje.
+Rola `dino_crm_discovery_ro_v1` je kreirana, login radi. Gate B1/B2/B3 V3
+kao ta rola su PASS. Sirovi B2/B3 izlaz je izvan Git-a.
+Vidi
 [pojašnjenje korisnika](discovery/access-plan-consolidated.md#klarstellung-welche-benutzer-sind-erforderlich).
 Detalji su u
 [provjeri plana](reviews/2026-09-11-rights-plan-verification.md). [Registar verzija](discovery/role-version-register.md)
@@ -251,7 +259,7 @@ sigurnost indirektnih poziva ostaje otvorena. Posljednji V2 sintetički ciklus
 ima 25 provjera, uključujući kontraprimjere, Q10.2h audit i Q10.2i plan prava.
 Nije bilo produkcijske mutacije ili čitanja kandidata. Opći schema audit i
 dalje nije izvršen.
-Za novu rolu potreban je vlastiti B1 V3 paket, koji još ne postoji. B2/B3
+Gate B1 V3 kao discovery rola je izvršen i PASS. B2/B3
 launcher, streammarker i coverage gateovi još nisu implementirani; B2 ostaje
 blokiran do pregledanog B1 PASS i vlastite freigabe.
 Raniji read-only lokalni preflight je potvrdio da target attest,

@@ -15,6 +15,9 @@ stvari. Oznaka V3 zato sama ne znači da postoji odobren SQL za izvođenje.
 | Q10.2h | IZVRŠENO, UZ OGRANIČENJA | Funkcije, zavisnosti i helper ACL-ovi. |
 | Q10.2i | PRIPREMA TESTIRANA / NO-GO | Za osam LO ciljeva nedostaju ovlasti. |
 | Q10.2j | KORISNIČKI ODOBRENO / TEHNIČKI NO-GO | Ovlašteni put nije imenovan. |
+| Q10.2k | ODOBRENO | Rola bez osam LO opoziva; učvršćivanje kasnije. |
+| Q10.2l | ODOBRENO / OPCIJA A | Prvo TEMP i dvije Definer, pa rola. |
+| Q10.2m | APPLY ODOBREN / NEIZVRŠENO | Samo taj ACL rez; ostalo otvoreno. |
 
 ## Rola V1 i V2
 
@@ -65,3 +68,14 @@ bilježi 25 sintetičkih provjera i stvarni blokator ovlasti.
 Q10.2j naknadno odobrava opisanu ciljanu promjenu. Novi read-only poziv
 potvrđuje da sadašnji pristup i dalje nema ovlasti za osam LO funkcija.
 Nije bilo primjene; korisnička dozvola i tehnička izvršivost su odvojene.
+
+Q10.2k, Q10.2l i Q10.2m sužavaju taj put. Rola se postavlja bez osam LO
+opoziva. Prije nje PUBLIC gubi samo \`TEMPORARY\` i EXECUTE na dvije Definer
+funkcije, uz Direktgrants postojećim rolama. Q10.2m je apply odobrenje za
+točno taj rez. Generator zato poznaje odvojeni \`scope=q10_2l_a\` i provjerava
+drift residualnih ACL-ova; osam LO privilegija ostaje nepromijenjeno.
+
+To odobrenje ne sadrži restore dokaz, svjež inventar, na katalog vezan SQL,
+mutacijski launcher bez read-only defaulta, attest vremenskog prozora ni
+SQL-hash attest. Postojeći Gate-B1 attest ne vrijedi za ovaj rez. Rola nije
+kreirana; B1, B2 i B3 i dalje nisu odobreni.

@@ -71,22 +71,15 @@ eine Lockerung von B1.
 
 ## Restore-Voraussetzung
 
-Laut Nutzer bestehen tägliche Backups, aber kein erfolgreicher Restore-Test
-(ADR-0002 Q10.2c, 2026-09-11). Das ist eine Nutzerangabe ohne technische
-Verifikation. Q10.2d erlaubt ausdrücklich die Leserollenanlage nach bestandenen
-Sicherheitsprüfungen ohne vorherigen Restore-Test. Vor Änderungen an Tabellen
-oder Daten bleibt der Restore-Nachweis erforderlich.
+Laut Nutzer bestehen tägliche Backups. Q10.2c1 akzeptiert den Restore in ein
+neues Projekt als Restore-Nachweis für die weiteren Schnitte. Q10.2d bleibt
+zusätzlich die Restore-Ausnahme nur für die Leserollenanlage. Mengenabgleich
+ist dokumentierte Lücke, kein Blocker. Der Developer-Plugin bleibt für die
+Kopie verboten.
 
 Die abgelehnten lokalen SQL-Dump-, OrbStack- und ZIP-Prüfungen bleiben
-ausgeschlossen. Für spätere Tabellen-/Datenänderungen ist ein **anderer,
-separat freizugebender
-Restore-Prüfweg** nötig: Herkunft/Umfang, autorisierter Ausführender, isoliertes
-Ziel, Wiederherstellungsschritte, Integritäts-/Mengenprüfung und gemessene
-Wiederherstellungszeit. Ein Anbieter-Backupstatus allein belegt keinen Restore.
-RTO/RPO und etwaige Storage-Objekte werden ausdrücklich als offen geführt.
-Es wird kein gehostetes Staging-Projekt vorausgesetzt oder stillschweigend
-bereitgestellt. Ohne zulässiges Ziel und Nachweis bleiben diese späteren
-Änderungen NO-GO; der Restore blockiert die reine Rollenanlage nicht mehr.
+ausgeschlossen. RTO/RPO und Storage-Objekte bleiben offen, blockieren aber
+diesen Restore-Gate nicht mehr.
 
 ## Versions- und Evidenzstatus
 
@@ -219,9 +212,12 @@ Q10.2i hat den [konkreten Rechteplan](public-rights-change-proposal.md) ermögli
 33 bestehende Rollen, 351 ergänzende Direktgrants und 11 PUBLIC-REVOKEs.
 Der erweiterte synthetische Lauf besteht mit 25 Prüfungen. Der vorhandene
 Zugang hat jedoch für alle acht LO-Helfer weder SET-owner noch Grant-option.
-Der Generator verweigert deshalb ein ausführbares Produktionspaket.
-Zuerst muss ein unterstützter, ausreichend berechtigter Ausführungsweg geklärt
-werden; andernfalls braucht es eine neue Entscheidung zum Zugangskonzept.
+Der Generator verweigert deshalb das unveränderte 11-Ziel-Paket.
+Q10.2l A ist bestätigt: zuerst nur TEMP und die zwei Definer-Funktionen, dann
+die Rolle; die acht LO-EXECUTE bleiben Rest. Das ist keine Apply-Freigabe.
+Q10.2n ist ausgeführt: TEMP und die zwei Definer-Funktionen sind von PUBLIC
+entfernt. Acht LO-EXECUTE bleiben. Rolle `dino_crm_discovery_ro_v1` ist
+angelegt. Gate B1/B2/B3 V3 als diese Rolle sind PASS.
 [Nachweise und Grenzen](../reviews/2026-09-11-rights-plan-verification.md).
 Es gilt
 keine Freigabe für pauschale PUBLIC-REVOKEs oder eine Lockerung des Rollen-Gates.

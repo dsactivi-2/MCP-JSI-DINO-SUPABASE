@@ -4,3 +4,5 @@
 !.env.example
 *.pgpass
 .scratch/
+__pycache__/
+*.py[cod]
