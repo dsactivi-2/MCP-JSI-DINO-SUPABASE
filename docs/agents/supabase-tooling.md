@@ -7,6 +7,8 @@ bez proširenja trenutnog governance ili database opsega.
 
 ## Razdvajanje odgovornosti
 
+<!-- markdownlint-disable MD013 -->
+
 | Komponenta | Uloga | Trenutni status |
 | --- | --- | --- |
 | `supabase` skill | Aktuelne procedure za Supabase, auth, RLS, CLI, MCP i debugging. | Dozvoljeno za planiranje i review. |
@@ -14,8 +16,14 @@ bez proširenja trenutnog governance ili database opsega.
 | Supabase plugin/MCP | Live razvojni alati za projekt, bazu, advisors, migracije i druge Supabase funkcije. | Dokumentacija je dozvoljena; pristup projektu/bazi je blokiran do zasebnog gatea. |
 | Runtime-Such-MCP | Budući kontrolisani CRM search ugovor. | Nije implementiran; plugin ga ne zamjenjuje. |
 | Profilverwaltungs-MCP | Buduća odvojena administrativna granica iz ADR-0003. | Nije implementiran; plugin nije njegova sigurnosna granica. |
+| Službeni MCP SDK | Biblioteka za protokol i transport vlastitog MCP servisa. | Kandidat je TypeScript v2; paketna generacija i klijentska podrška prolaze AUTO-02/03. |
+| `@supabase/server` | Biblioteka za auth kontekst i Supabase client u našoj aplikaciji. | Uslovni adapter iz SDK plana; nije Supabase developer plugin niti dokaz DB prava. |
+| `@supabase/middleware` | Opcionalna kompozicija obrade zahtjeva. | Alpha; nije osnovni release zahtjev niti zamjena MCP SDK-a. |
 
-Više instaliranih distribucija službenog Supabase plugina mogu pokazivati na isti
+<!-- markdownlint-enable MD013 -->
+
+Više instaliranih distribucija službenog Supabase plugina mogu pokazivati na
+isti
 Supabase app/MCP. One ne daju dodatna prava, redundanciju, projektno ograničenje
 ili razdvojene identitete. Jedna aktivna distribucija je funkcionalno dovoljna.
 
@@ -34,13 +42,21 @@ ili razdvojene identitete. Jedna aktivna distribucija je funkcionalno dovoljna.
 
 ## Live-MCP gate
 
+Za izbor, promjenu verzije ili povezivanje runtime SDK-a prvo pročitati
+[SDK integracijski plan](../planning/sdk-integration-plan.md). Razlikovati
+MCP audience od downstream DB identiteta; wrapper nije odobrenje token
+passthrougha. Runtime koristi samo kontrolisani RPC adapter, bez admin klijenta.
+Pristup produkciji preko vlastitog budućeg servisa ima release gate; istraživanje
+SDK-a ne mijenja zabranu razvojnog Plugin pristupa ispod.
+
 Javni `search_docs` može se koristiti bez pristupa projektu. Svi pozivi koji
 čitaju ili mijenjaju Supabase account, projekt, shemu, logove ili podatke čekaju
 zasebno odobrenje.
 
 Plugin/MCP put mora prije prvog database poziva dokazati:
 
-- tačan lokalno attestiran `project_ref`, bez upisa identifikatora u Git ili chat;
+- tačan lokalno attestiran `project_ref`, bez upisa identifikatora u Git ili
+  chat;
 - `read_only=true` i stvarni PostgreSQL identitet bez owner, migration,
   `BYPASSRLS`, superuser ili write prava;
 - najviše feature grupe `database,debugging,docs`;
@@ -66,6 +82,7 @@ Trenutni [Gate B](../discovery/security-read-only-discovery-preflight-b.md)
 ostaje vezan za svoj lokalni `psql` launcher. Plugin/MCP zahtijeva novu
 gate verziju; odobrenje jednog puta ne prenosi se na drugi.
 
+<!-- markdownlint-disable-next-line MD013 -->
 Prvi [Supabase-Plugin Gate-P nacrt](../discovery/supabase-plugin-read-only-gate-draft.md)
 je `DRAFT / NO-GO`. Korisnik je postavku `Always ask` potvrdio, ali trenutni
 Tool-Katalog i dalje prikazuje account i write alate. Zato projektna vezanost,
@@ -79,7 +96,8 @@ stvarnih osobnih podataka i proći vlastiti Gate P.
 ## Ažuriranje skillsa i plugina
 
 Projektne skill direktorije tretirati kao vendorizirane cjeline. Ne mijenjati
-njihov sadržaj ručno i ne kopirati samo `SKILL.md`; reference, assets i changelog
+njihov sadržaj ručno i ne kopirati samo `SKILL.md`; reference, assets i
+changelog
 moraju ostati zajedno.
 
 Pri ažuriranju:
@@ -100,13 +118,15 @@ Pri ažuriranju:
    [README-a](../../README.md#provjera-dokumentacije);
 8. otvoriti novi Codex task kako bi se osvježio katalog skillsa.
 
-U repozitoriju trenutno nema `skills-lock.json`; zato se porijeklo i svaka
-buduća promjena moraju dokazati pregledom sadržaja i diffa, a ne pretpostaviti
-iz naziva verzije u frontmatteru.
+Repozitorij sadrži `skills-lock.json`. On prati skill instalacije; nije
+aplikacijski SDK dependency lockfile niti dokaz instalacije MCP/Supabase
+paketa. Porijeklo vendoriziranih skillsa provjeriti zajedno sa sadržajem i
+diffom; verzija u frontmatteru sama nije dovoljna.
 
 ## Aktuelni vendor signali
 
-Supabase changelog provjeren je 2026-09-11. Prije implementacije ponovo provjeriti
+Supabase changelog provjeren je 2026-09-11. Prije implementacije ponovo
+provjeriti
 posebno ove promjenjive tačke:
 
 - stari Management API `logs.all` endpoint uklanja se 2026-09-23; novi `logs`

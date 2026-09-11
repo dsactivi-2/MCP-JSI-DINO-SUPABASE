@@ -2,11 +2,14 @@
 
 Recruiter treba pronaći relevantne kandidate u CRM-u s približno 200.000 zapisa
 koristeći B/H/S, njemački ili engleski. Obim je projektna procjena
-(DURCH DISCOVERY ZU PRÜFEN), ne potvrđen broj zapisa. Upit opisuje poslovne kriterije poput
+(DURCH DISCOVERY ZU PRÜFEN), ne potvrđen broj zapisa. Upit opisuje poslovne
+kriterije poput
 zanimanja, iskustva, lokacije, jezika, vještina i dostupnosti. Prikaz rezultata
 treba omogućiti ljudsku procjenu prikladnosti kandidata.
 
 ## Rječnik
+
+<!-- markdownlint-disable MD013 -->
 
 | Pojam | Značenje u ovom projektu |
 | --- | --- |
@@ -19,6 +22,8 @@ treba omogućiti ljudsku procjenu prikladnosti kandidata.
 | Relevante Berufserfahrung | VORLÄUFIGER VORSCHLAG: trajanje stručno odgovarajućih radnih perioda. Cijela Q8.5 je OFFEN, uključujući izbor ukupnog ili relevantnog iskustva i način obračuna; ovo nije potvrđena definicija. |
 | Aktiver Filter | Korisnik ga je izričito naveo ili potvrdio u pregledu; nenavedena kategorija je neaktivna i ne ograničava rezultat. |
 | Profilverwaltungs-MCP | Interna upravljačka granica za nacrte, provjeru i verzionirano objavljivanje Berufssuchprofila; odvojena je od read-only Runtime-Such-MCP-a. |
+| Runtime-Such-MCP | Kontrolisana read-only granica za pretragu, pojedinačni profil i dozvoljene filteropcije; korisnikov identitet i dozvoljeni opseg vrijede za svaki poziv. |
+| Autentificirani akter | Provjereni pozivalac; sama prijava ne daje pravo na svaki kandidat, profil ili administrativnu radnju. |
 | Kanonski model | Dogovoreni domenski pojmovi na koje se mapira stvarna shema. |
 | Taksonomija | Verzija odobrenih pojmova, identifikatora i višejezičnih sinonima. |
 | Dokaz poklapanja | Podatak koji objašnjava zbog čega kandidat zadovoljava filter. |
@@ -26,6 +31,8 @@ treba omogućiti ljudsku procjenu prikladnosti kandidata.
 | Svježina | Koliko je podatak aktuelan prema autoritativnom izvoru i vremenu. |
 | Tenant | Autorizacijski opseg; njegovo stvarno postojanje i mapiranje tek se utvrđuju. |
 | Discovery | Odobreni read-only postupak utvrđivanja sheme i kvaliteta podataka. |
+
+<!-- markdownlint-enable MD013 -->
 
 Rječnik opisuje poslovne koncepte, ne fizičke tabele, kolone ili postojeće role.
 Nepoznate vrijednosti i neslaganja izvora ostaju otvorena do audita i odluke
@@ -36,9 +43,14 @@ odgovornog vlasnika.
 - [Stanje projekta](docs/project.md) prati fazu, otvorene uslove i naredni cilj.
 - [Implementacijski brief](docs/SUPABASE_CRM_MCP_IMPLEMENTATION_BRIEF.md)
   definira zahtjeve i kriterije prihvata.
+- [SDK integracijski plan](docs/planning/sdk-integration-plan.md) čuva
+  tehničku razradu i otvorene provjere; SDK detalji nisu domenski pojmovi.
 - [ADR-0001](docs/decisions/0001-controlled-query-boundary.md) definira
   prihvaćenu arhitekturnu granicu.
 - [ADR-0002](docs/decisions/0002-search-design-interview.md) čuva potvrđene i
   otvorene odluke aktivnog design intervjua.
 - [Discovery runbook](docs/runbooks/schema-discovery.md) određuje postupak
   provjere nepoznatih činjenica.
+- [ADR-0004](docs/decisions/0004-automated-database-development.md) i
+  [runbook automatizacije](docs/runbooks/database-development-automation.md)
+  određuju kako se nakon discoveryja SQL piše, provjerava, optimizira i pušta.

@@ -5,6 +5,18 @@ Datum: 2026-09-11
 Status: Recherchegrundlage; Skills und Supabase-Plugin installiert und lokal
 abgeglichen; keine Freigabe für Datenbankzugriff, Migration oder Deployment
 
+## Aktuelle Einordnung nach dem Audit
+
+Korrekturstand 2026-09-11: `Always ask` wurde vom Nutzer bestätigt. Der
+Developer-MCP bleibt für das Produktionsprojekt mit realen Kandidatendaten
+verboten. Das ist die strengere **Projektentscheidung**, keine pauschale
+Behauptung über aktuelle Herstellerverbote. Ein späterer Plugin-Test erfordert
+separate Nicht-Produktion ohne reale Personendaten; ein solches Projekt ist
+nicht geplant. Historische Installations-/Toolbefunde unten sind
+Zeitpunktnachweise und wurden in dieser Korrekturrunde nicht erneut geprüft.
+Aktuelle Priorität: [Zugangsplan](../discovery/access-plan-consolidated.md) und
+[Primärprüfung](2026-09-11-plan-best-practice-verification.md).
+
 ## Fragestellung und Projektgrenzen
 
 Geprüft wurde, welche offiziellen Supabase-Empfehlungen, SDKs, MCP- und
@@ -37,15 +49,15 @@ dieselbe Aufgabe:
 1. **Jetzt sinnvoll:** die beiden installierten offiziellen Agent Skills als
    aktuelle Arbeitsanleitung sowie `search_docs` für öffentliche Dokumentation,
    ohne Projekt- oder Datenbankzugriff.
-2. **Installiert, aber für Live-Daten weiterhin blockiert:** der offizielle
-   Supabase-MCP. Er wird erst nach eigener Freigabe streng projektgebunden,
-   read-only, mit minimalen Feature-Gruppen und manueller Tool-Freigabe genutzt;
-   Advisors sind dann eine deterministische Ergänzung des Audits.
+2. **Installiert, für das produktive CRM ausgeschlossen:** der offizielle
+   Supabase-MCP. Nur eine separat freigegebene Nicht-Produktions-Evaluation
+   ohne echte Personendaten wäre möglich; aktuell ist sie nicht geplant.
 3. **Nach Discovery und Stack-Entscheidung sinnvoll:** Supabase CLI, pgTAP,
    `db lint`, generierte Typen und genau ein zum Runtime-Stack passendes SDK,
    das ausschließlich kontrollierte RPCs aufruft.
 4. **Technisch passend, aber noch zu prüfen:** PostgreSQL Full Text Search,
-   Supabase Branching und ein eigener MCP auf Edge Functions.
+   ein eigener MCP auf Edge Functions. Branching ist keine gewählte
+   Umgebung; ein separates gehostetes Staging-Projekt wurde abgelehnt.
 5. **Für den Produktiv-Runtime nicht empfehlen:** der offizielle
    Entwickler-MCP, der generische PostgREST-MCP, ein unauthentifizierter
    Edge-Function-MCP oder ein Backend-Client mit Supabase-Secret-Key als Ersatz
@@ -66,9 +78,9 @@ read-only Attestation liegt nicht vor. Es wurden bei dieser Prüfung keine
 Tabellen, Kandidaten-, Kontakt- oder CV-Daten gelesen und keine Änderung
 ausgeführt.
 
-Die aktuelle App-Berechtigung folgt dem allgemeinen Modus „Allow low-risk
-actions“. Das genügt nicht als Datenbank-Sicherheitskontrolle. Bis zum
-plugin-spezifischen Gate ist „Always ask“ angemessen; zusätzlich bleiben ein
+Der frühere Stand war „Allow low-risk actions“; inzwischen hat der Nutzer
+„Always ask“ bestätigt. Dies ist allein keine Datenbank-Sicherheitskontrolle;
+zusätzlich bleiben ein
 wirklicher read-only Datenbankkontext, Projektbindung und minimale Feature-
 Gruppen erforderlich.
 
@@ -87,9 +99,8 @@ Gruppen erforderlich.
 
 ### Nach Discovery oder Stack-Entscheidung prüfen
 
-- **Offizieller Supabase-MCP:** nach Discovery-Freigabe intern, projektgebunden,
-  read-only und feature-reduziert für Inventar, Advisors, Logs und genehmigte
-  Abfragen. Kein Endnutzer- oder Runtime-MCP.
+- **Offizieller Supabase-MCP:** nur für eine separat freigegebene isolierte
+  Nicht-Produktion ohne echte Personendaten; kein CRM-Produktionszugriff.
 - **Advisors:** nach Discovery-Freigabe als deterministische Zusatzbefunde;
   Findings sind keine verifizierte Ursache und kein automatischer Fix.
 - **CLI, lokale Instanz und Migrationen:** nach Discovery und Scaffold für
@@ -111,7 +122,8 @@ Gruppen erforderlich.
   unauthentifiziert; interoperable Auth und RLS müssen vor Produktion bewiesen
   sein.
 - **`@supabase/server` (Public Beta):** nach Stack-Entscheidung für
-  Edge-Function-Auth prüfen. Benutzer-JWT kann RLS erhalten; Secret-Modus liefert
+  Edge-Function-Auth prüfen. Benutzer-JWT kann RLS erhalten; Secret-Modus
+  liefert
   privilegierten Zugriff. Den Beta-Status vor einer Produktionsentscheidung neu
   bewerten.
 
@@ -134,10 +146,12 @@ Gruppen erforderlich.
   erwägen, wenn strukturierte Filter, Taxonomie, FTS und Trigramme einen
   gemessenen Qualitätsbedarf nicht erfüllen.
 
+<!-- markdownlint-disable-next-line MD013 -->
 ## 1. Offizieller Supabase-MCP: gutes internes Discovery-Werkzeug, falscher Runtime
 
 Der Anhang liegt mit seiner Kernaussage richtig: Der offizielle MCP lässt sich
-über Projektbindung, read-only Modus und Feature-Gruppen einschränken, aber nicht
+über Projektbindung, read-only Modus und Feature-Gruppen einschränken, aber
+nicht
 in einen eigenen CRM-MCP mit eigenen Werkzeugnamen umbauen. Das offizielle
 Repository bestätigt außerdem, dass `readOnly` mutierende Werkzeuge aus den
 statischen Tool-Schemas entfernt. Self-hosting stellt dieselben
@@ -152,9 +166,11 @@ oder Endnutzern zu geben. Die Werkzeuge laufen im Kontext von
 Entwicklerberechtigungen; Prompt Injection bleibt trotz Schutztexten in
 Tool-Ergebnissen möglich. Supabase empfiehlt manuelle Freigabe jedes Tool-Calls
 sowie Projektbindung, read-only und minimale Feature-Gruppen
+<!-- markdownlint-disable-next-line MD013 -->
 ([Supabase MCP: Sicherheitsrisiken und Empfehlungen](https://supabase.com/docs/guides/ai-tools/mcp#security-risks)).
 
-Damit passt der offizielle MCP nur in den einmaligen Discovery-/Engineering-Pfad:
+Die folgende generische technische Checkliste gilt nur für einen zulässigen
+Nicht-Produktions-Engineering-Pfad; sie öffnet keinen produktiven CRM-Zugriff:
 
 - erst nach Erfüllung der Voraussetzungen des Discovery-Runbooks;
 - nur für genau das bestätigte Projekt;
@@ -192,6 +208,7 @@ Bequemlichkeit ist erst sinnvoll, wenn Projektbindung, read-only Modus,
 Feature-Gruppen und Zugriffsfreigabe beschlossen sind. Da der Plugin inzwischen
 installiert ist, bleiben seine Live-Werkzeuge bis dahin unbenutzt; die Skills
 werden weiterhin separat und projektlokal geladen
+<!-- markdownlint-disable-next-line MD013 -->
 ([Supabase Plugin für AI Coding Agents](https://supabase.com/docs/guides/ai-tools/plugins)).
 
 ## 3. CLI, Advisors, pgTAP und generierte Typen
@@ -207,16 +224,20 @@ Supabase CLI vier wiederkehrende Aufgaben vereinfachen:
   Funktionen.
 
 Die offizielle Workflow-Dokumentation verlangt Review erzeugter Migrationen und
-weist darauf hin, dass lokale Resets destruktiv sind; ein verknüpfter Remote-Reset
+weist darauf hin, dass lokale Resets destruktiv sind; ein verknüpfter
+Remote-Reset
 löscht die Remote-Schemaobjekte und ist nur für Development/Staging gedacht
+<!-- markdownlint-disable-next-line MD013 -->
 ([Local Development Workflow](https://supabase.com/docs/guides/local-development/cli-workflows),
+<!-- markdownlint-disable-next-line MD013 -->
 [Testing and Linting](https://supabase.com/docs/guides/local-development/cli/testing-and-linting),
 [Generating Types](https://supabase.com/docs/guides/api/rest/generating-types)).
 
 Advisors sind bereits während des genehmigten Audits nützlich. Sie liefern
 deterministische Checks unter anderem für fehlende Foreign-Key-Indizes,
 deaktiviertes oder unvollständiges RLS, `security definer` Views, veränderbaren
-Function-`search_path`, exponierte sensible Spalten und ausführbare privilegierte
+Function-`search_path`, exponierte sensible Spalten und ausführbare
+privilegierte
 Funktionen. Supabase stellt dieselben Checks in Studio, über MCP
 `get_advisors`, CLI `supabase db advisors` und Management API bereit. Die Docs
 betonen jedoch, dass ein Finding kein Fix ist und gegen aktuelle Evidenz geprüft
@@ -234,6 +255,7 @@ sind standardmäßig breit ausführbar; deshalb müssen Ausführungsrechte für
 `public`, `anon` und `authenticated` entzogen und nur der vorgesehenen Rolle
 explizit erteilt werden. Falls `security definer` unvermeidbar ist, muss der
 `search_path` festgesetzt und jedes Objekt schemaqualifiziert werden
+<!-- markdownlint-disable-next-line MD013 -->
 ([Supabase Database Functions](https://supabase.com/docs/guides/database/functions)).
 
 Für den Service kann später entweder das offizielle
@@ -249,11 +271,14 @@ RLS bleibt Defense-in-Depth. Supabase weist darauf hin, dass Grants zuerst und
 RLS-Policies danach geprüft werden und dass Views RLS standardmäßig umgehen
 können. Deshalb müssen Tabellen, Views, Funktionen, Grants und Policies
 gemeinsam auditiert und negativ getestet werden
+<!-- markdownlint-disable-next-line MD013 -->
 ([Supabase Row Level Security](https://supabase.com/docs/guides/database/postgres/row-level-security)).
 
 Ein Supabase-Secret-Key beziehungsweise der Legacy-`service_role` umgeht RLS.
-Er ist daher kein geeigneter Default für den Runtime-Suchpfad. Bevorzugt wird ein
-Benutzer-JWT, der in der Datenbank auf Rolle und Tenant abgebildet wird, oder ein
+Er ist daher kein geeigneter Default für den Runtime-Suchpfad. Bevorzugt wird
+ein
+Benutzer-JWT, der in der Datenbank auf Rolle und Tenant abgebildet wird, oder
+ein
 eigener minimal privilegierter Server-/DB-Pfad mit vollständiger eigener
 Autorisierung. Schlüssel dürfen nie in Prompt, URL, Quellcode oder Log landen
 ([Supabase API Keys](https://supabase.com/docs/guides/getting-started/api-keys),
@@ -266,6 +291,7 @@ Supabase dokumentiert PostgreSQL Full Text Search mit `tsvector`,
 Ranking und Suche lassen sich in einer Database Function kapseln und per RPC
 aufrufen. Damit ist FTS ein passender Kandidat für den lexical-search Anteil,
 nachdem strukturierte Filter und Autorisierung den Suchraum begrenzt haben
+<!-- markdownlint-disable-next-line MD013 -->
 ([Supabase Full Text Search](https://supabase.com/docs/guides/database/full-text-search)).
 
 Die Dokumentation löst jedoch nicht automatisch die projektspezifische
@@ -284,7 +310,9 @@ Embeddings noch den Nachweis, dass selektive CRM-Filter vor dem endgültigen
 unterstützt nur den dokumentierten `<===>`-Distanzoperator, und Supabase ordnet
 sie eher großen backendorientierten Workloads zu. Für den geschätzten CRM-Umfang
 ist deshalb kein Vorteil gegenüber `pgvector` oder dem nichtvektoriellen
+<!-- markdownlint-disable-next-line MD013 -->
 Baseline belegt ([Vector Buckets](https://supabase.com/docs/guides/storage/vector/introduction),
+<!-- markdownlint-disable-next-line MD013 -->
 [Querying Vectors](https://supabase.com/docs/guides/storage/vector/querying-vectors)).
 
 Der verbindliche Prüfweg steht im
@@ -303,7 +331,8 @@ anonymisierten Testdatensatz sind vor Auswahl zu prüfen
 ([Supabase Branching](https://supabase.com/docs/guides/deployment/branching)).
 
 Der offizielle BYO-MCP-Guide zeigt einen eigenen MCP auf Edge Functions mit dem
-offiziellen TypeScript-SDK, Hono, Zod, Streamable HTTP und MCP Inspector. Das ist
+offiziellen TypeScript-SDK, Hono, Zod, Streamable HTTP und MCP Inspector. Das
+ist
 ein sinnvoller später POC-Kandidat für den eigenen Runtime-Such-MCP. Der Guide
 stellt aber klar, dass sein Beispiel keine Authentifizierung verlangt und
 verwendet `--no-verify-jwt`; Auth-Unterstützung für MCP auf Edge Functions wird
@@ -328,6 +357,7 @@ LLM-generierten SQL-ähnlichen Input in REST-Requests übersetzt. Genau diese
 breite CRUD-/Übersetzungsfläche widerspricht dem akzeptierten Drei-Tool-Vertrag,
 der SQL-Sperre und der getrennten Admin-Grenze. Es sollte für dieses Projekt
 nicht eingesetzt werden
+<!-- markdownlint-disable-next-line MD013 -->
 ([offizielles PostgREST-MCP-README](https://github.com/supabase/mcp/tree/main/packages/mcp-server-postgrest)).
 
 ### Self-hosted Supabase-MCP
@@ -337,6 +367,7 @@ Supabase-Entwicklertools unter eigener Infrastruktur bereitgestellt werden
 sollen. Es erweitert den Server aber nicht um kontrollierte CRM-Fachwerkzeuge.
 Ein Self-host würde daher zusätzliche Betriebs- und Auth-Komplexität schaffen,
 ohne die Runtime-Architektur zu ersetzen
+<!-- markdownlint-disable-next-line MD013 -->
 ([Self-hosting im Supabase-MCP-Repository](https://github.com/supabase/mcp#self-hosting-the-mcp-endpoint)).
 
 ### `mcp-lite`, Reflex und ungefilterte Secret-Key-Zugriffe
@@ -377,10 +408,9 @@ deshalb als allgemeiner Kandidatenzugang abzulehnen.
 2. Die bestehende Gate-B-Freigabe und den kleinsten read-only Discovery-Scope
    abschließen. Noch keinen Live-MCP, CLI-Link oder Branch mit Produktionsdaten
    einrichten.
-3. Nach Freigabe entweder den bereits vorgesehenen dedizierten read-only
-   Datenbankzugang oder den offiziellen Supabase-MCP streng projektgebunden,
-   read-only und feature-reduziert verwenden. Advisors als Zusatzbefund
-   erfassen.
+3. Nur den separat freigegebenen lokalen Discovery-Zugang verwenden. Der
+   Developer-MCP ist kein alternativer Produktionspfad; Advisors benötigen
+   ebenfalls einen eigenen erlaubten Scope.
 4. Nach Discovery den kanonischen Datenvertrag und die einzige
    `search_candidates_v1`-RPC festlegen; RLS, Grants, Views und Function-Rechte
    gemeinsam designen.
@@ -399,9 +429,11 @@ deshalb als allgemeiner Kandidatenzugang abzulehnen.
   Log-Retention und geeignete Connection-Limits umfasst.
 - Ob ein dataloser Branch plus synthetischer/anonymisierter Seed die reale
   Kandidatenverteilung ausreichend repräsentiert.
-- Ob Supabase Auth die benötigte interne Recruiter-, Rollen- und Tenant-Abbildung
+- Ob Supabase Auth die benötigte interne Recruiter-, Rollen- und
+  Tenant-Abbildung
   vollständig trägt oder ein vorgeschalteter Identity Provider nötig ist.
-- Ob Edge Functions die geforderten End-to-End-Timeouts, Connection-Pool-Grenzen,
+- Ob Edge Functions die geforderten End-to-End-Timeouts,
+  Connection-Pool-Grenzen,
   Backpressure und MCP-Auth-Interoperabilität erfüllen.
 - Welche PostgreSQL-Textsuchkonfigurationen und Indizes die realen B/H/S-,
   deutschen und englischen Daten benötigen.
@@ -414,13 +446,16 @@ deshalb als allgemeiner Kandidatenzugang abzulehnen.
 
 Alle externen Quellen sind offizielle Supabase-Dokumentation oder offizielle
 Supabase-Repositories und wurden am 2026-09-11 geprüft. Volatile Angaben wie
-Toolgruppen, Auth-Support, Branching, API-Key-Empfehlungen und SDK-Support müssen
+Toolgruppen, Auth-Support, Branching, API-Key-Empfehlungen und SDK-Support
+müssen
 vor Implementierung erneut gegen die aktuelle Dokumentation verifiziert werden.
 
 Der Supabase-Changelog wurde zusätzlich am 2026-09-11 geprüft. Für spätere
 Planung relevant sind die Entfernung des Management-API-Endpunkts `logs.all` am
-2026-09-23 zugunsten des neuen `logs`-Endpunkts mit ClickHouse SQL, das Ignorieren
-explizit gepinnter Extension-Versionen und die geänderte automatische Exponierung
+2026-09-23 zugunsten des neuen `logs`-Endpunkts mit ClickHouse SQL, das
+Ignorieren
+explizit gepinnter Extension-Versionen und die geänderte automatische
+Exponierung
 neuer Tabellen gegenüber Data/GraphQL APIs. Diese Punkte sind volatile
 Vendor-Signale, keine bestätigten Fakten über das CRM-Projekt
 ([Supabase Changelog](https://supabase.com/changelog.md)).

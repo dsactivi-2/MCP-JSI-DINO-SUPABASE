@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import argparse
 import os
 import re
 import subprocess
@@ -10,6 +11,9 @@ from urllib.parse import unquote
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 LINK_PATTERN = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
+parser = argparse.ArgumentParser(description="Check local Markdown links and fragments.")
+parser.add_argument("--source", choices=("working-tree", "index"), default="working-tree")
+args = parser.parse_args()
 
 
 def git_output(*arguments: str) -> bytes:
@@ -21,7 +25,7 @@ def git_output(*arguments: str) -> bytes:
     return result.stdout
 
 
-if (REPO_ROOT / ".git").exists():
+if args.source == "index":
     tracked_files = {
         Path(raw_path.decode("utf-8"))
         for raw_path in git_output("ls-files", "-z").split(b"\0")
@@ -52,14 +56,14 @@ else:
 
 
 def slugify(heading: str) -> str:
-    normalized = unicodedata.normalize("NFKD", heading.strip().lower())
+    normalized = unicodedata.normalize("NFC", heading.strip().lower())
     without_markup = re.sub(r"[`*_~]", "", normalized)
     without_punctuation = "".join(
         character
         for character in without_markup
         if character.isalnum() or character in {" ", "-", "_"}
     )
-    return re.sub(r"-+", "-", re.sub(r"\s+", "-", without_punctuation)).strip("-")
+    return re.sub(r"\s", "-", without_punctuation)
 
 
 def headings(path: Path) -> set[str]:
@@ -105,9 +109,9 @@ for markdown_path in markdown_paths:
             if resolved.is_absolute() or str(resolved).startswith("..") or not target_exists(resolved):
                 errors.append(f"{markdown_path}:{line_number}: missing tracked target")
                 continue
-            if separator and resolved.suffix == ".md" and slugify(unquote(fragment)) not in headings(resolved):
+            if separator and resolved.suffix == ".md" and unquote(fragment) not in headings(resolved):
                 errors.append(f"{markdown_path}:{line_number}: missing fragment")
 
 if errors:
     raise SystemExit("FAIL: relative Markdown links\n" + "\n".join(errors))
-print(f"PASS: {checked} relative Markdown links")
+print(f"PASS: {checked} relative Markdown links ({args.source})")

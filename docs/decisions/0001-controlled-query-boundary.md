@@ -53,6 +53,10 @@ Troškovi i ograničenja:
 
 ## Verifikacija
 
+Razvojna automatizacija ove granice definirana je u
+[ADR-0004](0004-automated-database-development.md). AI može pripremati SQL diff,
+ali nijedan runtime ili produkcijski apply put ne smije zaobići ovu odluku.
+
 Odluka je ispravno provedena samo ako:
 
 - runtime ne sadrži putanju za proizvoljni SQL;

@@ -3,6 +3,9 @@
 -- Prerequisites: Gate B1 PASS, Gate B2 reviewed, then a new explicit approval.
 -- Definitions can contain literals and sensitive internal structure.
 -- Statistics are derived from data or workload even when no rows are returned.
+-- The schema ceiling below is not the required object allowlist.
+-- Execution stays blocked until B2 identifies and approves exact objects,
+-- coverage, stream markers, a launcher, and a separate approval package.
 
 BEGIN TRANSACTION READ ONLY;
 SET LOCAL statement_timeout = '5s';
@@ -33,9 +36,7 @@ JOIN pg_catalog.pg_class AS relation
   ON relation.oid = policy.polrelid
 JOIN pg_catalog.pg_namespace AS namespace
   ON namespace.oid = relation.relnamespace
-WHERE namespace.nspname NOT IN ('pg_catalog', 'information_schema')
-  AND namespace.nspname NOT LIKE 'pg_toast%'
-  AND namespace.nspname NOT LIKE 'pg_temp_%'
+WHERE namespace.nspname IN ('crm', 'crm_api', 'crm_auth')
 ORDER BY schema_name, relation_name, policy_name
 LIMIT 5001;
 
@@ -47,6 +48,12 @@ SELECT
   namespace.nspname AS schema_name,
   relation.relname AS view_name,
   relation.relkind,
+  'security_invoker=true' = ANY(
+    COALESCE(relation.reloptions, ARRAY[]::text[])
+  ) AS security_invoker,
+  'security_barrier=true' = ANY(
+    COALESCE(relation.reloptions, ARRAY[]::text[])
+  ) AS security_barrier,
   pg_catalog.pg_get_viewdef(
     relation.oid,
     true
@@ -55,9 +62,7 @@ FROM pg_catalog.pg_class AS relation
 JOIN pg_catalog.pg_namespace AS namespace
   ON namespace.oid = relation.relnamespace
 WHERE relation.relkind IN ('v', 'm')
-  AND namespace.nspname NOT IN ('pg_catalog', 'information_schema')
-  AND namespace.nspname NOT LIKE 'pg_toast%'
-  AND namespace.nspname NOT LIKE 'pg_temp_%'
+  AND namespace.nspname IN ('crm', 'crm_api', 'crm_auth')
 ORDER BY schema_name, view_name
 LIMIT 5001;
 
@@ -79,9 +84,7 @@ JOIN pg_catalog.pg_class AS relation
 JOIN pg_catalog.pg_namespace AS namespace
   ON namespace.oid = relation.relnamespace
 WHERE NOT trigger_entry.tgisinternal
-  AND namespace.nspname NOT IN ('pg_catalog', 'information_schema')
-  AND namespace.nspname NOT LIKE 'pg_toast%'
-  AND namespace.nspname NOT LIKE 'pg_temp_%'
+  AND namespace.nspname IN ('crm', 'crm_api', 'crm_auth')
 ORDER BY schema_name, relation_name, trigger_name
 LIMIT 5001;
 
@@ -101,9 +104,7 @@ JOIN pg_catalog.pg_class AS table_relation
   ON table_relation.oid = index_entry.indrelid
 JOIN pg_catalog.pg_namespace AS table_namespace
   ON table_namespace.oid = table_relation.relnamespace
-WHERE table_namespace.nspname NOT IN ('pg_catalog', 'information_schema')
-  AND table_namespace.nspname NOT LIKE 'pg_toast%'
-  AND table_namespace.nspname NOT LIKE 'pg_temp_%'
+WHERE table_namespace.nspname IN ('crm', 'crm_api', 'crm_auth')
 ORDER BY table_schema, table_name, index_name
 LIMIT 5001;
 
@@ -121,7 +122,7 @@ JOIN pg_catalog.pg_type AS type_entry
   ON type_entry.oid = enum_entry.enumtypid
 JOIN pg_catalog.pg_namespace AS namespace
   ON namespace.oid = type_entry.typnamespace
-WHERE namespace.nspname NOT IN ('pg_catalog', 'information_schema')
+WHERE namespace.nspname IN ('crm', 'crm_api', 'crm_auth')
 ORDER BY schema_name, type_name, enum_entry.enumsortorder
 LIMIT 5001;
 
@@ -131,6 +132,7 @@ LIMIT 5001;
 -- Value arrays such as most_common_vals and histogram_bounds remain excluded.
 SELECT
   'SQL-GATE-B3-006' AS query_id,
+  'READABLE_TABLES_ONLY' AS coverage,
   schemaname,
   tablename,
   attname AS column_name,
@@ -140,7 +142,7 @@ SELECT
   n_distinct,
   correlation
 FROM pg_catalog.pg_stats
-WHERE schemaname NOT IN ('pg_catalog', 'information_schema')
+WHERE schemaname IN ('crm', 'crm_api', 'crm_auth')
 ORDER BY schemaname, tablename, column_name
 LIMIT 5001;
 
@@ -160,6 +162,7 @@ SELECT
   last_analyze,
   last_autoanalyze
 FROM pg_catalog.pg_stat_user_tables
+WHERE schemaname IN ('crm', 'crm_api', 'crm_auth')
 ORDER BY schemaname, relation_name
 LIMIT 5001;
 
@@ -178,9 +181,7 @@ FROM pg_catalog.pg_class AS relation
 JOIN pg_catalog.pg_namespace AS namespace
   ON namespace.oid = relation.relnamespace
 WHERE relation.relkind IN ('r', 'p', 'm', 'f')
-  AND namespace.nspname NOT IN ('pg_catalog', 'information_schema')
-  AND namespace.nspname NOT LIKE 'pg_toast%'
-  AND namespace.nspname NOT LIKE 'pg_temp_%'
+  AND namespace.nspname IN ('crm', 'crm_api', 'crm_auth')
 ORDER BY schema_name, relation_name
 LIMIT 5001;
 
@@ -192,7 +193,8 @@ SELECT
   namespace.nspname AS schema_name,
   relation.relname AS relation_name,
   policy.polname AS policy_name,
-  role_entry.rolname AS policy_role
+  CASE WHEN expanded_policy_role.role_oid = 0 THEN 'PUBLIC'
+    ELSE role_entry.rolname END AS policy_role
 FROM pg_catalog.pg_policy AS policy
 JOIN pg_catalog.pg_class AS relation
   ON relation.oid = policy.polrelid
@@ -202,10 +204,27 @@ CROSS JOIN LATERAL pg_catalog.unnest(policy.polroles)
   AS expanded_policy_role(role_oid)
 LEFT JOIN pg_catalog.pg_roles AS role_entry
   ON role_entry.oid = expanded_policy_role.role_oid
-WHERE namespace.nspname NOT IN ('pg_catalog', 'information_schema')
-  AND namespace.nspname NOT LIKE 'pg_toast%'
-  AND namespace.nspname NOT LIKE 'pg_temp_%'
+WHERE namespace.nspname IN ('crm', 'crm_api', 'crm_auth')
 ORDER BY schema_name, relation_name, policy_name, policy_role
+LIMIT 5001;
+
+-- SQL-GATE-B3-011: routine definitions and execution settings
+-- SENSITIVITY: bodies and proconfig may contain literals or secrets.
+-- Restricted output and an exact object allowlist are required before use.
+SELECT
+  'SQL-GATE-B3-011' AS query_id,
+  namespace.nspname AS routine_schema,
+  routine.proname AS routine_name,
+  pg_catalog.pg_get_function_identity_arguments(routine.oid) AS arguments,
+  routine.prosecdef AS security_definer,
+  routine.proconfig AS execution_settings,
+  pg_catalog.pg_get_functiondef(routine.oid) AS routine_definition
+FROM pg_catalog.pg_proc AS routine
+JOIN pg_catalog.pg_namespace AS namespace
+  ON namespace.oid = routine.pronamespace
+WHERE routine.prokind IN ('f', 'p')
+  AND namespace.nspname IN ('crm', 'crm_api', 'crm_auth')
+ORDER BY routine_schema, routine_name, arguments
 LIMIT 5001;
 
 -- SQL-GATE-B3-010: confirm stable identity and guardrails before rollback

@@ -6,6 +6,12 @@ Ziel-Alias: **dino_crm_discovery_target_01**
 
 Status: **PASS_WITH_GAPS / NO-GO**
 
+Der aktuelle [Zugangsplan](access-plan-consolidated.md) ordnet Bootstrap,
+Restore, B1 V1/V2/V3 und Coverage. B1 V2 ist kein automatisch nächster Lauf;
+für eine neue Rolle muss ein eigenes V3-Paket entstehen. B2/B3 besitzen noch
+keine implementierten Gate-Launcher oder Streammarker. Die unten genannten
+B2/B3-Limits sind Anforderungen, keine getesteten Schutzmechanismen.
+
 Version A bleibt als historischer Entwurf erhalten. Version B ersetzt keine
 fehlende Nutzerfreigabe. Es besteht keine Erlaubnis für eine
 Datenbankverbindung, SQL-Ausführung oder Ausgabe von Datenbankresultaten.
@@ -28,6 +34,7 @@ Datenbanknamen noch Credentials.
 
 Vor jeder Verbindung muss ein lokales Zielattest verwendet werden:
 
+<!-- markdownlint-disable-next-line MD013 -->
 \`/Users/activi/Library/Application Support/Activi/discovery-targets/dino_crm_discovery_target_01.target\`
 
 Das Attest liegt außerhalb des Repositories, hat Modus \`0600\` und enthält:
@@ -41,10 +48,15 @@ Das Attest liegt außerhalb des Repositories, hat Modus \`0600\` und enthält:
 B1 V2 verwendet zusätzlich ausschließlich folgende feste lokale Dateien:
 
 - Freigabeattest:
+<!-- markdownlint-disable-next-line MD013 -->
   \`/Users/activi/Library/Application Support/Activi/discovery-targets/dino_crm_discovery_target_01.approval\`
+
 - Connection Service:
+<!-- markdownlint-disable-next-line MD013 -->
   \`/Users/activi/Library/Application Support/Activi/discovery-targets/dino_crm_discovery_target_01.pg_service.conf\`
+
 - Credential-Datei:
+<!-- markdownlint-disable-next-line MD013 -->
   \`/Users/activi/Library/Application Support/Activi/discovery-targets/dino_crm_discovery_target_01.pgpass\`
 
 Alle drei Dateien müssen regulär, symlinkfrei, Eigentum des ausführenden
@@ -73,11 +85,15 @@ Die tatsächlichen Werte werden nicht ausgegeben.
 
 ## 2. Drei getrennte Freigabestufen
 
+<!-- markdownlint-disable MD013 -->
+
 | Gate | Inhalt | Voraussetzung | Status |
 | --- | --- | --- | --- |
 | B1 V2 | Nur Ziel-, Identity- und effektive Privilege-Prüfung mit streambaren Query-Grenzen. | Neuer exakter B1-V2-Freigabetext. | NO-GO, Freigabe fehlt. |
 | B2 | Nur einfache Katalog- und Strukturmetadaten. | B1 PASS, Review des B1-Raw-Outputs und neue B2-Freigabe. | BLOCKED. |
 | B3 | Definitionen und daten-/workload-abgeleitete Statistiken. | B2 PASS, Sensitivitätsreview und neue B3-Freigabe. | DRAFT / BLOCKED. |
+
+<!-- markdownlint-enable MD013 -->
 
 Keine Freigabe überträgt sich auf eine spätere Stufe. Jede Stufe verwendet eine
 neue, separat genehmigte Sitzung und genau eine Verbindung.
@@ -88,6 +104,7 @@ Die ursprüngliche B1-Datei bleibt als historischer, nicht freigegebener Entwurf
 erhalten:
 
 Allowlist:
+<!-- markdownlint-disable-next-line MD013 -->
 [00-identity-and-privilege-gate-b1.sql](sql/00-identity-and-privilege-gate-b1.sql)
 
 SHA-256:
@@ -97,7 +114,9 @@ Der lokal getestete Launcher ist ausschließlich an die neue B1-V2-Datei
 gebunden:
 
 - Allowlist:
+<!-- markdownlint-disable-next-line MD013 -->
   [00-identity-and-privilege-gate-b1-v2.sql](sql/00-identity-and-privilege-gate-b1-v2.sql)
+
 - SHA-256:
   \`0f586d02a663f9df543a7b7c1b8efde876c2b96d6079cd79e02c3a7359710317\`
 - Launcher-SHA-256:
@@ -128,6 +147,8 @@ Ergebniszeilen.
 
 ### Fail-closed Bewertung
 
+<!-- markdownlint-disable MD013 -->
+
 | Query | PASS | STOP |
 | --- | --- | --- |
 | B1-001/002 | Alias/Fingerprint vor Verbindung passend; erwarteter Datenbankname und Identitäten passen. | Jede Abweichung oder fehlende lokale Attestation. |
@@ -141,6 +162,8 @@ Ergebniszeilen.
 | B1-010 | Null Treffer. | Routine-Owner oder ausführbare SECURITY-DEFINER-Routine. |
 | B1-011 | Ziel und Identität unverändert; Limits aktiv. | Abweichung, Rollenwechsel oder inaktives Limit. |
 
+<!-- markdownlint-enable MD013 -->
+
 Jeder Treffer in B1-004 bis B1-010 ist STOP. Es gibt in Gate B1 kein
 automatisches Akzeptieren vermeintlich harmloser Treffer. Eine Ausnahme braucht
 eine neue Gate-Version und neue Nutzerfreigabe.
@@ -151,20 +174,32 @@ Allowlist:
 [10-catalog-structure-gate-b2.sql](sql/10-catalog-structure-gate-b2.sql)
 
 SHA-256:
-\`88652862e75934b0348f0b1bdcd101eae318be3f1700df9c1efe9f73f0deac88\`
+\`53a7eb35b3d3c49e6901c3ad12dc418955be44f88eae4cd3fbe0cb7ae1376200\`
 
 B2 ist nicht freigegeben. Nach B1 PASS müssen B1-Ergebnis, Zielbindung,
 Dateihash, Größen und Stopstatus geprüft werden. Erst danach darf der Nutzer
 einen eigenständigen B2-Freigabetext bestätigen.
 
+Der vorbereitete erste B2-Lauf ist auf \`crm\`, \`crm_api\` und \`crm_auth\`
+begrenzt. \`auth\`, \`crm_audit\`, \`extensions\`, \`firstschema\`, \`graphql\`,
+\`graphql_public\`, \`pgbouncer\`, \`public\`, \`realtime\`, \`storage\`,
+\`supabase_migrations\` und \`vault\` werden nicht inventarisiert. Namen eines
+referenzierten Zielobjekts oder einer Triggerfunktion außerhalb des Scopes
+dürfen nur erscheinen, wenn ein Constraint oder Trigger eines erlaubten
+Quellobjekts direkt darauf verweist. Das entsperrt keine tiefere Prüfung des
+Zielschema.
+
 B2 erlaubt ausschließlich:
 
+- Strukturmetadaten der drei erlaubten Schemas \`crm\`, \`crm_api\` und
+  \`crm_auth\`;
 - Schema-, Relations-, Spalten-, Constraint-, Index-, Trigger-, Routine-,
   Extension- und Publication-Namen;
 - Datentypen und strukturelle Flags;
 - PK/FK-/Constraint-Beziehungen über Metadaten;
 - RLS-Enabled-/Forced-Flags und Anzahl Policies, keine Ausdrücke;
-- Grantnamen und Grantflags;
+- Grantnamen und Grantflags, bei B2-006/008 ausdrücklich `ROLE_VISIBLE_ONLY`;
+  leere Ergebnisse belegen keine Abwesenheit fremder Grants;
 - Größenklassen, keine exakten Größen;
 - \`reltuples\` als geschätzte Zeilenzahl;
 - Routine-Signaturen und Sicherheitsflags ohne Body;
@@ -186,10 +221,13 @@ des unvollständigen Inventars.
 ## 5. Gate B3 – nicht freigegebener Entwurf
 
 Entwurf:
+<!-- markdownlint-disable-next-line MD013 -->
 [20-definitions-statistics-gate-b3-draft.sql](sql/20-definitions-statistics-gate-b3-draft.sql)
 
 SHA-256 des aktuellen, **nicht freigegebenen** Entwurfs:
-\`fa6e0e518d9e659b4c97ff9b58eb7891012897032acb44c35a3d758da518abff\`
+\`c5ac6f0a554835f125276915eb453172c28e9a7ae1733164ef74b0626775b17f\`
+
+<!-- markdownlint-disable MD013 -->
 
 | Querygruppe | Inhalt | Mögliche Sensitivität |
 | --- | --- | --- |
@@ -201,11 +239,18 @@ SHA-256 des aktuellen, **nicht freigegebenen** Entwurfs:
 | B3-006 | \`pg_stats\` ohne Wertarrays | Datenabgeleitete Sparsität, Selektivität, Breite und Korrelation. |
 | B3-007 | \`pg_stat_user_tables\` | Workload, Wartungszeiten und approximative Live-/Dead-Zahlen. |
 | B3-008 | Exakte Objektgrößen | Interne Skalierung, Wachstum und Datenkonzentration. |
-| B3-009 | Policy-Rollen | Interne Autorisierungsstruktur. |
+| B3-009 | Policy-Rollen einschließlich PUBLIC/OID 0 | Interne Autorisierungsstruktur. |
+| B3-011 | Funktionsdefinitionen und Ausführungskonfiguration | Body/proconfig können Secrets und Literale enthalten. |
+
+<!-- markdownlint-enable MD013 -->
 
 \`most_common_vals\`, \`most_common_freqs\`, \`histogram_bounds\`,
 Kandidatenzeilen und Anwendungstabellen-Aggregate sind auch im B3-Entwurf nicht
-enthalten. B3 benötigt vor jeder Ausführung einen neuen Sensitivitätsreview,
+enthalten. Die drei Schemas bilden nur eine Obergrenze; eine genaue
+Objektallowlist aus
+B2 fehlt noch. `pg_stats` ist auf lesbare Tabellen beschränkt; leere Resultate
+sind kein DQ-Nachweis. B3 benötigt vor jeder Ausführung einen neuen
+Sensitivitätsreview,
 eine neue Hashprüfung und einen eigenen Freigabetext.
 
 ## 6. Exakter Ausführungsmechanismus
@@ -228,9 +273,13 @@ Ziel-, SQL- oder Raw-Pfadparameter. Zielwerte werden ausschließlich aus den
 lokalen, nicht protokollierten Attest-, Connection-Service- und Credential-
 Dateien bezogen. Der Restricted-Raw-Pfad ist fest vorgegeben:
 
-\`\`\`bash
-/Users/activi/Documents/ChatGPT/Dino\ problem\ baza\ crm/scripts/discovery/run-gate-b1.sh
-\`\`\`
+<!-- markdownlint-disable MD013 -->
+
+```bash
+rtk proxy /bin/bash "/Users/activi/Documents/ChatGPT/Dino problem baza crm/scripts/discovery/run-gate-b1.sh"
+```
+
+<!-- markdownlint-enable MD013 -->
 
 Der Launcher darf den Prozess nur starten, wenn:
 
@@ -251,6 +300,8 @@ weder seine Anlage noch den Lauf.
 
 ### Ausgabebegrenzung
 
+<!-- markdownlint-disable MD013 -->
+
 | Grenze | B1 | B2 | B3-Entwurf |
 | --- | --- | --- | --- |
 | SQL-Zeilensentinel | \`LIMIT 5001\`; 5001 Treffer = STOP | Gleich | Gleich |
@@ -260,6 +311,8 @@ weder seine Anlage noch den Lauf.
 | Verbindungen | 1 | 1 | 1 |
 | Parallelität | 0 weitere | 0 weitere | 0 weitere |
 
+<!-- markdownlint-enable MD013 -->
+
 Der lokale Launcher begrenzt den CSV-Stream anhand tokengebundener Query-Marker
 während des Schreibens. Er prüft Reihenfolge, Query-ID, CSV-Grenzen, Query- und
 Gesamtbytes sowie den 5001-Zeilensentinel. Beim Überschreiten einer Grenze
@@ -267,10 +320,12 @@ beendet er die Prozessgruppe und damit die einzige Verbindung, markiert STOP
 und startet keinen Retry. Fehlende Marker oder ein nullzeiliger Abschnitt ohne
 korrektes Marker-Paar sind ebenfalls STOP.
 
-Die Launcher-Implementierung ist ausschließlich mit Fake-\`psql\` lokal
-verifiziert. Zielattest, Connection Service, Credentialweg, echte
-PostgreSQL-Kompatibilität und Freigabe fehlen weiterhin. Deshalb bleibt der
-Gesamtstatus NO-GO.
+Die B1-Launcher-Implementierung ist ausschließlich mit Fake-`psql` lokal
+verifiziert. Im früheren lokalen Metadatenpreflight wurden Zielattest, Service
+und Credential-Datei als regulär, symlinkfrei, eigener Nutzer und `0600`
+festgestellt. Inhalte, Zielrichtigkeit, effektive Rechte, echte PostgreSQL-
+Kompatibilität und Freigabe sind damit nicht belegt. Keine erneute Prüfung
+dieser Dateien in der Korrekturrunde. Gesamtstatus bleibt NO-GO.
 
 ### Ausgabe- und Retention-Regel
 
@@ -301,6 +356,7 @@ Nur die in der jeweils freigegebenen SQL-Datei wörtlich enthaltenen
 
 ### B2
 
+<!-- markdownlint-disable-next-line MD013 -->
 - \`current_database\`, \`current_setting\`, \`pg_get_userbyid\`, \`format_type\`;
 - \`pg_total_relation_size\`, \`pg_relation_size\`;
 - \`pg_get_function_identity_arguments\`, \`pg_get_function_result\`;
@@ -308,10 +364,13 @@ Nur die in der jeweils freigegebenen SQL-Datei wörtlich enthaltenen
 
 ### B3-Entwurf
 
+<!-- markdownlint-disable-next-line MD013 -->
 - \`current_database\`, \`current_setting\`, \`pg_get_expr\`, \`pg_get_viewdef\`;
 - \`pg_get_triggerdef\`, \`pg_get_indexdef\`;
 - \`pg_relation_size\`, \`pg_total_relation_size\`;
-- \`unnest\` ausschließlich über \`pg_policy.polroles\`.
+- `unnest` ausschließlich über `pg_policy.polroles`;
+- `pg_get_function_identity_arguments` und `pg_get_functiondef` nur für
+  separat genehmigte Routinedefinitionen, keine Ausführung der Routinen.
 
 Anwendungsfunktionen, Supabase-RPCs, Triggerfunktionen, gespeicherte
 Prozeduren, SECURITY-DEFINER-Ausführung und dynamisches SQL bleiben verboten.
@@ -359,10 +418,12 @@ Fehlt ein Feld oder ändert sich ein Hash, ist der Text unwirksam.
 
 ## 10. Status
 
+<!-- markdownlint-disable MD013 -->
+
 | Prüfung | Status |
 | --- | --- |
 | Ziel-Alias definiert | PASS |
-| Lokale Zielattestation spezifiziert | PASS_WITH_GAPS – noch nicht lokal geprüft |
+| Lokale Zielattestation spezifiziert | PASS_WITH_GAPS – frühere Dateimetadaten belegt; Inhalt/Ziel ungeprüft |
 | B1 V1 SQL erhalten | PASS – historischer Entwurf, nicht freigegeben |
 | B1 V2 SQL entworfen | PASS – nur statisch und mit Fake-Protokoll getestet |
 | B2 SQL getrennt und reduziert | PASS – nur statisch |
@@ -375,13 +436,17 @@ Fehlt ein Feld oder ändert sich ein Hash, ist der Text unwirksam.
 | Gate B2 freigegeben | BLOCKED |
 | Gate B3 freigegeben | BLOCKED |
 
+<!-- markdownlint-enable MD013 -->
+
 **Gesamtstatus: PASS_WITH_GAPS / NO-GO.**
 
 ## 11. Discovery-Artefaktliste
 
+<!-- markdownlint-disable MD013 -->
+
 | Artefakt | Ort | Klassifikation | Gate-Status |
 | --- | --- | --- | --- |
-| Zielattest | Lokaler absoluter Pfad aus Abschnitt 1 | Restricted Config; nie kopieren oder ausgeben. | B1-Voraussetzung, nicht geprüft. |
+| Zielattest | Lokaler absoluter Pfad aus Abschnitt 1 | Restricted Config; nie kopieren oder ausgeben. | Frühere Dateimetadaten belegt; Inhalt/Ziel ungeprüft. |
 | B1-V1-Allowlist | Historischer Repository-Pfad und SHA-256 aus Abschnitt 3 | Reviewable SQL; keine Ergebnisdaten. | Historischer Entwurf, nicht freigegeben. |
 | B1-V2-Allowlist | Aktueller Repository-Pfad und SHA-256 aus Abschnitt 3 | Reviewable SQL mit Query-Markern; keine Ergebnisdaten. | Entwurf, nicht freigegeben. |
 | B1-V2-Raw-Ausgabe | Absoluter externer Pfad aus Abschnitt 6 | Restricted Raw; Modus \`0700\`, maximal 24 Stunden. | Darf in dieser Sitzung nicht entstehen. |
@@ -392,10 +457,13 @@ Fehlt ein Feld oder ändert sich ein Hash, ist der Text unwirksam.
 | B3-Raw-Ausgabe und Manifest | Erst in eigenem B3-Freigabetext exakt festzulegen | Restricted Raw/Metadata mit erhöhtem Sensitivitätsrisiko. | Nicht freigegeben. |
 | Sanitized Review | Noch kein Pfad | Nur nach Security-/Privacy-Review und separater Schreibfreigabe. | Nicht freigegeben. |
 
+<!-- markdownlint-enable MD013 -->
+
 ## 12. Zugehörige Dokumente
 
 - [Änderungsmatrix A zu B](gate-b-change-matrix.md)
 - [Historischer, nicht erteilter B1-Freigabetext](gate-b1-approval-text.md)
 - [Exakter, nicht erteilter B1-V2-Freigabetext](gate-b1-v2-approval-text.md)
 - [Supabase-Tooling-Regeln](../agents/supabase-tooling.md)
+<!-- markdownlint-disable-next-line MD013 -->
 - [Append-only Arbeitsbericht](../worklogs/2026-09-11-security-read-only-discovery-gate.md)
