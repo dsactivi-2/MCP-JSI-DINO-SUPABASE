@@ -60,6 +60,11 @@ Trenutni [Gate B](../discovery/security-read-only-discovery-preflight-b.md)
 ostaje vezan za svoj lokalni `psql` launcher. Plugin/MCP zahtijeva novu
 gate verziju; odobrenje jednog puta ne prenosi se na drugi.
 
+Prvi [Supabase-Plugin Gate-P nacrt](../discovery/supabase-plugin-read-only-gate-draft.md)
+je `DRAFT / NO-GO`. Korisnik je postavku `Always ask` potvrdio, ali trenutni
+Tool-Katalog i dalje prikazuje account i write alate. Zato projektna vezanost,
+read-only i minimalne feature grupe još nisu dokazani.
+
 ## Ažuriranje skillsa i plugina
 
 Projektne skill direktorije tretirati kao vendorizirane cjeline. Ne mijenjati

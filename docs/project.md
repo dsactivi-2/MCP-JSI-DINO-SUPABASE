@@ -32,6 +32,8 @@ MCP-kompatibilne klijente.
   postupak read-only audita.
 - [Supabase tooling](agents/supabase-tooling.md) razdvaja projektne skills,
   razvojni Supabase plugin/MCP i strogo kontrolisani Gate-B put.
+- [Supabase-Plugin Gate P](discovery/supabase-plugin-read-only-gate-draft.md)
+  dokumentuje neizvršivi `DRAFT / NO-GO` za mogući alternativni read-only put.
 - [AGENTS.md](../AGENTS.md) definira pravila rada agenata u repozitoriju.
 
 Ako se dokumenti ne slažu, rad se zaustavlja dok se konflikt ne razriješi
@@ -50,6 +52,11 @@ duplikat ne daje dodatnu izolaciju ni novi trust boundary. Read-only i
 projektno ograničenje aktivne veze nisu dokazani, pa plugin nije odobren za
 project, schema, data ili SQL pozive. Trenutni Gate B i dalje koristi isključivo
 pregledani lokalni `psql` put iz svog preflight dokumenta.
+
+Korisnik je 2026-09-11 potvrdio postavku `Always ask`. Statički Tool-Katalog
+ipak još sadrži account i write alate, pa
+[Plugin Gate P](discovery/supabase-plugin-read-only-gate-draft.md) ostaje
+`NO-GO`. Nije izveden nijedan projektni ili bazni Plugin poziv.
 
 Setup koristi postojeći namjenski Linear projekt **Dino problem baza CRM** u
 timu **Activi (ACT)**. Identitet i workflow su u

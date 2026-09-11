@@ -431,3 +431,40 @@ werden als neuer Eintrag mit Verweis auf den betroffenen Eintrag angehängt.
   externe Berechtigung geändert.
 - Assessment: `PASS_WITH_GAPS / NO-GO`; Skills sind freigegeben für Planung und
   Review, Live-Plugin-Zugriffe bleiben `BLOCKED`.
+
+### [2026-09-11T09:14:17+02:00] Phase 14 – Plugin-Gate-P-Entwurf
+
+- Intent: Nach dem angeforderten Git-Checkpoint einen nicht ausführbaren Gate-
+  Entwurf für einen möglichen projektgebundenen Read-only-Zugriff über den
+  Supabase-Plugin erstellen.
+- Git-Checkpoint:
+  - Commit `1efca87` (`Document CRM governance and Supabase tooling`) wurde nach
+    Link-, Lint-, Gate-B-, Secret-Dateinamen- und Diff-Prüfung erstellt.
+  - Das temporäre `.scratch/`-Verzeichnis wurde nicht aufgenommen und ist jetzt
+    ignoriert.
+- Verifizierte Ausgangslage:
+  - Der Nutzer attestiert `Always ask` als aktiviert.
+  - Supabase dokumentiert `project_ref`, `read_only=true` und Feature-Gruppen für
+    einen eingeschränkten MCP-Endpunkt.
+  - Der aktuell sichtbare Codex-Connector verlangt weiterhin `project_id` und
+    zeigt Account- und Mutationswerkzeuge. Projektbindung und Read-only sind
+    damit nicht nachgewiesen.
+  - Read-only verhindert Writes, begrenzt aber nicht automatisch lesbare
+    personenbezogene Daten.
+- Änderungen:
+  - Neuer `DRAFT / NO-GO` unter
+    `docs/discovery/supabase-plugin-read-only-gate-draft.md`.
+  - README, Projektstatus, Tooling-Regeln, Gate B und Entscheidungskarte wurden
+    auf den Entwurf verlinkt.
+  - Ein statischer Test verhindert GO-Formulierungen, echte Projektkennungen und
+    fehlende Sicherheitsmarker im Entwurf.
+- Evidenz:
+  - Plugin-Gate-Statiktest: `PASS`.
+  - Relative Markdown-Links: `PASS`, 238 Links.
+  - Gate-B1-V2-Statikprüfung: `PASS`.
+  - Markdownlint der sechs geänderten Zieldokumente: `PASS`, null Befunde.
+  - `git diff --check`: `PASS`.
+- Sicherheitsgrenze: Kein Projekt-, Schema-, Log-, Advisor-, SQL- oder
+  Datenzugriff; keine Connector-Konfiguration, Migration oder externe Änderung.
+- Assessment: `DRAFT / NO-GO`; `Always ask` erfüllt nur `PG-00`. Live-Plugin-
+  Zugriff bleibt bis zur Schließung von `PG-02` bis `PG-09` blockiert.

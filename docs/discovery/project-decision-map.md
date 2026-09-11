@@ -90,7 +90,7 @@ Runtime-Such-MCP integriert werden.
 | P-03 | Freitext wird unter Erhalt des Originals vorab normalisiert. | Datenlage, Datenschutz und Q8.5. | VORLÄUFIGER VORSCHLAG. |
 | P-04 | Das Discovery-Gate nutzt die konservativen Grenzen des [Gate-B-Preflights](security-read-only-discovery-preflight-b.md). | Ausdrückliche Freigabe. | Zur Freigabe vorgelegt. |
 | P-05 | Identity-Prüfung, Strukturmetadaten und sensitive Definitionen/Statistiken werden als B1, B2 und B3 separat freigegeben. | Jeweils Review der vorherigen Stufe. | B1 V2 NO-GO; B2/B3 BLOCKED. |
-| P-06 | Ein Supabase-MCP kann später einen alternativen internen Discovery-Pfad bilden, wenn Projektbindung, read-only, minimale Features, Query-/Outputgrenzen und manuelle Freigabe in einer eigenen Gate-Version bewiesen sind. | Neue technische Evidenz und ausdrückliche Nutzerfreigabe. | Kein Bestandteil von Gate B; BLOCKED. |
+| P-06 | Ein Supabase-MCP kann später einen alternativen internen Discovery-Pfad bilden, wenn Projektbindung, read-only, minimale Features, Query-/Outputgrenzen und manuelle Freigabe in einer eigenen Gate-Version bewiesen sind. | [Plugin Gate P](supabase-plugin-read-only-gate-draft.md), neue technische Evidenz und ausdrückliche Nutzerfreigabe. | DRAFT / NO-GO; kein Bestandteil von Gate B. |
 
 ## Arbeitsannahmen
 
@@ -109,7 +109,7 @@ Runtime-Such-MCP integriert werden.
 | G1-02 | Dedizierte Identität bereitstellen und ihre effektiven Rechte mit der Gate-Allowlist prüfen. | Nutzer/Operations; nur nach G1-01. | Metadaten-Discovery. |
 | G1-03 | Rohdatenverzeichnis mit restriktiven Rechten erzeugen; Repository-Ausgabe bleibt bis Redaktionsprüfung gesperrt. | Discovery-Sitzung. | Persistenz von Ergebnissen. |
 | G1-04 | B1-Output prüfen und Gate B2 separat freigeben; B3 bleibt bis nach B2 gesperrt. | B1 PASS und Nutzerfreigabe. | Einfache Strukturmetadaten. |
-| G1-05 | Falls statt des geprüften `psql`-Pfads der Supabase-MCP verwendet werden soll, einen separaten plugin-spezifischen Gate-Entwurf erstellen und testen. | Neue Nutzerentscheidung; bestehende Gate-B-Freigabe ist nicht übertragbar. | Optionaler MCP-Discovery-Pfad. |
+| G1-05 | Falls statt des geprüften `psql`-Pfads der Supabase-MCP verwendet werden soll, den [plugin-spezifischen Gate-P-Entwurf](supabase-plugin-read-only-gate-draft.md) schließen und testen. | `Always ask` ist attestiert; Projektbindung, read-only, Features, Outputgrenze und neue Freigabe fehlen. | Optionaler MCP-Discovery-Pfad bleibt NO-GO. |
 | G3-01 | Fachlich relevante Objekte anhand des Metadateninventars auswählen. | G2-Bericht. | Aggregierte Data-Quality-Abfragen. |
 | G3-02 | Für jede Tiefenprüfung einen exakten, objektgebundenen SQL-Nachtrag freigeben. | G3-01. | Kandidatendaten oder Aggregate. |
 | O-01 | Q4.5 einschließlich ursprünglicher Frage und Optionen. | Nutzer; nicht durch Discovery ableitbar. | Interviewabschluss. |

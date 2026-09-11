@@ -16,6 +16,9 @@ Ausführungsmechanismus dieses Gates. Seine derzeitige Verbindung ist weder durc
 dieses Dokument projektgebunden noch als read-only attestiert und besitzt nicht
 die Stream-, Retry- und Ausgabegrenzen des Launchers. Ein MCP-Lauf erfordert
 eine eigene Gate-Version, neue Evidenz und eine neue ausdrückliche Freigabe.
+Der nicht ausführbare Entwurf dafür ist
+[Supabase-Plugin Gate P](supabase-plugin-read-only-gate-draft.md); sein Status
+ist `DRAFT / NO-GO` und ändert dieses Gate nicht.
 
 ## 1. Zielbindung ohne Repository-Geheimnisse
 
