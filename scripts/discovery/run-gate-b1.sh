@@ -5,8 +5,9 @@ set -euo pipefail
 readonly GATE_ID='DISCOVERY-GATE-B1-V2-2026-09-11'
 readonly TARGET_ALIAS='dino_crm_discovery_target_01'
 readonly REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd -P)"
+readonly LAUNCHER_PATH="${REPO_ROOT}/scripts/discovery/run-gate-b1.sh"
 readonly PROD_SQL_PATH="${REPO_ROOT}/docs/discovery/sql/00-identity-and-privilege-gate-b1-v2.sql"
-readonly PROD_SQL_SHA256='e63a5eea418f48b1d912d2777b0e27fd9ca93a71980bd5dd8eeff56e970f7223'
+readonly PROD_SQL_SHA256='0f586d02a663f9df543a7b7c1b8efde876c2b96d6079cd79e02c3a7359710317'
 readonly PROD_CONFIG_ROOT='/Users/activi/Library/Application Support/Activi/discovery-targets'
 readonly PROD_TARGET_ATTEST="${PROD_CONFIG_ROOT}/${TARGET_ALIAS}.target"
 readonly PROD_APPROVAL_ATTEST="${PROD_CONFIG_ROOT}/${TARGET_ALIAS}.approval"
@@ -16,7 +17,7 @@ readonly PROD_RAW_PARENT='/Users/activi/Library/Application Support/Activi/disco
 readonly PROD_PSQL='/opt/homebrew/bin/psql'
 readonly PYTHON_BIN='/opt/homebrew/bin/python3'
 readonly STREAM_GUARD="${REPO_ROOT}/scripts/discovery/gate_b1_stream_guard.py"
-readonly STREAM_GUARD_SHA256='fb6713fe56dc5b4f165f0893c964c683155df06792329bce2dd0df94f0be77f0'
+readonly STREAM_GUARD_SHA256='acfc52daf4773be1034d52f5bed1acd61f73a2ec6ae6768c872b86876406e190'
 readonly WINDOW_SECONDS=1800
 readonly RETENTION_SECONDS=86400
 LOCK_DIR=''
@@ -33,11 +34,19 @@ cleanup_lock() {
   fi
 }
 
-read_attest_value() {
-  local file="$1" wanted_key="$2" line key value found=''
+read_config_value() {
+  local file="$1" wanted_section="$2" wanted_key="$3"
+  local line section='' key value found=''
 
   while IFS= read -r line || [[ -n "${line}" ]]; do
-    [[ -n "${line}" && "${line}" != \#* && "${line}" == *=* ]] || continue
+    [[ -n "${line}" && "${line}" != \#* && "${line}" != \;* ]] || continue
+    if [[ -n "${wanted_section}" && "${line}" == \[*\] ]]; then
+      section="${line#\[}"
+      section="${section%\]}"
+      continue
+    fi
+    [[ -z "${wanted_section}" || "${section}" == "${wanted_section}" ]] || continue
+    [[ "${line}" == *=* ]] || continue
     key="${line%%=*}"
     value="${line#*=}"
     if [[ "${key}" == "${wanted_key}" ]]; then
@@ -48,6 +57,10 @@ read_attest_value() {
 
   [[ -n "${found}" ]] || stop 'missing attestation key'
   printf '%s' "${found}"
+}
+
+read_attest_value() {
+  read_config_value "$1" '' "$2"
 }
 
 validate_kv_schema() {
@@ -117,33 +130,15 @@ validate_secure_file() {
 }
 
 read_service_value() {
-  local file="$1" wanted_section="$2" wanted_key="$3"
-  local line section='' key value found=''
-
-  while IFS= read -r line || [[ -n "${line}" ]]; do
-    [[ -n "${line}" && "${line}" != \#* && "${line}" != \;* ]] || continue
-    if [[ "${line}" == \[*\] ]]; then
-      section="${line#\[}"
-      section="${section%\]}"
-      continue
-    fi
-    [[ "${section}" == "${wanted_section}" && "${line}" == *=* ]] || continue
-    key="${line%%=*}"
-    value="${line#*=}"
-    if [[ "${key}" == "${wanted_key}" ]]; then
-      [[ -z "${found}" ]] || stop 'duplicate service key'
-      found="${value}"
-    fi
-  done <"${file}"
-
-  [[ -n "${found}" ]] || stop 'missing service key'
-  printf '%s' "${found}"
+  read_config_value "$1" "$2" "$3"
 }
 
 main() {
   local sql_path approval_path target_attest service_file credential_file
   local raw_parent raw_dir psql_bin test_mode='false'
   local expected_hash actual_hash hash_record approval_status approval_gate approval_alias
+  local expected_launcher_hash launcher_hash_record launcher_hash
+  local expected_stream_guard_hash
   local window_start window_end now retention_authorized retention_seconds
   local target_alias target_service expected_database expected_fingerprint
   local service_host service_database service_user service_sslmode service_timeout
@@ -180,7 +175,16 @@ main() {
   fi
 
   validate_secure_file "${approval_path}" 'approval attestation'
+  validate_kv_schema \
+    "${approval_path}" \
+    'approval attestation' \
+    'status|gate_id|target_alias|window_start_epoch|window_end_epoch|sql_sha256|launcher_sha256|stream_guard_sha256|retention_delete_authorized|retention_seconds'
   expected_hash="$(read_attest_value "${approval_path}" 'sql_sha256')"
+  expected_launcher_hash="$(read_attest_value "${approval_path}" 'launcher_sha256')"
+  expected_stream_guard_hash="$(read_attest_value "${approval_path}" 'stream_guard_sha256')"
+  launcher_hash_record="$(shasum -a 256 "${LAUNCHER_PATH}")"
+  launcher_hash="${launcher_hash_record%% *}"
+  [[ "${launcher_hash}" == "${expected_launcher_hash}" ]] || stop 'launcher hash mismatch'
   [[ -f "${sql_path}" && ! -L "${sql_path}" ]] || stop 'SQL file invalid'
   hash_record="$(shasum -a 256 "${sql_path}")"
   actual_hash="${hash_record%% *}"
@@ -197,12 +201,9 @@ main() {
   [[ -f "${STREAM_GUARD}" && ! -L "${STREAM_GUARD}" ]] || stop 'stream guard invalid'
   stream_guard_hash_record="$(shasum -a 256 "${STREAM_GUARD}")"
   stream_guard_hash="${stream_guard_hash_record%% *}"
+  [[ "${stream_guard_hash}" == "${expected_stream_guard_hash}" ]] || stop 'approved stream guard hash mismatch'
   [[ "${stream_guard_hash}" == "${STREAM_GUARD_SHA256}" ]] || stop 'stream guard hash mismatch'
 
-  validate_kv_schema \
-    "${approval_path}" \
-    'approval attestation' \
-    'status|gate_id|target_alias|window_start_epoch|window_end_epoch|sql_sha256|retention_delete_authorized|retention_seconds'
   validate_kv_schema \
     "${target_attest}" \
     'target attestation' \
@@ -242,6 +243,7 @@ main() {
   service_sslmode="$(read_service_value "${service_file}" "${TARGET_ALIAS}" 'sslmode')"
   service_timeout="$(read_service_value "${service_file}" "${TARGET_ALIAS}" 'connect_timeout')"
   [[ -n "${service_user}" ]] || stop 'connection service identity missing'
+  [[ "${service_host}" != *,* ]] || stop 'connection service host invalid'
   case "${service_sslmode}" in
     require|verify-ca|verify-full) ;;
     *) stop 'connection service TLS invalid' ;;

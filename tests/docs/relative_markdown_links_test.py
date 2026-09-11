@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
+import os
 import re
+import subprocess
 import unicodedata
 from pathlib import Path
 from urllib.parse import unquote
@@ -8,6 +10,45 @@ from urllib.parse import unquote
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 LINK_PATTERN = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
+
+
+def git_output(*arguments: str) -> bytes:
+    result = subprocess.run(
+        ["git", "-C", str(REPO_ROOT), *arguments],
+        check=True,
+        capture_output=True,
+    )
+    return result.stdout
+
+
+if (REPO_ROOT / ".git").exists():
+    tracked_files = {
+        Path(raw_path.decode("utf-8"))
+        for raw_path in git_output("ls-files", "-z").split(b"\0")
+        if raw_path
+    }
+    markdown_paths = sorted(path for path in tracked_files if path.suffix == ".md")
+
+    def read_repository_text(relative_path: Path) -> str:
+        return git_output("show", f":{relative_path.as_posix()}").decode("utf-8")
+
+    def target_exists(relative_path: Path) -> bool:
+        return relative_path in tracked_files or any(
+            candidate.is_relative_to(relative_path) for candidate in tracked_files
+        )
+
+else:
+    tracked_files = set()
+    markdown_paths = [
+        path.relative_to(REPO_ROOT)
+        for path in sorted(REPO_ROOT.glob("*.md")) + sorted((REPO_ROOT / "docs").rglob("*.md"))
+    ]
+
+    def read_repository_text(relative_path: Path) -> str:
+        return (REPO_ROOT / relative_path).read_text(encoding="utf-8")
+
+    def target_exists(relative_path: Path) -> bool:
+        return (REPO_ROOT / relative_path).exists()
 
 
 def slugify(heading: str) -> str:
@@ -25,7 +66,7 @@ def headings(path: Path) -> set[str]:
     result: set[str] = set()
     duplicates: dict[str, int] = {}
     in_fence = False
-    for line in path.read_text(encoding="utf-8").splitlines():
+    for line in read_repository_text(path).splitlines():
         if line.lstrip().startswith("```"):
             in_fence = not in_fence
             continue
@@ -43,9 +84,9 @@ def headings(path: Path) -> set[str]:
 
 errors: list[str] = []
 checked = 0
-for markdown_path in sorted(REPO_ROOT.glob("*.md")) + sorted((REPO_ROOT / "docs").rglob("*.md")):
+for markdown_path in markdown_paths:
     in_fence = False
-    for line_number, line in enumerate(markdown_path.read_text(encoding="utf-8").splitlines(), 1):
+    for line_number, line in enumerate(read_repository_text(markdown_path).splitlines(), 1):
         if line.lstrip().startswith("```"):
             in_fence = not in_fence
             continue
@@ -56,13 +97,16 @@ for markdown_path in sorted(REPO_ROOT.glob("*.md")) + sorted((REPO_ROOT / "docs"
             if target.startswith(("http://", "https://", "mailto:")):
                 continue
             path_part, separator, fragment = target.partition("#")
-            resolved = markdown_path if not path_part else (markdown_path.parent / unquote(path_part)).resolve()
+            resolved = markdown_path if not path_part else Path(
+                (markdown_path.parent / unquote(path_part)).as_posix()
+            )
+            resolved = Path(os.path.normpath(resolved.as_posix()))
             checked += 1
-            if not resolved.exists():
-                errors.append(f"{markdown_path.relative_to(REPO_ROOT)}:{line_number}: missing target")
+            if resolved.is_absolute() or str(resolved).startswith("..") or not target_exists(resolved):
+                errors.append(f"{markdown_path}:{line_number}: missing tracked target")
                 continue
-            if separator and resolved.is_file() and slugify(unquote(fragment)) not in headings(resolved):
-                errors.append(f"{markdown_path.relative_to(REPO_ROOT)}:{line_number}: missing fragment")
+            if separator and resolved.suffix == ".md" and slugify(unquote(fragment)) not in headings(resolved):
+                errors.append(f"{markdown_path}:{line_number}: missing fragment")
 
 if errors:
     raise SystemExit("FAIL: relative Markdown links\n" + "\n".join(errors))

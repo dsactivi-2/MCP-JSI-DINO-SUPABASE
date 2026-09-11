@@ -64,6 +64,11 @@ SELECT
 FROM identities
 JOIN pg_catalog.pg_roles AS role_entry
   ON role_entry.rolname = identities.role_name
+WHERE role_entry.rolsuper
+  OR role_entry.rolcreaterole
+  OR role_entry.rolcreatedb
+  OR role_entry.rolreplication
+  OR role_entry.rolbypassrls
 ORDER BY identities.identity_kind, role_entry.rolname
 LIMIT 5001;
 \echo __GATE_B1_BOUNDARY__|:boundary_token|END|SQL-GATE-B1-003

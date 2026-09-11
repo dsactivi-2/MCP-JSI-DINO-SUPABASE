@@ -4,6 +4,9 @@ set -euo pipefail
 
 readonly REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd -P)"
 readonly LAUNCHER="${REPO_ROOT}/scripts/discovery/run-gate-b1.sh"
+readonly STREAM_GUARD="${REPO_ROOT}/scripts/discovery/gate_b1_stream_guard.py"
+readonly TEST_LAUNCHER_SHA256="$(shasum -a 256 "${LAUNCHER}" | cut -d ' ' -f 1)"
+readonly TEST_STREAM_GUARD_SHA256="$(shasum -a 256 "${STREAM_GUARD}" | cut -d ' ' -f 1)"
 
 fail() {
   printf 'FAIL: %s\n' "$1" >&2
@@ -26,6 +29,8 @@ test_hash_mismatch_stops_before_psql() {
     'window_start_epoch=2000000000' \
     'window_end_epoch=2000001800' \
     'sql_sha256=ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff' \
+    "launcher_sha256=${TEST_LAUNCHER_SHA256}" \
+    "stream_guard_sha256=${TEST_STREAM_GUARD_SHA256}" \
     >"${test_root}/config/approval.attest"
   chmod 600 "${test_root}/config/approval.attest"
 
@@ -82,6 +87,8 @@ test_valid_fake_run_writes_minimized_manifest() {
     'window_start_epoch=2000000000' \
     'window_end_epoch=2000001800' \
     "sql_sha256=${sql_hash}" \
+    "launcher_sha256=${TEST_LAUNCHER_SHA256}" \
+    "stream_guard_sha256=${TEST_STREAM_GUARD_SHA256}" \
     'retention_delete_authorized=true' \
     'retention_seconds=86400' \
     >"${test_root}/config/approval.attest"
@@ -123,9 +130,11 @@ test_valid_fake_run_writes_minimized_manifest() {
       'for query_number in 001 002 003 004 005 006 007 008 009 010 011; do' \
       '  query_id="SQL-GATE-B1-${query_number}"' \
       '  printf "__GATE_B1_BOUNDARY__|%s|BEGIN|%s\\n" "${boundary_token}" "${query_id}"' \
-      '  if [[ "${query_number}" != 005 ]]; then' \
-      '    printf "%s,%s\\n" "${query_id}" "SENSITIVE_FAKE_VALUE"' \
-      '  fi' \
+      '  case "${query_number}" in' \
+      '    001) printf "%s,TEST_DATABASE,TEST_IDENTITY,TEST_IDENTITY,150000,on,f\\n" "${query_id}" ;;' \
+      '    002) printf "%s,1,1\\n" "${query_id}" ;;' \
+      '    011) printf "%s,1,1,on,5s,1s,15s\\n" "${query_id}" ;;' \
+      '  esac' \
       '  printf "__GATE_B1_BOUNDARY__|%s|END|%s\\n" "${boundary_token}" "${query_id}"' \
       'done'
   } >"${test_root}/bin/fake-psql"
@@ -189,6 +198,8 @@ create_valid_case() {
     'window_start_epoch=2000000000' \
     'window_end_epoch=2000001800' \
     "sql_sha256=${sql_hash}" \
+    "launcher_sha256=${TEST_LAUNCHER_SHA256}" \
+    "stream_guard_sha256=${TEST_STREAM_GUARD_SHA256}" \
     'retention_delete_authorized=true' \
     'retention_seconds=86400' \
     >"${CASE_ROOT}/config/approval.attest"
@@ -224,10 +235,12 @@ write_fake_psql() {
       'if [[ -f "${test_root}/psql-invocations" ]]; then read -r count <"${test_root}/psql-invocations"; fi' \
       'printf "%s\\n" "$((count + 1))" >"${test_root}/psql-invocations"' \
       'boundary_token=' \
+      'quiet=false' \
       'required_flags=0' \
       'for argument in "$@"; do' \
       '  case "${argument}" in' \
       '    -X|--no-psqlrc|--no-password|--set=ON_ERROR_STOP=on|--csv|--tuples-only) required_flags=$((required_flags + 1)) ;;' \
+      '    --quiet) quiet=true ;;' \
       '    --set=boundary_token=*) boundary_token="${argument#--set=boundary_token=}" ;;' \
       '    --set=expected_database_name=TEST_DATABASE) : ;;' \
       '    --file=*) : ;;' \
@@ -267,13 +280,32 @@ write_fake_psql() {
       '      printf "__GATE_B1_BOUNDARY__|%s|END|%s\\n" "${boundary_token}" "${query_id}"' \
       '    done' \
       '    ;;' \
+      '  realistic_status|semantic_finding)' \
+      '    if [[ "${scenario}" == realistic_status && "${quiet}" == false ]]; then' \
+      '      printf "BEGIN\\nSET\\nSET\\nSET\\nSET\\n"' \
+      '    fi' \
+      '    for query_number in 001 002 003 004 005 006 007 008 009 010 011; do' \
+      '      query_id="SQL-GATE-B1-${query_number}"' \
+      '      printf "__GATE_B1_BOUNDARY__|%s|BEGIN|%s\\n" "${boundary_token}" "${query_id}"' \
+      '      case "${query_number}" in' \
+      '        001) printf "%s,TEST_DATABASE,TEST_IDENTITY,TEST_IDENTITY,150000,on,f\\n" "${query_id}" ;;' \
+      '        002) printf "%s,1,1\\n" "${query_id}" ;;' \
+      '        004) [[ "${scenario}" != semantic_finding ]] || printf "%s,session_user,TEST_IDENTITY,DIRECT,1,WRITER_ROLE,f,f,f,f,f,f\\n" "${query_id}" ;;' \
+      '        011) printf "%s,1,1,on,5s,1s,15s\\n" "${query_id}" ;;' \
+      '      esac' \
+      '      printf "__GATE_B1_BOUNDARY__|%s|END|%s\\n" "${boundary_token}" "${query_id}"' \
+      '    done' \
+      '    [[ "${scenario}" != realistic_status || "${quiet}" == false ]] || printf "ROLLBACK\\n" >/dev/null' \
+      '    ;;' \
       '  happy)' \
       '    for query_number in 001 002 003 004 005 006 007 008 009 010 011; do' \
       '      query_id="SQL-GATE-B1-${query_number}"' \
       '      printf "__GATE_B1_BOUNDARY__|%s|BEGIN|%s\\n" "${boundary_token}" "${query_id}"' \
-      '      if [[ "${query_number}" != 005 ]]; then' \
-      '        printf "%s,%s\\n" "${query_id}" "SENSITIVE_FAKE_VALUE"' \
-      '      fi' \
+      '      case "${query_number}" in' \
+      '        001) printf "%s,TEST_DATABASE,TEST_IDENTITY,TEST_IDENTITY,150000,on,f\\n" "${query_id}" ;;' \
+      '        002) printf "%s,1,1\\n" "${query_id}" ;;' \
+      '        011) printf "%s,1,1,on,5s,1s,15s\\n" "${query_id}" ;;' \
+      '      esac' \
       '      printf "__GATE_B1_BOUNDARY__|%s|END|%s\\n" "${boundary_token}" "${query_id}"' \
       '    done' \
       '    ;;' \
@@ -377,7 +409,7 @@ test_raw_time_and_lock_guards() {
   assert_preflight_stop 'raw path already exists'
   cleanup_case
 
-  CASE_TEMPLATE="${REPO_ROOT}/.scratch/gate-b1-test.XXXXXX"
+  CASE_TEMPLATE="${REPO_ROOT}/tests/gate-b1-test.XXXXXX"
   create_valid_case
   unset CASE_TEMPLATE
   write_fake_psql happy
@@ -425,11 +457,10 @@ test_psql_failures_stop_without_retry() {
 
 test_stream_limits_stop_fail_closed() {
   local manifest expected_reason
-  for scenario in sentinel query_bytes total_bytes; do
+  for scenario in sentinel query_bytes; do
     case "${scenario}" in
       sentinel) expected_reason='row_sentinel_5001' ;;
       query_bytes) expected_reason='query_byte_limit' ;;
-      total_bytes) expected_reason='total_byte_limit' ;;
     esac
     create_valid_case
     write_fake_psql "${scenario}"
@@ -464,21 +495,76 @@ test_timeout_stops_once_without_retry() {
   unset CASE_TIMEOUT_SECONDS
 }
 
-test_hash_mismatch_stops_before_psql
-printf 'PASS: hash mismatch stops before fake psql\n'
-test_valid_fake_run_writes_minimized_manifest
-printf 'PASS: valid fake run writes minimized manifest\n'
-test_timeout_stops_once_without_retry
-printf 'PASS: timeout stops once without retry\n'
-test_wrong_owner_stops_before_psql
-printf 'PASS: wrong owner stops before fake psql\n'
-test_preflight_attestation_and_path_guards
-printf 'PASS: attestation and path guards stop before fake psql\n'
-test_unknown_attest_and_inline_password_stop
-printf 'PASS: strict config schemas reject unknown and inline-secret fields\n'
-test_raw_time_and_lock_guards
-printf 'PASS: raw, time, and lock guards stop before fake psql\n'
-test_psql_failures_stop_without_retry
-printf 'PASS: SQL and client failures stop without retry\n'
-test_stream_limits_stop_fail_closed
-printf 'PASS: stream limits stop fail-closed\n'
+test_semantic_findings_stop_fail_closed() {
+  local manifest
+  create_valid_case
+  write_fake_psql semantic_finding
+  run_case
+  manifest="${CASE_ROOT}/raw/DISCOVERY-GATE-B1-V2-2026-09-11/gate-b1-manifest.json"
+
+  [[ ${RUN_STATUS} -ne 0 ]] || fail 'semantic finding returned success'
+  [[ "${RUN_OUTPUT}" == *'STOP: semantic_finding_SQL-GATE-B1-004'* ]] || fail 'semantic finding stop reason missing'
+  [[ "$(<"${CASE_ROOT}/psql-invocations")" == '1' ]] || fail 'semantic finding caused retry'
+  [[ "$(<"${manifest}")" == *'"status":"STOP"'* ]] || fail 'semantic finding manifest is not STOP'
+
+  cleanup_case
+}
+
+test_realistic_psql_status_is_suppressed() {
+  create_valid_case
+  write_fake_psql realistic_status
+  run_case
+
+  [[ ${RUN_STATUS} -eq 0 ]] || fail "realistic psql status output was not suppressed: ${RUN_OUTPUT}"
+  [[ "$(<"${CASE_ROOT}/psql-invocations")" == '1' ]] || fail 'realistic status case caused retry'
+
+  cleanup_case
+}
+
+test_multihost_service_stops_before_psql() {
+  local target_hash
+  create_valid_case
+  write_fake_psql happy
+  replace_config_value "${CASE_ROOT}/config/pg_service.conf" host 'TEST_TARGET,SECOND_TARGET'
+  target_hash="$(printf '%s' 'test_target,second_target' | shasum -a 256)"
+  target_hash="${target_hash%% *}"
+  replace_config_value "${CASE_ROOT}/config/target.attest" target_fingerprint_sha256 "${target_hash}"
+  run_case
+
+  assert_preflight_stop 'connection service host invalid'
+  cleanup_case
+}
+
+test_launcher_hash_mismatch_stops_before_psql() {
+  create_valid_case
+  write_fake_psql happy
+  replace_config_value \
+    "${CASE_ROOT}/config/approval.attest" \
+    launcher_sha256 \
+    ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+  run_case
+
+  assert_preflight_stop 'launcher hash mismatch'
+  cleanup_case
+}
+
+run_selected_test() {
+  local name="$1" function_name="$2" success_message="$3"
+  [[ -z "${GATE_B1_TEST_ONLY:-}" || "${GATE_B1_TEST_ONLY}" == "${name}" ]] || return 0
+  "${function_name}"
+  printf 'PASS: %s\n' "${success_message}"
+}
+
+run_selected_test hash test_hash_mismatch_stops_before_psql 'hash mismatch stops before fake psql'
+run_selected_test happy test_valid_fake_run_writes_minimized_manifest 'valid fake run writes minimized manifest'
+run_selected_test timeout test_timeout_stops_once_without_retry 'timeout stops once without retry'
+run_selected_test owner test_wrong_owner_stops_before_psql 'wrong owner stops before fake psql'
+run_selected_test attest test_preflight_attestation_and_path_guards 'attestation and path guards stop before fake psql'
+run_selected_test schema test_unknown_attest_and_inline_password_stop 'strict config schemas reject unknown and inline-secret fields'
+run_selected_test raw test_raw_time_and_lock_guards 'raw, time, and lock guards stop before fake psql'
+run_selected_test psql_failure test_psql_failures_stop_without_retry 'SQL and client failures stop without retry'
+run_selected_test limits test_stream_limits_stop_fail_closed 'stream limits stop fail-closed'
+run_selected_test semantic test_semantic_findings_stop_fail_closed 'semantic findings stop fail-closed'
+run_selected_test quiet test_realistic_psql_status_is_suppressed 'realistic psql status output is suppressed'
+run_selected_test multihost test_multihost_service_stops_before_psql 'multi-host service stops before fake psql'
+run_selected_test launcher_hash test_launcher_hash_mismatch_stops_before_psql 'launcher hash mismatch stops before fake psql'

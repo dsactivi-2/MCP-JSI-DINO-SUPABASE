@@ -15,6 +15,7 @@ from pathlib import Path
 
 
 EXPECTED_QUERY_IDS = [f"SQL-GATE-B1-{number:03d}" for number in range(1, 12)]
+FINDING_QUERY_IDS = {f"SQL-GATE-B1-{number:03d}" for number in range(3, 11)}
 PER_QUERY_LIMIT = 2 * 1024 * 1024
 TOTAL_LIMIT = 12 * 1024 * 1024
 ROW_SENTINEL = 5001
@@ -113,6 +114,7 @@ def main() -> int:
         "-X",
         "--no-psqlrc",
         "--no-password",
+        "--quiet",
         "--set=ON_ERROR_STOP=on",
         "--csv",
         "--tuples-only",
@@ -135,6 +137,7 @@ def main() -> int:
 
     def consume_line(line: bytes, raw_handle: io.BufferedWriter) -> None:
         nonlocal current_query, in_quotes, query_index, total_bytes, record_buffer
+        semantic_finding_id: str | None = None
 
         begin_marker = None
         end_marker = None
@@ -174,6 +177,8 @@ def main() -> int:
                 if len(rows) != 1 or not rows[0] or rows[0][0] != current_query:
                     raise ProtocolStop("query_identity_mismatch")
                 query_rows[current_query] += 1
+                if current_query in FINDING_QUERY_IDS:
+                    semantic_finding_id = current_query
                 record_buffer.clear()
                 if query_rows[current_query] >= ROW_SENTINEL:
                     raise ProtocolStop("row_sentinel_5001")
@@ -183,47 +188,50 @@ def main() -> int:
             raise ProtocolStop("total_byte_limit")
         raw_handle.write(line)
         raw_handle.flush()
+        if semantic_finding_id is not None:
+            raise ProtocolStop(f"semantic_finding_{semantic_finding_id}")
 
-    raw_descriptor = os.open(raw_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
     try:
-        with os.fdopen(raw_descriptor, "wb") as raw_handle:
-            while True:
-                now = time.time()
-                if now >= args.window_end_epoch:
-                    raise ProtocolStop("time_window_expired")
-                if time.monotonic() - started_monotonic >= args.timeout_seconds:
-                    raise ProtocolStop("launcher_timeout")
+        raw_descriptor = os.open(raw_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        try:
+            with os.fdopen(raw_descriptor, "wb") as raw_handle:
+                while True:
+                    now = time.time()
+                    if now >= args.window_end_epoch:
+                        raise ProtocolStop("time_window_expired")
+                    if time.monotonic() - started_monotonic >= args.timeout_seconds:
+                        raise ProtocolStop("launcher_timeout")
 
-                events = selector.select(timeout=0.1)
-                if events:
-                    chunk = os.read(process.stdout.fileno(), 65536)
-                    if chunk:
-                        pending.extend(chunk)
-                        while b"\n" in pending:
-                            line, remainder = pending.split(b"\n", 1)
-                            pending = bytearray(remainder)
-                            consume_line(line + b"\n", raw_handle)
-                        if current_query is not None and query_bytes[current_query] + len(pending) > PER_QUERY_LIMIT:
-                            raise ProtocolStop("query_byte_limit")
-                        if total_bytes + len(pending) > TOTAL_LIMIT:
-                            raise ProtocolStop("total_byte_limit")
+                    events = selector.select(timeout=0.1)
+                    if events:
+                        chunk = os.read(process.stdout.fileno(), 65536)
+                        if chunk:
+                            pending.extend(chunk)
+                            while b"\n" in pending:
+                                line, remainder = pending.split(b"\n", 1)
+                                pending = bytearray(remainder)
+                                consume_line(line + b"\n", raw_handle)
+                            if current_query is not None and query_bytes[current_query] + len(pending) > PER_QUERY_LIMIT:
+                                raise ProtocolStop("query_byte_limit")
+                            if total_bytes + len(pending) > TOTAL_LIMIT:
+                                raise ProtocolStop("total_byte_limit")
+                        elif process.poll() is not None:
+                            break
                     elif process.poll() is not None:
                         break
-                elif process.poll() is not None:
-                    break
 
-            if pending:
-                raise ProtocolStop("unterminated_output")
-            return_code = process.wait()
-            if return_code != 0:
-                raise ProtocolStop("psql_error")
-            if current_query is not None or query_index != len(EXPECTED_QUERY_IDS):
-                raise ProtocolStop("incomplete_query_protocol")
-    except ProtocolStop as error:
-        stop_reason = str(error)
-        terminate(process)
+                if pending:
+                    raise ProtocolStop("unterminated_output")
+                return_code = process.wait()
+                if return_code != 0:
+                    raise ProtocolStop("psql_error")
+                if current_query is not None or query_index != len(EXPECTED_QUERY_IDS):
+                    raise ProtocolStop("incomplete_query_protocol")
+        except ProtocolStop as error:
+            stop_reason = str(error)
     finally:
         selector.close()
+        terminate(process)
 
     ended_at = int(time.time())
     status = "STOP" if stop_reason else "PASS"

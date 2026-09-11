@@ -10,9 +10,9 @@ SQL_PATH = REPO_ROOT / "docs/discovery/sql/00-identity-and-privilege-gate-b1-v2.
 LAUNCHER_PATH = REPO_ROOT / "scripts/discovery/run-gate-b1.sh"
 PREFLIGHT_PATH = REPO_ROOT / "docs/discovery/security-read-only-discovery-preflight-b.md"
 APPROVAL_PATH = REPO_ROOT / "docs/discovery/gate-b1-v2-approval-text.md"
-EXPECTED_HASH = "e63a5eea418f48b1d912d2777b0e27fd9ca93a71980bd5dd8eeff56e970f7223"
-EXPECTED_LAUNCHER_HASH = "28fb3e4251e6ae45447c5ed570b1b0b02bf8e38948b7efc81ebec7d122fdc812"
-EXPECTED_STREAM_GUARD_HASH = "fb6713fe56dc5b4f165f0893c964c683155df06792329bce2dd0df94f0be77f0"
+EXPECTED_HASH = "0f586d02a663f9df543a7b7c1b8efde876c2b96d6079cd79e02c3a7359710317"
+EXPECTED_LAUNCHER_HASH = "638e4713370f7a2499e2543656334da97f1e245d3a8385d6914f0f137fbabf3d"
+EXPECTED_STREAM_GUARD_HASH = "acfc52daf4773be1034d52f5bed1acd61f73a2ec6ae6768c872b86876406e190"
 EXPECTED_QUERY_IDS = [f"SQL-GATE-B1-{number:03d}" for number in range(1, 12)]
 FORBIDDEN_SQL_TOKENS = {
     "ALTER",
@@ -109,5 +109,7 @@ if "Status: **NICHT ERTEILT**" not in approval_text:
     fail("B1 V2 approval text is not marked as ungranted")
 if "**Gesamtstatus: PASS_WITH_GAPS / NO-GO.**" not in preflight_text:
     fail("preflight status is not PASS_WITH_GAPS / NO-GO")
+if "Launcher fehlt" in preflight_text:
+    fail("preflight contradicts the present launcher")
 
 print("PASS: B1 V2 static SQL and gate-document checks")

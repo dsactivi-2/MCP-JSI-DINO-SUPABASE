@@ -89,11 +89,11 @@ gebunden:
 - Allowlist:
   [00-identity-and-privilege-gate-b1-v2.sql](sql/00-identity-and-privilege-gate-b1-v2.sql)
 - SHA-256:
-  \`e63a5eea418f48b1d912d2777b0e27fd9ca93a71980bd5dd8eeff56e970f7223\`
+  \`0f586d02a663f9df543a7b7c1b8efde876c2b96d6079cd79e02c3a7359710317\`
 - Launcher-SHA-256:
-  \`28fb3e4251e6ae45447c5ed570b1b0b02bf8e38948b7efc81ebec7d122fdc812\`
+  \`638e4713370f7a2499e2543656334da97f1e245d3a8385d6914f0f137fbabf3d\`
 - Stream-Guard-SHA-256:
-  \`fb6713fe56dc5b4f165f0893c964c683155df06792329bce2dd0df94f0be77f0\`
+  \`acfc52daf4773be1034d52f5bed1acd61f73a2ec6ae6768c872b86876406e190\`
 - Gate-ID: \`DISCOVERY-GATE-B1-V2-2026-09-11\`
 - Freigabestatus: \`NICHT ERTEILT\`
 
@@ -206,8 +206,8 @@ eine neue Hashprüfung und einen eigenen Freigabetext.
   Datenbankverbindung.
 - Keine Parallelität, Wiederholung, automatische Retry-Logik oder Kombination
   von B1, B2 und B3.
-- \`psql -X --no-psqlrc --no-password --set=ON_ERROR_STOP=on\`; jeder SQL- oder
-  Clientfehler beendet den Lauf.
+- \`psql -X --no-psqlrc --no-password --quiet --set=ON_ERROR_STOP=on --csv
+  --tuples-only\`; jeder SQL- oder Clientfehler beendet den Lauf.
 - Jede SQL-Datei startet \`BEGIN TRANSACTION READ ONLY\`, setzt lokale Timeouts
   und endet mit \`ROLLBACK\`.
 - Der lokale Connection Service entspricht dem Ziel-Alias. Credentials werden
@@ -225,10 +225,12 @@ Dateien bezogen. Der Restricted-Raw-Pfad ist fest vorgegeben:
 Der Launcher darf den Prozess nur starten, wenn:
 
 - Zielattest und lokaler Connection Service bytegenau zum Alias gehören;
+- der Connection Service genau einen Hostwert ohne Multi-Host-Liste enthält;
 - der Host-/Projektfingerprint lokal übereinstimmt;
 - der Restricted-Raw-Ordner außerhalb des Repositories neu ist und Modus
   \`0700\` hat;
-- die SQL-Datei den freigegebenen SHA-256 besitzt;
+- SQL-Datei, Launcher und Stream-Guard jeweils den im Freigabeattest gebundenen
+  SHA-256 besitzen;
 - der aktuelle Zeitstempel im freigegebenen Zeitfenster liegt;
 - kein anderer Discovery-Prozess oder keine andere Verbindung aktiv ist.
 
@@ -372,7 +374,7 @@ Fehlt ein Feld oder ändert sich ein Hash, ist der Text unwirksam.
 | B1-V1-Allowlist | Historischer Repository-Pfad und SHA-256 aus Abschnitt 3 | Reviewable SQL; keine Ergebnisdaten. | Historischer Entwurf, nicht freigegeben. |
 | B1-V2-Allowlist | Aktueller Repository-Pfad und SHA-256 aus Abschnitt 3 | Reviewable SQL mit Query-Markern; keine Ergebnisdaten. | Entwurf, nicht freigegeben. |
 | B1-V2-Raw-Ausgabe | Absoluter externer Pfad aus Abschnitt 6 | Restricted Raw; Modus \`0700\`, maximal 24 Stunden. | Darf in dieser Sitzung nicht entstehen. |
-| B1-Laufmanifest | Neben B1-Raw-Ausgabe, ohne Zielwerte oder Resultset-Inhalte | Restricted Metadata; Gate-ID, Alias, Zeiten, SQL-Hash, Byte-/Zeilenzähler und STOP/PASS. | Launcher fehlt. |
+| B1-Laufmanifest | Neben B1-Raw-Ausgabe, ohne Zielwerte oder Resultset-Inhalte | Restricted Metadata; Gate-ID, Alias, Zeiten, SQL-Hash, Byte-/Zeilenzähler und STOP/PASS. | Launcher lokal mit Fake-`psql` verifiziert; reales Manifest darf ohne Freigabe nicht entstehen. |
 | B2-Allowlist | Repository-Pfad und SHA-256 aus Abschnitt 4 | Reviewable SQL; keine Ergebnisdaten. | BLOCKED. |
 | B2-Raw-Ausgabe und Manifest | Erst in eigenem B2-Freigabetext exakt festzulegen | Restricted Raw/Metadata. | Nicht freigegeben. |
 | B3-Entwurf | Repository-Pfad und SHA-256 aus Abschnitt 5 | Sensitiver SQL-Entwurf; mögliche Literale/interne Informationen. | DRAFT / BLOCKED. |
@@ -384,5 +386,4 @@ Fehlt ein Feld oder ändert sich ein Hash, ist der Text unwirksam.
 - [Änderungsmatrix A zu B](gate-b-change-matrix.md)
 - [Historischer, nicht erteilter B1-Freigabetext](gate-b1-approval-text.md)
 - [Exakter, nicht erteilter B1-V2-Freigabetext](gate-b1-v2-approval-text.md)
-- [Abhängige Entscheidungskarte](project-decision-map.md)
 - [Append-only Arbeitsbericht](../worklogs/2026-09-11-security-read-only-discovery-gate.md)

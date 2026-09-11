@@ -283,3 +283,39 @@ werden als neuer Eintrag mit Verweis auf den betroffenen Eintrag angehängt.
 - Assessment: \`PASS_WITH_GAPS / NO-GO\`
 - Nächster Freigabepunkt: Erst separater Nutzerauftrag für lokale Setup-Schritte,
   danach neue ausdrückliche Bestätigung des vollständigen B1-V2-Freigabetexts.
+
+### [2026-09-11T04:57:34+02:00] Phase 10 – Review-Korrekturlauf mit TDD
+
+- Intent: Alle Befunde des Launcher-Reviews ohne Datenbankzugriff test-first
+  korrigieren und den zukünftigen Commit aus einem sauberen Git-Index-Export
+  verifizieren.
+- RED-Evidenz:
+  - Ein semantischer Rollen-Finding-Row endete fälschlich mit Erfolg.
+  - Realistische `psql`-Statuszeilen verursachten einen Protokollfehler.
+  - Multi-Host wurde akzeptiert und ein falscher Launcher-Hash nicht passend
+    erkannt.
+  - Ein unerwarteter I/O-Fehler ließ den Fake-`psql`-Prozess weiterlaufen.
+  - Der versionierte Preflight verlinkte ein unversioniertes Ziel und bezeichnete
+    den vorhandenen Launcher widersprüchlich als fehlend.
+- Korrekturen:
+  - Finding-Queries `SQL-GATE-B1-003` bis `SQL-GATE-B1-010` stoppen bei jeder
+    Ergebniszeile; Query 003 liefert nur administrative Rollenbefunde.
+  - `psql` läuft mit `--quiet`; unerwartete Fehler beenden die Prozessgruppe.
+  - Multi-Host-Listen sind verboten. Freigabeattest, tatsächlicher Launcher und
+    Stream-Guard werden hashgebunden verglichen.
+  - Doppelte Konfigurations-Leselogik wurde zusammengeführt.
+  - Linkprüfung arbeitet gegen den Git-Index; die Lint-Konfiguration ist Teil des
+    vorgesehenen Commits.
+- Neue SHA-256-Werte:
+  - B1-V2-SQL:
+    `0f586d02a663f9df543a7b7c1b8efde876c2b96d6079cd79e02c3a7359710317`.
+  - Launcher:
+    `638e4713370f7a2499e2543656334da97f1e245d3a8385d6914f0f137fbabf3d`.
+  - Stream-Guard:
+    `acfc52daf4773be1034d52f5bed1acd61f73a2ec6ae6768c872b86876406e190`.
+- Sauberer Index-Export unter `/private/tmp`: 13 Launcher-Gruppen, separater
+  I/O-Test, statische Gate-Prüfung, 39 versionierte Links, Bash-Syntax und
+  Markdownlint bestanden.
+- Sicherheitsgrenze: Kein reales `psql`, kein Netzwerk, keine
+  Datenbankverbindung und kein SQL gegen PostgreSQL.
+- Assessment: `PASS_WITH_GAPS / NO-GO`; Freigabestatus bleibt `NICHT ERTEILT`.

@@ -46,13 +46,13 @@ Freigabetext bleiben historische, nicht erteilte Entwürfe.
 >   \`/Users/activi/Library/Application Support/Activi/discovery-raw/dino_crm_discovery_target_01/DISCOVERY-GATE-B1-V2-2026-09-11/gate-b1-manifest.json\`
 >
 > SHA-256 der einzigen freigegebenen SQL-Datei:
-> \`e63a5eea418f48b1d912d2777b0e27fd9ca93a71980bd5dd8eeff56e970f7223\`.
+> \`0f586d02a663f9df543a7b7c1b8efde876c2b96d6079cd79e02c3a7359710317\`.
 >
 > SHA-256 des Launchers:
-> \`28fb3e4251e6ae45447c5ed570b1b0b02bf8e38948b7efc81ebec7d122fdc812\`.
+> \`638e4713370f7a2499e2543656334da97f1e245d3a8385d6914f0f137fbabf3d\`.
 >
 > SHA-256 des Stream-Guards:
-> \`fb6713fe56dc5b4f165f0893c964c683155df06792329bce2dd0df94f0be77f0\`.
+> \`acfc52daf4773be1034d52f5bed1acd61f73a2ec6ae6768c872b86876406e190\`.
 >
 > Bei Hashabweichung einer dieser drei Dateien ist die Freigabe unwirksam.
 >
@@ -83,7 +83,7 @@ Freigabetext bleiben historische, nicht erteilte Entwürfe.
 > Secrets, URLs und Credentials.
 >
 > \`psql\` muss mit
-> \`-X --no-psqlrc --no-password --set=ON_ERROR_STOP=on --csv
+> \`-X --no-psqlrc --no-password --quiet --set=ON_ERROR_STOP=on --csv
 > --tuples-only\` laufen. Der Launcher setzt zusätzlich einen zufälligen,
 > nicht geheimen \`boundary_token\` und den lokal attestierten erwarteten
 > Datenbanknamen als \`psql\`-Variablen. Die
@@ -93,6 +93,8 @@ Freigabetext bleiben historische, nicht erteilte Entwürfe.
 > Jede Query wird im Raw-Stream durch genau ein tokengebundenes
 > \`BEGIN\`/\`END\`-Markerpaar begrenzt. Fehlende, vertauschte oder zusätzliche
 > Marker, eine falsche Query-ID oder ein unvollständiger CSV-Datensatz sind STOP.
+> Jede Ergebniszeile der Finding-Queries SQL-GATE-B1-003 bis
+> SQL-GATE-B1-010 ist ebenfalls sofort STOP.
 >
 > Stop-Kriterien: Es gilt sofortiger fail-closed STOP bei abweichender Gate-ID,
 > Ziel-Alias,
@@ -105,6 +107,7 @@ Freigabetext bleiben historische, nicht erteilte Entwürfe.
 > allowlisteten Query/Funktion; Anwendungstabellen-, Kandidaten-, RPC- oder
 > dynamischem SQL-Zugriff; \`LIMIT 5001\`; mehr als 2 MiB je Query oder
 > 12 MiB Gesamtausgabe; mehr als einer Verbindung, Parallelität oder Retry;
+> einer Multi-Host-Liste im Connection Service;
 > SQL-Ausgabe im Chat oder außerhalb des Restricted-Raw-Ordners; Auftreten
 > verbotener Inhalte; ungeklärter Retention/Löschung; Scopeänderung oder
 > Widerruf.
