@@ -56,6 +56,26 @@ ažuriranjem briefa ili novim ADR-om.
 
 ## Trenutno stanje
 
+Raniji [ograničeni Q10.2g audit](reviews/2026-09-11-public-definer-audit.md)
+nalazi dvije SECURITY-DEFINER rutine sa PUBLIC EXECUTE, bez PUBLIC schema
+USAGE; u tom ranijem pozivu definicije nisu pročitane. Sintetički kontraprimjeri
+pokazuju da schema USAGE i promjenjivi read-only default ne dokazuju potpunu
+zabranu trajnih upisa. Predložena V3 iznimka je povučena. Rola još nije
+kreirana. Korisnik je dodatni uski read-only scope izričito odobrio u Q10.2h;
+Q10.2h je sada izvršen. Dvije definicije ostaju NOT_PROVEN_READ_ONLY, a osam
+pregledanih LO helper funkcija ima PUBLIC EXECUTE. Detalji i 23 sintetičke
+provjere su u [izvještaju](reviews/2026-09-11-public-paths-audit.md).
+Q10.2i je zatim omogućio [konkretan plan prava](discovery/public-rights-change-proposal.md):
+33 postojeće role, 351 predloženi grant i 11 PUBLIC opoziva. Novi ciklus ima
+25 sintetičkih provjera. Sadašnji pristup nema ovlast za osam LO funkcija;
+produkcijski paket ostaje tehnički NO-GO. Q10.2j daje korisničku dozvolu za
+opisanu promjenu, ali naknadna read-only provjera potvrđuje nepromijenjene
+ovlasti. Potreban je konkretan ovlašteni pristup koji korisnik navodi kao moguć.
+Detalji su u
+[provjeri plana](reviews/2026-09-11-rights-plan-verification.md). [Registar verzija](discovery/role-version-register.md)
+razlikuje
+povučeni pokušaj role V3 od još planiranog Gate-B1-V3 paketa.
+
 Repozitorij sadrži dokumentacijsku osnovu, prihvaćene ADR-ove, discovery
 runbook,
 lokalni Matt Pocock setup i Serena projektnu konfiguraciju.
@@ -211,17 +231,20 @@ treba ispuniti sigurnosne preduslove prema
 Q10.2d izuzima isključivo ovu izradu role od prethodnog restore testa. Test
 ostaje obavezan prije promjena tabela ili podataka; dnevni backup je potvrđen
 kao korisnička izjava, bez tehničke provjere.
-Q10.2e je omogućio privremene sintetičke testove: V1 ima 12 provjera, zasebni
-V2 nacrt 16, uz ograničenja password/prava produkcije. Owner preflight je
+Q10.2e je omogućio privremene sintetičke testove: prvi V1 je imao 12 provjera,
+zasebni V2 nacrt 16, uz ograničenja password/prava produkcije. Owner preflight je
 zaustavljen lokalno zbog nepotpune potvrde pooler/projekt identiteta.
 <!-- markdownlint-disable-next-line MD013 -->
 Detalji: [provjera role](reviews/2026-09-11-role-bootstrap-verification.md).
 Naknadno je korisnik odabrao odgovarajući projekt „JSI Base“ i nezavisni hash
 abgleich je prošao (Q10.2f). Dvije ograničene read-only provjere potvrdile su
 PostgreSQL 17, CREATEROLE/DB-owner pristup bez superusera i nepostojanje nove role.
-PUBLIC TEMP i javno dostupne SECURITY-DEFINER funkcije sada blokiraju izradu
-role. Njihove definicije i efekti nisu analizirani; nije bilo mutacije ili
-čitanja kandidata. Opći schema audit i dalje nije izvršen.
+Tadašnji nalazi PUBLIC TEMP i SECURITY-DEFINER prava blokirali su izradu role.
+Najnoviji audit gore precizira razliku između EXECUTE prava i schema USAGE;
+sigurnost indirektnih poziva ostaje otvorena. Posljednji V2 sintetički ciklus
+ima 25 provjera, uključujući kontraprimjere, Q10.2h audit i Q10.2i plan prava.
+Nije bilo produkcijske mutacije ili čitanja kandidata. Opći schema audit i
+dalje nije izvršen.
 Za novu rolu potreban je vlastiti B1 V3 paket, koji još ne postoji. B2/B3
 launcher, streammarker i coverage gateovi još nisu implementirani; B2 ostaje
 blokiran do pregledanog B1 PASS i vlastite freigabe.

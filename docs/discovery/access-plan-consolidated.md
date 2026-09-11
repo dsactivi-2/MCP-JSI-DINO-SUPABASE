@@ -65,8 +65,9 @@ Service-, Credential- und B1-Attestdateien wurden nicht geändert.
 
 Zwei begrenzte Read-only-Vorabprüfungen wurden anschließend ausgeführt. Ergebnis:
 PostgreSQL 17, Nicht-Superuser mit CREATEROLE und DB-Ownership; neue Rolle fehlt.
-PUBLIC besitzt TEMP sowie ausführbare SECURITY-DEFINER-Funktionen in mindestens
-einem für PUBLIC zugänglichen Schema. Keine PUBLIC-Schema-CREATE-, Relations-,
+Die damaligen Abfragen meldeten PUBLIC TEMP sowie SECURITY-DEFINER-Funktionen
+in mindestens einem für PUBLIC zugänglichen Schema. Keine PUBLIC-Schema-CREATE-,
+Relations-,
 Spalten- oder Sequenzschreibrechte wurden im geprüften Scope gefunden; die
 bekannte `pg_settings`-UPDATE-Ausnahme wurde berücksichtigt. Dies ist kein
 Beweis, dass die Funktionen Daten verändern: Definitionen wurden nicht gelesen
@@ -76,6 +77,11 @@ Check wurde synthetisch geprüft. Sein Produktionszustand bleibt ausdrücklich
 offen und wird nicht aus dem früheren Ergebnis abgeleitet.
 <!-- markdownlint-disable-next-line MD013 -->
 Beleg: [Produktions-Preflight](../reviews/2026-09-11-production-role-preflight.md).
+
+Der neue [begrenzte Funktionsaudit](../reviews/2026-09-11-public-definer-audit.md)
+findet dagegen zwei PUBLIC-EXECUTE-Routinen ohne PUBLIC schema USAGE.
+Die zeitliche Abweichung bleibt ungeklärt. Auch ohne schema USAGE sind
+indirekte Aufrufwege nicht ausgeschlossen. Die beiden Entwürfe bleiben NO-GO.
 
 Historischer Vorzustand vor dem erfolgreichen Dashboard-Abgleich:
 
@@ -166,13 +172,38 @@ Funktionen, Last und Ausgaben müssen vorher einzeln zugelassen sein.
 
 Der Auftrag zur neuen Rolle und die begrenzte Restore-Ausnahme liegen vor.
 Der unabhängige Pooler-/Projektabgleich und die beschränkte Owner-Prüfung sind
-erfolgt. Offen ist jetzt ein konkret begrenzter Prüfweg für die öffentlich
-aufrufbaren SECURITY-DEFINER-Funktionen und den Umgang mit PUBLIC TEMP. Es gilt
+erfolgt. Der erste enge Funktionsprüfweg ist mit Q10.2g genehmigt und ausgeführt.
+Zwei Routinen haben PUBLIC EXECUTE, aber keine PUBLIC schema USAGE. Das beweist
+keine vollständige Unerreichbarkeit: Der synthetische View-Gegenfall und die
+PUBLIC-Large-Object-Grenze sind im
+[neuen Prüfbericht](../reviews/2026-09-11-public-definer-audit.md) belegt.
+Der dort konkret abgegrenzte Zusatzscope für die zwei Definitionen, indirekte
+Katalogabhängigkeiten und eng begrenzte Invoker-Funktionsrechte ist mit Q10.2h
+ausdrücklich genehmigt und nach 23 synthetischen Prüfungen ausgeführt.
+Der [Abschlussbericht](../reviews/2026-09-11-public-paths-audit.md) belegt zwei
+ungeklärte Definer-Funktionen und acht PUBLIC-ausführbare LO-Hilfsfunktionen.
+Q10.2i hat den [konkreten Rechteplan](public-rights-change-proposal.md) ermöglicht:
+33 bestehende Rollen, 351 ergänzende Direktgrants und 11 PUBLIC-REVOKEs.
+Der erweiterte synthetische Lauf besteht mit 25 Prüfungen. Der vorhandene
+Zugang hat jedoch für alle acht LO-Helfer weder SET-owner noch Grant-option.
+Der Generator verweigert deshalb ein ausführbares Produktionspaket.
+Zuerst muss ein unterstützter, ausreichend berechtigter Ausführungsweg geklärt
+werden; andernfalls braucht es eine neue Entscheidung zum Zugangskonzept.
+[Nachweise und Grenzen](../reviews/2026-09-11-rights-plan-verification.md).
+Es gilt
 keine Freigabe für pauschale PUBLIC-REVOKEs oder eine Lockerung des Rollen-Gates.
 Review der V2-Mitgliedschaftsregel und gebundener Mutationslauncher bleiben
 ebenfalls erforderlich. Die synthetischen
 Lifecycle-Proben wurden ausgeführt; Passwort-Login und Produktionskompatibilität
-sind damit nicht belegt. Danach wird das konkrete Ausführungspaket mit Ziel,
-Zeitfenster und bestandenem Preflight zur abschließenden Freigabe vorgelegt.
+sind damit nicht belegt. Q10.2j erteilt inzwischen die Freigabe für den
+beschriebenen gezielten Rechteplan. Die anschließende read-only Wiederprüfung
+zeigt unverändert acht Ziele ohne Änderungsbefugnis. Es fehlt die Benennung
+des vom Nutzer gemeinten berechtigten Zugangs. Die gleiche pauschale Freigabe
+wird nicht erneut verlangt; technische und Backup/Restore-Voraussetzungen
+bleiben zu erfüllen.
 Der Einrichtungsauftrag ist keine Freigabe für B1, B2 oder B3. Q9 verschiebt
 weitere Geschäftsentscheidungen bis nach Discovery.
+
+Der [Versionsstand](role-version-register.md) trennt den zurückgezogenen
+Rollen-V3-Versuch vom zukünftigen Gate-B1-V3-Paket. Q10.2h reaktiviert den
+verworfenen Rollenentwurf nicht.

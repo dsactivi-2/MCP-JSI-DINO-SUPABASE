@@ -176,3 +176,17 @@ V2-Entwurf SHA-256:
 
 Rollback SHA-256:
 `c57e37514dd824bdbfed1d3a8b5075faeca986014b4dd264f4aea2d6fafac49a`
+
+## Naknadno utvrđena granica PUBLIC funkcija
+
+Ograničeni [audit i kontraprimjeri](../reviews/2026-09-11-public-definer-audit.md)
+ne daju dozvolu za primjenu. Dvije rutine imaju PUBLIC EXECUTE, bez PUBLIC
+schema USAGE. To ne isključuje indirektan poziv preko viewa. Sintetički je
+potvrđeno i kreiranje trajnog large objecta preko PUBLIC invoker funkcije.
+Read-only zadana postavka se može isključiti. V1/V2 nisu dokaz potpune zabrane
+svih trajnih upisa; njihovi postojeći strogi gateovi ostaju nepromijenjeni.
+Privremena V3 ideja je povučena nakon kontraprimjera. Produkcija nije mijenjana.
+
+Korisnik je dodatni isključivo read-only scope odobrio u Q10.2h. Odobrenje
+ne mijenja V1/V2 gateove niti vraća povučeni V3 pokušaj. Razlika između verzija
+role i Gate-B1-V3 paketa je u [registru verzija](role-version-register.md).

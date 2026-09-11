@@ -410,6 +410,49 @@ Unsichere oder unvollständige Verarbeitung ist STOP. Die Freigabe umfasst
 keine Funktionsausführung, Kandidatenabfrage, Rechteänderung oder Aufweichung
 des Rollen-Gates.
 
+**Q10.2h – Erweiterter, ausschließlich lesender Funktionsprüfumfang:**
+`BESTÄTIGT` – Der Nutzer antwortete am 2026-09-11 ausdrücklich „ja“ auf:
+„Darf ich auch diese Wege ausschließlich lesend prüfen: die zwei Funktionen,
+indirekte Aufrufe und bestimmte PostgreSQL-Hilfsrechte?“ Zusätzlich beauftragte
+er: „dokumentiere das \"v\" und ziehe die docs nach“. Der besprochene V3-Versuch
+und seine Rücknahme werden als Versionsstand dokumentiert; daraus folgt keine
+Freigabe der verworfenen Lockerung.
+
+Genehmigt ist der Zusatzumfang aus dem
+[PUBLIC-Prüfbericht](../reviews/2026-09-11-public-definer-audit.md): die zwei
+PUBLIC-EXECUTE-Definer-Funktionen auch ohne PUBLIC schema USAGE, ihre
+Katalogabhängigkeiten und relevanten indirekten View-/Routinenrechte sowie die
+dort aufgezählten PostgreSQL-Large-Object-Funktionsrechte. Verarbeitung erfolgt
+über den geprüften lokalen psql-Weg mit begrenzter, redigierter Ausgabe.
+Keine Funktions- oder Viewausführung, Kandidaten- oder Large-Object-Inhalte,
+Dateiinhalte, DB-Mutation, Rechteänderung oder Lockerung der Rollen-Gates.
+Rohe Definitionen, Identitäten und Literale bleiben außerhalb von Modell,
+Chat und Git. Diese Freigabe muss nicht erneut eingeholt werden; offene
+Prüfergebnisse bleiben als solche dokumentiert.
+
+**Q10.2i – Konkreten, getesteten Rechteplan vorbereiten:** `BESTÄTIGT` – Auf
+den beschriebenen nächsten Schritt antwortete der Nutzer „mach das“:
+bestehende betroffene Konten und Rechte prüfen, einen getesteten Entwurf
+vorbereiten, bestehende Zugriffe erhalten und die bekannten Schreibrechte vom
+neuen Prüfzugang fernhalten. Der fertige Entwurf wird zur Freigabe vorgelegt.
+Die Zustimmung umfasst die dafür erforderliche begrenzte read-only Prüfung
+von Rollen, Objekt-/Grantrechten und den bekannten Zielen sowie lokale
+SQL-Entwürfe und bereits erlaubte isolierte Tests. Sie autorisiert noch keine
+Produktionsmutation oder Änderung bestehender PUBLIC-Rechte. Ein erhaltender
+Entwurf darf bestehende effektive Zugriffe bewahren, aber keine unbestätigte
+fachliche Notwendigkeit einzelner Rechte behaupten.
+
+**Q10.2j – Freigabe des beschriebenen Rechteplans:** `BESTÄTIGT` – Nach
+Erklärung der acht LO-Funktionen und der fehlenden Verwaltungsrechte antwortet
+der Nutzer: „ja es ist mögloch und ich gebe die freigeb dazu“. Die Zustimmung
+gilt für die beschriebene gezielte Rechteänderung unter Erhalt bestehender
+Zugriffe. Dafür ist keine erneute pauschale Zustimmung anzufordern.
+Die Aussage, dass ein berechtigter Weg möglich ist, ist als Nutzeraussage
+bestätigt; ein konkreter zusätzlicher Zugang oder eine tatsächlich geänderte
+Datenbankberechtigung ist damit noch nicht technisch nachgewiesen.
+Die vorhandenen Identitäts-, Rechte- und Transaktionsprüfungen bleiben bestehen.
+Keine Erweiterung auf andere Objekte, Datenänderungen oder unbenannte Zugänge.
+
 **Q10.3 – Kurzfristig Option A, schrittweise zu Option D:** `BESTÄTIGT` – Die
 importierten CRM-Tabellen bleiben in der kurzfristigen Phase unverändert. Für
 Release 1 werden nur die benötigten kontrollierten Strukturen, Beziehungen und

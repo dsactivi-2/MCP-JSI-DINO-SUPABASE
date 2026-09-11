@@ -67,7 +67,12 @@ Prüfer: [check-role-bootstrap.py](../../scripts/discovery/check-role-bootstrap.
 <!-- markdownlint-disable-next-line MD013 -->
 [role_lifecycle_integration.py](../../tests/discovery/role_lifecycle_integration.py).
 
-## Predloženi dodatni pregled: čeka odobrenje opsega
+## Dodatni pregled: odobren i izvršen u ograničenom opsegu
+
+Q10.2g je naknadno odobren. Stvarni rezultati i korekcija tumačenja schema
+USAGE nalaze se u [novom izvještaju](2026-09-11-public-definer-audit.md).
+Sljedeći pasusi čuvaju opis prvobitno predloženog užeg opsega; nisu odobrenje
+proširenog pregleda indirektnih poziva ili drugih funkcija.
 
 Predmet su isključivo SECURITY-DEFINER funkcije koje su u potvrđenom projektu
 javno izvršive i imaju odgovarajući javni schema pristup. Priprema pregleda

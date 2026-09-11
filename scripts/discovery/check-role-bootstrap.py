@@ -77,10 +77,8 @@ def secure(path):
         raise ValueError("restricted configuration metadata failed")
 
 
-def main():
-    public_scope = sys.argv[1:] == ["--read-only-public-preflight"]
-    if not public_scope and sys.argv[1:] != ["--read-only-owner-preflight"]:
-        raise ValueError("explicit read-only owner-preflight argument required")
+def connection_parameters():
+    """Validate the independently bound target without reading password contents."""
     target = CONFIG_ROOT / (ALIAS + ".target")
     service = CONFIG_ROOT / (ALIAS + ".pg_service.conf")
     credential = CONFIG_ROOT / (ALIAS + ".pgpass")
@@ -132,6 +130,14 @@ def main():
                "-v", "VERBOSITY=sqlstate", "-v", "SHOW_CONTEXT=never",
                "-v", "expected_database_name=" + settings["dbname"],
                "-v", "expected_user=" + expected_role]
+    return command, env
+
+
+def main():
+    public_scope = sys.argv[1:] == ["--read-only-public-preflight"]
+    if not public_scope and sys.argv[1:] != ["--read-only-owner-preflight"]:
+        raise ValueError("explicit read-only owner-preflight argument required")
+    command, env = connection_parameters()
     process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                stderr=subprocess.DEVNULL, text=True, env=env,
                                start_new_session=True)
