@@ -57,116 +57,28 @@ test_hash_mismatch_stops_before_psql() {
 }
 
 test_valid_fake_run_writes_minimized_manifest() {
-  local test_root sql_hash target_hash output status manifest raw_output
-  test_root="$(mktemp -d "${TMPDIR:-/tmp}/gate-b1-test.XXXXXX")"
-  test_root="$(cd "${test_root}" && pwd -P)"
-  trap 'rm -rf "${test_root}"' RETURN
+  local manifest raw_output
+  create_valid_case
+  write_fake_psql happy
+  run_case
 
-  mkdir -p \
-    "${test_root}/config" \
-    "${test_root}/sql" \
-    "${test_root}/bin" \
-    "${test_root}/raw"
-  chmod 700 \
-    "${test_root}" \
-    "${test_root}/config" \
-    "${test_root}/sql" \
-    "${test_root}/bin" \
-    "${test_root}/raw"
-
-  printf '%s\n' 'synthetic gate sql' >"${test_root}/sql/gate-b1.sql"
-  sql_hash="$(shasum -a 256 "${test_root}/sql/gate-b1.sql")"
-  sql_hash="${sql_hash%% *}"
-  target_hash="$(printf '%s' 'test_target' | shasum -a 256)"
-  target_hash="${target_hash%% *}"
-
-  printf '%s\n' \
-    'status=GRANTED' \
-    'gate_id=DISCOVERY-GATE-B1-V2-2026-09-11' \
-    'target_alias=dino_crm_discovery_target_01' \
-    'window_start_epoch=2000000000' \
-    'window_end_epoch=2000001800' \
-    "sql_sha256=${sql_hash}" \
-    "launcher_sha256=${TEST_LAUNCHER_SHA256}" \
-    "stream_guard_sha256=${TEST_STREAM_GUARD_SHA256}" \
-    'retention_delete_authorized=true' \
-    'retention_seconds=86400' \
-    >"${test_root}/config/approval.attest"
-  chmod 600 "${test_root}/config/approval.attest"
-
-  printf '%s\n' \
-    'target_alias=dino_crm_discovery_target_01' \
-    'expected_database_name=TEST_DATABASE' \
-    "target_fingerprint_sha256=${target_hash}" \
-    'connection_service=dino_crm_discovery_target_01' \
-    'created_at_epoch=1999999000' \
-    'responsible_person=TEST_OWNER' \
-    >"${test_root}/config/target.attest"
-  chmod 600 "${test_root}/config/target.attest"
-
-  printf '%s\n' \
-    '[dino_crm_discovery_target_01]' \
-    'host=TEST_TARGET' \
-    'dbname=TEST_DATABASE' \
-    'user=TEST_IDENTITY' \
-    'sslmode=require' \
-    'connect_timeout=5' \
-    >"${test_root}/config/pg_service.conf"
-  chmod 600 "${test_root}/config/pg_service.conf"
-  printf '%s\n' 'SYNTHETIC_CREDENTIAL_RECORD' >"${test_root}/config/pgpass"
-  chmod 600 "${test_root}/config/pgpass"
-
-  {
-    printf '%s\n' '#!/bin/bash' 'set -euo pipefail'
-    printf '%s\n' \
-      'test_root="${PGPASSFILE%/config/pgpass}"' \
-      'printf "invoked\\n" >"${test_root}/psql-invoked"' \
-      'boundary_token=' \
-      'for argument in "$@"; do' \
-      '  case "${argument}" in' \
-      '    --set=boundary_token=*) boundary_token="${argument#--set=boundary_token=}" ;;' \
-      '  esac' \
-      'done' \
-      'for query_number in 001 002 003 004 005 006 007 008 009 010 011; do' \
-      '  query_id="SQL-GATE-B1-${query_number}"' \
-      '  printf "__GATE_B1_BOUNDARY__|%s|BEGIN|%s\\n" "${boundary_token}" "${query_id}"' \
-      '  case "${query_number}" in' \
-      '    001) printf "%s,TEST_DATABASE,TEST_IDENTITY,TEST_IDENTITY,150000,on,f\\n" "${query_id}" ;;' \
-      '    002) printf "%s,1,1\\n" "${query_id}" ;;' \
-      '    011) printf "%s,1,1,on,5s,1s,15s\\n" "${query_id}" ;;' \
-      '  esac' \
-      '  printf "__GATE_B1_BOUNDARY__|%s|END|%s\\n" "${boundary_token}" "${query_id}"' \
-      'done'
-  } >"${test_root}/bin/fake-psql"
-  chmod 700 "${test_root}/bin/fake-psql"
-
-  set +e
-  output="$(
-    GATE_B1_TEST_ROOT="${test_root}" \
-    GATE_B1_NOW_EPOCH=2000000001 \
-      "${LAUNCHER}" --test-mode 2>&1
-  )"
-  status=$?
-  set -e
-
-  manifest="${test_root}/raw/DISCOVERY-GATE-B1-V2-2026-09-11/gate-b1-manifest.json"
-  raw_output="${test_root}/raw/DISCOVERY-GATE-B1-V2-2026-09-11/gate-b1.out"
-  if [[ ${status} -ne 0 ]]; then
-    [[ "${output}" != *'SENSITIVE_FAKE_VALUE'* ]] || fail 'valid fake run leaked result data'
-    fail "valid fake run returned failure: ${output}"
+  manifest="${CASE_ROOT}/raw/DISCOVERY-GATE-B1-V2-2026-09-11/gate-b1-manifest.json"
+  raw_output="${CASE_ROOT}/raw/DISCOVERY-GATE-B1-V2-2026-09-11/gate-b1.out"
+  if [[ ${RUN_STATUS} -ne 0 ]]; then
+    [[ "${RUN_OUTPUT}" != *'TEST_IDENTITY'* ]] || fail 'valid fake run leaked result data'
+    fail "valid fake run returned failure: ${RUN_OUTPUT}"
   fi
-  [[ -f "${test_root}/psql-invoked" ]] || fail 'fake psql was not invoked'
+  [[ "$(<"${CASE_ROOT}/psql-invocations")" == '1' ]] || fail 'fake psql was not invoked exactly once'
   [[ -f "${manifest}" && -f "${raw_output}" ]] || fail 'run artifacts missing'
-  [[ "${output}" != *'SENSITIVE_FAKE_VALUE'* ]] || fail 'sensitive fake output reached terminal'
-  [[ "$(<"${manifest}")" != *'SENSITIVE_FAKE_VALUE'* ]] || fail 'manifest contains result data'
+  [[ "${RUN_OUTPUT}" != *'TEST_IDENTITY'* ]] || fail 'sensitive fake output reached terminal'
+  [[ "$(<"${manifest}")" != *'TEST_IDENTITY'* ]] || fail 'manifest contains result data'
   [[ "$(<"${manifest}")" == *'"status":"PASS"'* ]] || fail 'manifest is not PASS'
   [[ "$(<"${manifest}")" == *'"SQL-GATE-B1-005":0'* ]] || fail 'null-row query boundary was not preserved'
   [[ "$(stat -f '%Lp' "$(dirname "${manifest}")")" == '700' ]] || fail 'raw directory mode is not 0700'
   [[ "$(stat -f '%Lp' "${manifest}")" == '600' ]] || fail 'manifest mode is not 0600'
   [[ "$(stat -f '%Lp' "${raw_output}")" == '600' ]] || fail 'raw output mode is not 0600'
 
-  trap - RETURN
-  rm -rf "${test_root}"
+  cleanup_case
 }
 
 create_valid_case() {
@@ -272,15 +184,7 @@ write_fake_psql() {
       '    printf "__GATE_B1_BOUNDARY__|%s|BEGIN|SQL-GATE-B1-001\\n" "${boundary_token}"' \
       '    /opt/homebrew/bin/python3 -c '\''import sys; sys.stdout.write("SQL-GATE-B1-001," + "X" * (2 * 1024 * 1024) + "\n")'\''' \
       '    ;;' \
-      '  total_bytes)' \
-      '    for query_number in 001 002 003 004 005 006 007 008 009 010 011; do' \
-      '      query_id="SQL-GATE-B1-${query_number}"' \
-      '      printf "__GATE_B1_BOUNDARY__|%s|BEGIN|%s\\n" "${boundary_token}" "${query_id}"' \
-      '      /opt/homebrew/bin/python3 -c '\''import sys; sys.stdout.write(sys.argv[1] + "," + "X" * 1200000 + "\n")'\'' "${query_id}"' \
-      '      printf "__GATE_B1_BOUNDARY__|%s|END|%s\\n" "${boundary_token}" "${query_id}"' \
-      '    done' \
-      '    ;;' \
-      '  realistic_status|semantic_finding)' \
+      '  happy|realistic_status|semantic_003|semantic_004|semantic_005|semantic_006|semantic_007|semantic_008|semantic_009|semantic_010)' \
       '    if [[ "${scenario}" == realistic_status && "${quiet}" == false ]]; then' \
       '      printf "BEGIN\\nSET\\nSET\\nSET\\nSET\\n"' \
       '    fi' \
@@ -290,24 +194,12 @@ write_fake_psql() {
       '      case "${query_number}" in' \
       '        001) printf "%s,TEST_DATABASE,TEST_IDENTITY,TEST_IDENTITY,150000,on,f\\n" "${query_id}" ;;' \
       '        002) printf "%s,1,1\\n" "${query_id}" ;;' \
-      '        004) [[ "${scenario}" != semantic_finding ]] || printf "%s,session_user,TEST_IDENTITY,DIRECT,1,WRITER_ROLE,f,f,f,f,f,f\\n" "${query_id}" ;;' \
       '        011) printf "%s,1,1,on,5s,1s,15s\\n" "${query_id}" ;;' \
       '      esac' \
+      '      [[ "${scenario}" != "semantic_${query_number}" ]] || printf "%s,SYNTHETIC_FINDING\\n" "${query_id}"' \
       '      printf "__GATE_B1_BOUNDARY__|%s|END|%s\\n" "${boundary_token}" "${query_id}"' \
       '    done' \
       '    [[ "${scenario}" != realistic_status || "${quiet}" == false ]] || printf "ROLLBACK\\n" >/dev/null' \
-      '    ;;' \
-      '  happy)' \
-      '    for query_number in 001 002 003 004 005 006 007 008 009 010 011; do' \
-      '      query_id="SQL-GATE-B1-${query_number}"' \
-      '      printf "__GATE_B1_BOUNDARY__|%s|BEGIN|%s\\n" "${boundary_token}" "${query_id}"' \
-      '      case "${query_number}" in' \
-      '        001) printf "%s,TEST_DATABASE,TEST_IDENTITY,TEST_IDENTITY,150000,on,f\\n" "${query_id}" ;;' \
-      '        002) printf "%s,1,1\\n" "${query_id}" ;;' \
-      '        011) printf "%s,1,1,on,5s,1s,15s\\n" "${query_id}" ;;' \
-      '      esac' \
-      '      printf "__GATE_B1_BOUNDARY__|%s|END|%s\\n" "${boundary_token}" "${query_id}"' \
-      '    done' \
       '    ;;' \
       '  *) exit 65 ;;' \
       'esac'
@@ -336,7 +228,7 @@ replace_config_value() {
 assert_preflight_stop() {
   local expected_reason="$1"
   [[ ${RUN_STATUS} -ne 0 ]] || fail "${expected_reason} returned success"
-  [[ "${RUN_OUTPUT}" == *"STOP: ${expected_reason}"* ]] || fail "${expected_reason} stop reason missing"
+  [[ "${RUN_OUTPUT}" == *"STOP: ${expected_reason}"* ]] || fail "${expected_reason} stop reason missing: ${RUN_OUTPUT}"
   [[ ! -e "${CASE_ROOT}/psql-invocations" ]] || fail "${expected_reason} invoked fake psql"
 }
 
@@ -496,18 +388,21 @@ test_timeout_stops_once_without_retry() {
 }
 
 test_semantic_findings_stop_fail_closed() {
-  local manifest
-  create_valid_case
-  write_fake_psql semantic_finding
-  run_case
-  manifest="${CASE_ROOT}/raw/DISCOVERY-GATE-B1-V2-2026-09-11/gate-b1-manifest.json"
+  local manifest query_number query_id
+  for query_number in 003 004 005 006 007 008 009 010; do
+    query_id="SQL-GATE-B1-${query_number}"
+    create_valid_case
+    write_fake_psql "semantic_${query_number}"
+    run_case
+    manifest="${CASE_ROOT}/raw/DISCOVERY-GATE-B1-V2-2026-09-11/gate-b1-manifest.json"
 
-  [[ ${RUN_STATUS} -ne 0 ]] || fail 'semantic finding returned success'
-  [[ "${RUN_OUTPUT}" == *'STOP: semantic_finding_SQL-GATE-B1-004'* ]] || fail 'semantic finding stop reason missing'
-  [[ "$(<"${CASE_ROOT}/psql-invocations")" == '1' ]] || fail 'semantic finding caused retry'
-  [[ "$(<"${manifest}")" == *'"status":"STOP"'* ]] || fail 'semantic finding manifest is not STOP'
+    [[ ${RUN_STATUS} -ne 0 ]] || fail "semantic finding ${query_id} returned success"
+    [[ "${RUN_OUTPUT}" == *"STOP: semantic_finding_${query_id}"* ]] || fail "semantic finding ${query_id} stop reason missing"
+    [[ "$(<"${CASE_ROOT}/psql-invocations")" == '1' ]] || fail "semantic finding ${query_id} caused retry"
+    [[ "$(<"${manifest}")" == *'"status":"STOP"'* ]] || fail "semantic finding ${query_id} manifest is not STOP"
 
-  cleanup_case
+    cleanup_case
+  done
 }
 
 test_realistic_psql_status_is_suppressed() {
@@ -548,6 +443,16 @@ test_launcher_hash_mismatch_stops_before_psql() {
   cleanup_case
 }
 
+test_missing_service_value_has_specific_stop_reason() {
+  create_valid_case
+  write_fake_psql happy
+  replace_config_value "${CASE_ROOT}/config/pg_service.conf" user ''
+  run_case
+
+  assert_preflight_stop 'missing connection service key'
+  cleanup_case
+}
+
 run_selected_test() {
   local name="$1" function_name="$2" success_message="$3"
   [[ -z "${GATE_B1_TEST_ONLY:-}" || "${GATE_B1_TEST_ONLY}" == "${name}" ]] || return 0
@@ -568,3 +473,4 @@ run_selected_test semantic test_semantic_findings_stop_fail_closed 'semantic fin
 run_selected_test quiet test_realistic_psql_status_is_suppressed 'realistic psql status output is suppressed'
 run_selected_test multihost test_multihost_service_stops_before_psql 'multi-host service stops before fake psql'
 run_selected_test launcher_hash test_launcher_hash_mismatch_stops_before_psql 'launcher hash mismatch stops before fake psql'
+run_selected_test service_reason test_missing_service_value_has_specific_stop_reason 'missing service value has a specific stop reason'

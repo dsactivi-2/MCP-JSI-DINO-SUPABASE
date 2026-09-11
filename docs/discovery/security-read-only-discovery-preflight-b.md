@@ -91,17 +91,17 @@ gebunden:
 - SHA-256:
   \`0f586d02a663f9df543a7b7c1b8efde876c2b96d6079cd79e02c3a7359710317\`
 - Launcher-SHA-256:
-  \`638e4713370f7a2499e2543656334da97f1e245d3a8385d6914f0f137fbabf3d\`
+  \`735dd6e5ad63ec6e211b0df027dea19286181060f50ceda64d80f1c51f15dce7\`
 - Stream-Guard-SHA-256:
-  \`acfc52daf4773be1034d52f5bed1acd61f73a2ec6ae6768c872b86876406e190\`
+  \`c7628f48c5487202d0db3279753030be73a749664fb45b4e0f03103777158b7c\`
 - Gate-ID: \`DISCOVERY-GATE-B1-V2-2026-09-11\`
 - Freigabestatus: \`NICHT ERTEILT\`
 
-B1 V2 ändert keine SELECT-, Transaktions- oder Timeout-Semantik. Es ergänzt
-nur launcher-generierte, tokengebundene \`BEGIN\`/\`END\`-Marker um jede der elf
-Queries. Dadurch bleiben Query-Grenzen auch bei null Ergebniszeilen eindeutig.
-Die folgende Allowlist und fail-closed Bewertung gilt inhaltlich unverändert
-für B1 V2.
+B1 V2 behält Transaktions- und Timeout-Grenzen bei. Query 003 liefert nur noch
+administrative Rollenbefunde; jede Ergebniszeile der Finding-Queries 003 bis
+010 ist sofort STOP. Zusätzlich begrenzen launcher-generierte, tokengebundene
+\`BEGIN\`/\`END\`-Marker jede der elf Queries eindeutig, auch bei null
+Ergebniszeilen.
 
 ### Erlaubte Inhalte
 

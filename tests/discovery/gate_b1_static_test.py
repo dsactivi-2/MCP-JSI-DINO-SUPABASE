@@ -11,8 +11,8 @@ LAUNCHER_PATH = REPO_ROOT / "scripts/discovery/run-gate-b1.sh"
 PREFLIGHT_PATH = REPO_ROOT / "docs/discovery/security-read-only-discovery-preflight-b.md"
 APPROVAL_PATH = REPO_ROOT / "docs/discovery/gate-b1-v2-approval-text.md"
 EXPECTED_HASH = "0f586d02a663f9df543a7b7c1b8efde876c2b96d6079cd79e02c3a7359710317"
-EXPECTED_LAUNCHER_HASH = "638e4713370f7a2499e2543656334da97f1e245d3a8385d6914f0f137fbabf3d"
-EXPECTED_STREAM_GUARD_HASH = "acfc52daf4773be1034d52f5bed1acd61f73a2ec6ae6768c872b86876406e190"
+EXPECTED_LAUNCHER_HASH = "735dd6e5ad63ec6e211b0df027dea19286181060f50ceda64d80f1c51f15dce7"
+EXPECTED_STREAM_GUARD_HASH = "c7628f48c5487202d0db3279753030be73a749664fb45b4e0f03103777158b7c"
 EXPECTED_QUERY_IDS = [f"SQL-GATE-B1-{number:03d}" for number in range(1, 12)]
 FORBIDDEN_SQL_TOKENS = {
     "ALTER",
@@ -111,5 +111,7 @@ if "**Gesamtstatus: PASS_WITH_GAPS / NO-GO.**" not in preflight_text:
     fail("preflight status is not PASS_WITH_GAPS / NO-GO")
 if "Launcher fehlt" in preflight_text:
     fail("preflight contradicts the present launcher")
+if "B1 V2 ändert keine SELECT-" in preflight_text:
+    fail("preflight contradicts the changed B1 V2 finding semantics")
 
 print("PASS: B1 V2 static SQL and gate-document checks")

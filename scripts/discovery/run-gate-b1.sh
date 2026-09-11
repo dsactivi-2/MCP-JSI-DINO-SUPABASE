@@ -17,7 +17,7 @@ readonly PROD_RAW_PARENT='/Users/activi/Library/Application Support/Activi/disco
 readonly PROD_PSQL='/opt/homebrew/bin/psql'
 readonly PYTHON_BIN='/opt/homebrew/bin/python3'
 readonly STREAM_GUARD="${REPO_ROOT}/scripts/discovery/gate_b1_stream_guard.py"
-readonly STREAM_GUARD_SHA256='acfc52daf4773be1034d52f5bed1acd61f73a2ec6ae6768c872b86876406e190'
+readonly STREAM_GUARD_SHA256='c7628f48c5487202d0db3279753030be73a749664fb45b4e0f03103777158b7c'
 readonly WINDOW_SECONDS=1800
 readonly RETENTION_SECONDS=86400
 LOCK_DIR=''
@@ -35,7 +35,7 @@ cleanup_lock() {
 }
 
 read_config_value() {
-  local file="$1" wanted_section="$2" wanted_key="$3"
+  local file="$1" wanted_section="$2" wanted_key="$3" source_label="$4"
   local line section='' key value found=''
 
   while IFS= read -r line || [[ -n "${line}" ]]; do
@@ -50,17 +50,17 @@ read_config_value() {
     key="${line%%=*}"
     value="${line#*=}"
     if [[ "${key}" == "${wanted_key}" ]]; then
-      [[ -z "${found}" ]] || stop 'duplicate attestation key'
+      [[ -z "${found}" ]] || stop "duplicate ${source_label} key"
       found="${value}"
     fi
   done <"${file}"
 
-  [[ -n "${found}" ]] || stop 'missing attestation key'
+  [[ -n "${found}" ]] || stop "missing ${source_label} key"
   printf '%s' "${found}"
 }
 
 read_attest_value() {
-  read_config_value "$1" '' "$2"
+  read_config_value "$1" '' "$2" 'attestation'
 }
 
 validate_kv_schema() {
@@ -130,7 +130,7 @@ validate_secure_file() {
 }
 
 read_service_value() {
-  read_config_value "$1" "$2" "$3"
+  read_config_value "$1" "$2" "$3" 'connection service'
 }
 
 main() {

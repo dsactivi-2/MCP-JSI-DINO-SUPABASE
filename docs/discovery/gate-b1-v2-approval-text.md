@@ -49,10 +49,10 @@ Freigabetext bleiben historische, nicht erteilte Entwürfe.
 > \`0f586d02a663f9df543a7b7c1b8efde876c2b96d6079cd79e02c3a7359710317\`.
 >
 > SHA-256 des Launchers:
-> \`638e4713370f7a2499e2543656334da97f1e245d3a8385d6914f0f137fbabf3d\`.
+> \`735dd6e5ad63ec6e211b0df027dea19286181060f50ceda64d80f1c51f15dce7\`.
 >
 > SHA-256 des Stream-Guards:
-> \`acfc52daf4773be1034d52f5bed1acd61f73a2ec6ae6768c872b86876406e190\`.
+> \`c7628f48c5487202d0db3279753030be73a749664fb45b4e0f03103777158b7c\`.
 >
 > Bei Hashabweichung einer dieser drei Dateien ist die Freigabe unwirksam.
 >

@@ -319,3 +319,37 @@ werden als neuer Eintrag mit Verweis auf den betroffenen Eintrag angehängt.
 - Sicherheitsgrenze: Kein reales `psql`, kein Netzwerk, keine
   Datenbankverbindung und kein SQL gegen PostgreSQL.
 - Assessment: `PASS_WITH_GAPS / NO-GO`; Freigabestatus bleibt `NICHT ERTEILT`.
+
+### [2026-09-11T05:14:07+02:00] Phase 11 – Review-Follow-up mit TDD
+
+- Intent: Die Befunde des ersten Matt-`/code-review` test-first schließen und
+  den exakten Korrekturstand in einem echten sauberen Git-Checkout prüfen.
+- RED-Evidenz:
+  - SIGTERM ließ die gestartete Fake-`psql`-Prozessgruppe weiterlaufen.
+  - Ein Fehler bei der Selector-Initialisierung ließ Fake-`psql` weiterlaufen.
+  - Fehlende Service-Werte meldeten eine Attestationsdiagnose.
+  - Der Preflight behauptete trotz geänderter Query-003-Semantik, dass keine
+    SELECT-Semantik geändert wurde.
+- Korrekturen:
+  - Der Stream-Guard installiert lokale Handler für SIGINT, SIGTERM und SIGHUP;
+    Initialisierung, Protokolllauf und Cleanup teilen einen Fail-Closed-Pfad.
+  - Konfigurationsdiagnosen unterscheiden Attestation und Connection Service.
+  - Fake-`psql` deckt Findings für Queries 003 bis 010 einzeln ab; duplizierte
+    Protokoll-Fixtures wurden zusammengeführt.
+  - Die Markdownlint-Ausnahme wurde vom Repository-Root in eine ausschließlich
+    für die Gate-B-Prüfung angegebene Testkonfiguration verschoben.
+- Finale SHA-256-Werte:
+  - B1-V2-SQL:
+    `0f586d02a663f9df543a7b7c1b8efde876c2b96d6079cd79e02c3a7359710317`.
+  - Launcher:
+    `735dd6e5ad63ec6e211b0df027dea19286181060f50ceda64d80f1c51f15dce7`.
+  - Stream-Guard:
+    `c7628f48c5487202d0db3279753030be73a749664fb45b4e0f03103777158b7c`.
+- Sauberer Checkout: Lokaler Clone unter
+  `/private/tmp/gate-b1-clean-clone.rMc0TP/repo`; 14 Launcher-Gruppen,
+  I/O-, Signal- und Selector-Cleanup, statische Gate-Prüfung, 39 versionierte
+  Links, Bash-Syntax, Markdownlint und `git diff --check` bestanden.
+  `git status --short` blieb nach den Tests leer.
+- Sicherheitsgrenze: Kein reales `psql`, kein Netzwerk, keine
+  Datenbankverbindung und kein SQL gegen PostgreSQL.
+- Assessment: `PASS_WITH_GAPS / NO-GO`; Freigabestatus bleibt `NICHT ERTEILT`.

@@ -123,17 +123,18 @@ def main() -> int:
         f"--file={args.sql}",
     ]
 
-    process = subprocess.Popen(
-        command,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        env=child_env,
-        start_new_session=True,
-    )
-    assert process.stdout is not None
-    selector = selectors.DefaultSelector()
-    selector.register(process.stdout, selectors.EVENT_READ)
+    process: subprocess.Popen[bytes] | None = None
+    selector: selectors.BaseSelector | None = None
+    handling_signal = False
+    previous_signal_handlers: dict[int, signal.Handlers] = {}
     pending = bytearray()
+
+    def handle_signal(_signal_number: int, _frame: object) -> None:
+        nonlocal handling_signal
+        if handling_signal:
+            return
+        handling_signal = True
+        raise ProtocolStop("launcher_interrupted")
 
     def consume_line(line: bytes, raw_handle: io.BufferedWriter) -> None:
         nonlocal current_query, in_quotes, query_index, total_bytes, record_buffer
@@ -192,46 +193,61 @@ def main() -> int:
             raise ProtocolStop(f"semantic_finding_{semantic_finding_id}")
 
     try:
+        for signal_number in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP):
+            previous_signal_handlers[signal_number] = signal.signal(signal_number, handle_signal)
+        process = subprocess.Popen(
+            command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            env=child_env,
+            start_new_session=True,
+        )
+        assert process.stdout is not None
+        selector = selectors.DefaultSelector()
+        selector.register(process.stdout, selectors.EVENT_READ)
         raw_descriptor = os.open(raw_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
-        try:
-            with os.fdopen(raw_descriptor, "wb") as raw_handle:
-                while True:
-                    now = time.time()
-                    if now >= args.window_end_epoch:
-                        raise ProtocolStop("time_window_expired")
-                    if time.monotonic() - started_monotonic >= args.timeout_seconds:
-                        raise ProtocolStop("launcher_timeout")
+        with os.fdopen(raw_descriptor, "wb") as raw_handle:
+            while True:
+                now = time.time()
+                if now >= args.window_end_epoch:
+                    raise ProtocolStop("time_window_expired")
+                if time.monotonic() - started_monotonic >= args.timeout_seconds:
+                    raise ProtocolStop("launcher_timeout")
 
-                    events = selector.select(timeout=0.1)
-                    if events:
-                        chunk = os.read(process.stdout.fileno(), 65536)
-                        if chunk:
-                            pending.extend(chunk)
-                            while b"\n" in pending:
-                                line, remainder = pending.split(b"\n", 1)
-                                pending = bytearray(remainder)
-                                consume_line(line + b"\n", raw_handle)
-                            if current_query is not None and query_bytes[current_query] + len(pending) > PER_QUERY_LIMIT:
-                                raise ProtocolStop("query_byte_limit")
-                            if total_bytes + len(pending) > TOTAL_LIMIT:
-                                raise ProtocolStop("total_byte_limit")
-                        elif process.poll() is not None:
-                            break
+                events = selector.select(timeout=0.1)
+                if events:
+                    chunk = os.read(process.stdout.fileno(), 65536)
+                    if chunk:
+                        pending.extend(chunk)
+                        while b"\n" in pending:
+                            line, remainder = pending.split(b"\n", 1)
+                            pending = bytearray(remainder)
+                            consume_line(line + b"\n", raw_handle)
+                        if current_query is not None and query_bytes[current_query] + len(pending) > PER_QUERY_LIMIT:
+                            raise ProtocolStop("query_byte_limit")
+                        if total_bytes + len(pending) > TOTAL_LIMIT:
+                            raise ProtocolStop("total_byte_limit")
                     elif process.poll() is not None:
                         break
+                elif process.poll() is not None:
+                    break
 
-                if pending:
-                    raise ProtocolStop("unterminated_output")
-                return_code = process.wait()
-                if return_code != 0:
-                    raise ProtocolStop("psql_error")
-                if current_query is not None or query_index != len(EXPECTED_QUERY_IDS):
-                    raise ProtocolStop("incomplete_query_protocol")
-        except ProtocolStop as error:
-            stop_reason = str(error)
+            if pending:
+                raise ProtocolStop("unterminated_output")
+            return_code = process.wait()
+            if return_code != 0:
+                raise ProtocolStop("psql_error")
+            if current_query is not None or query_index != len(EXPECTED_QUERY_IDS):
+                raise ProtocolStop("incomplete_query_protocol")
+    except ProtocolStop as error:
+        stop_reason = str(error)
     finally:
-        selector.close()
-        terminate(process)
+        for signal_number, previous_handler in previous_signal_handlers.items():
+            signal.signal(signal_number, previous_handler)
+        if selector is not None:
+            selector.close()
+        if process is not None:
+            terminate(process)
 
     ended_at = int(time.time())
     status = "STOP" if stop_reason else "PASS"
