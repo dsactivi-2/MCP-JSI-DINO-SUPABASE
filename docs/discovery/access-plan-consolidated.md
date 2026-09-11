@@ -3,6 +3,39 @@
 Stand: 2026-09-11. Status: **ENTWURF / NO-GO**.
 Ziel-Alias: `dino_crm_discovery_target_01`.
 
+## Klarstellung: Welche Benutzer sind erforderlich?
+
+Die Aussage „kein neuer Benutzer nötig“ war ohne Zweckangabe falsch.
+
+- **Vorhandener Einrichtungszugang:** Besteht bereits. Er besitzt laut geprüftem
+  Owner-Preflight CREATEROLE und wurde für die einzeln genehmigten, begrenzten
+  Katalog-Vorprüfungen erfolgreich verwendet. Für diese Vorprüfungen war kein
+  neuer Benutzer erforderlich. Das ist keine Freigabe für den gesamten B1/B2/B3
+  Audit über diesen privilegierten Zugang.
+- **Dedizierter Prüfbenutzer:** In Q10.2b beauftragt und nach dem letzten
+  verifizierten Inventar noch nicht angelegt. Er bleibt Bestandteil des
+  gewählten Plans, ist aber keine universelle technische Voraussetzung jeder
+  lesenden PostgreSQL-Abfrage. Eine Änderung dieses Plans ist nicht beschlossen.
+- **Zusätzlicher Administratorbenutzer:** Kein belegter notwendiger Schritt.
+  Ein neuer Name oder CREATEROLE verleiht ihm nicht die fehlenden Rechte an den
+  acht Systemfunktionen. Der Nutzer soll dafür keinen weiteren Benutzer oder
+  neue Zugangsdaten bereitstellen.
+
+Blockiert ist der aktuelle Entwurf zur Rechtehärtung, nicht die technische
+Möglichkeit, überhaupt einen Benutzer anzulegen. Ein Read-only-Default ist
+keine unveränderbare Berechtigungsgrenze. Umgekehrt beweist dieser Befund nicht,
+dass jede begrenzte lesende Prüfung globale PUBLIC-REVOKEs erfordert.
+
+Die [Supabase-Dokumentation](https://supabase.com/docs/guides/database/postgres/roles-superuser)
+bestätigt, dass Kunden keinen Superuser erhalten. Ob Supabase die konkrete
+ACL-Änderung unterstützt, ist damit nicht beantwortet. Ein Supportkontakt ist
+ein möglicher Klärungsweg, keine bewiesene Voraussetzung jedes anderen
+abgesicherten Designs. Der weitere technische Schritt ist die Prüfung eines
+unterstützten Zugriffskonzepts; bestehende Gates werden dabei nicht gelockert.
+
+Diese Klarstellung korrigiert widersprüchliche Assistentenantworten. Sie ist
+keine neue Nutzerentscheidung, Rollenanlage oder Produktionsfreigabe.
+
 ## Bootstrap vor der ersten Verbindung
 
 Q10.2a verlangt Audit und Restore vor Produktionsänderungen. Q10.2d nimmt
@@ -197,8 +230,10 @@ ebenfalls erforderlich. Die synthetischen
 Lifecycle-Proben wurden ausgeführt; Passwort-Login und Produktionskompatibilität
 sind damit nicht belegt. Q10.2j erteilt inzwischen die Freigabe für den
 beschriebenen gezielten Rechteplan. Die anschließende read-only Wiederprüfung
-zeigt unverändert acht Ziele ohne Änderungsbefugnis. Es fehlt die Benennung
-des vom Nutzer gemeinten berechtigten Zugangs. Die gleiche pauschale Freigabe
+zeigt unverändert acht Ziele ohne Änderungsbefugnis. Ein unterstützter
+Ausführungsweg für diese konkrete Rechteänderung ist nicht nachgewiesen.
+Die Anlage eines weiteren Administrators löst das nicht.
+Die gleiche pauschale Freigabe
 wird nicht erneut verlangt; technische und Backup/Restore-Voraussetzungen
 bleiben zu erfüllen.
 Der Einrichtungsauftrag ist keine Freigabe für B1, B2 oder B3. Q9 verschiebt
