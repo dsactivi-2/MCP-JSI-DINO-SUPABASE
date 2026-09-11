@@ -3,7 +3,10 @@
 - Status dokumenta: prijedlog za tehnički dizajn i kontrolisanu implementaciju
 - Jezik: B/H/S latinica
 - Supabase projekt: `https://project-redacted.invalid`
-- Procijenjeni obim: približno 200.000 kandidata
+- Procijenjeni obim: približno 200.000 kandidata (projektna procjena, DURCH DISCOVERY ZU PRÜFEN)
+- Projektni endpoint iznad: ARBEITSANNAHME; porijeklo i dozvola dokumentovanja nisu potvrđeni ovim auditom.
+- Korekcija 2026-09-11: prema korisničkom odobrenju nalaza audita; bez implementacije ili pristupa bazi.
+
 Opseg: dokumentacija; bez pristupa produkcijskim podacima i bez promjena baze
 
 ## Sadržaj
@@ -48,7 +51,11 @@ DataTables server-side obradi.
 Jednokratni, read-only audit sheme potreban je u razvojnoj fazi. Njegov rezultat
 postaje verzioniran ugovor. Produkcijski MCP ne smije iznova otkrivati shemu pri
 svakom upitu. Minimalni prvi release obuhvata sve stavke označene kao Must-have;
-dodatne optimizacije uvode se tek prema mjerenjima.
+dodatne optimizacije uvode se tek prema mjerenjima. Release 1 je potpuno bez
+izlaza kontaktnih podataka, uključujući pojedinačni profil. Odobrenje pristupa kontaktima
+i CONTACT-02 nisu Must-have za Release 1, nego kasnija zasebno odobrena faza.
+Predložene filterdetalje i nepotpuni JSON nacrt ne treba tumačiti kao konačan
+ugovor; Q8.5 je u cijelosti OFFEN.
 
 ## Problem
 
@@ -89,13 +96,16 @@ objašnjiv i provjerljiv.
 
 ## Pretpostavke i poznate nepoznanice
 
-### Potvrđene činjenice
+### Projektna osnova i status dokaza
 
-| Tema | Potvrđena činjenica |
+Fizičke i količinske tvrdnje nisu rezultat discoveryja. Prihvaćene arhitekturne
+granice ostaju odvojene od radnih pretpostavki o postojećem sistemu.
+
+| Tema | Tvrdnja i status |
 |---|---|
-| Platforma | Supabase projekt koristi PostgreSQL. |
-| Projekt | Javni URL projekta je `https://project-redacted.invalid`. |
-| Obim | CRM sadrži približno 200.000 kandidata, ne 2.000. |
+| Platforma | Projektna osnova: Supabase/PostgreSQL; stvarno okruženje je DURCH DISCOVERY ZU PRÜFEN. |
+| Projekt | Endpoint je naveden u zaglavlju; ARBEITSANNAHME. Porijeklo i dozvola dokumentovanja ostaju OFFEN; nije potvrđen pristup niti vlasništvo. |
+| Obim | Projektna procjena približno 200.000 kandidata; DURCH DISCOVERY ZU PRÜFEN. Korisnik je naveo 179 tabela; broj nije tehnički potvrđen. |
 | Klijenti | Cilj uključuje ChatGPT, Claude, Codex, Grok i druge MCP klijente. |
 | Jezici upita | B/H/S, njemački i engleski. |
 | Granica podataka | Cijela baza se nikada ne šalje LLM-u kao JSON. |
@@ -122,7 +132,8 @@ flowchart LR
     P --> V[MCP validator<br/>JSON Schema + allowliste + auth]
     V -->|nejasno ili nevažeće| Q[Pitanje za pojašnjenje<br/>ili sigurna greška]
     Q --> U
-    V -->|važeće| R[Kontrolisana<br/>search_candidates RPC]
+    V -->|važeće| S[Predložena potvrda pregleda<br/>VORLÄUFIGER VORSCHLAG]
+    S --> R[Kontrolisana<br/>search_candidates RPC]
     R --> D[(Supabase PostgreSQL)]
     D --> F[Filter, sort, rank<br/>keyset pagination, RLS]
     F --> R
@@ -135,13 +146,19 @@ flowchart LR
 
 ### Tok produkcijskog upita
 
+VORLÄUFIGER VORSCHLAG za tok potvrde: prije svake nove ili izmijenjene
+pretrage prikazati filtere i zatražiti potvrdu, zatim ponoviti validaciju.
+Opća obaveza potvrde još nije konačna odluka. Q7 zasebno obavezno zahtijeva
+saglasnost prije izvršavanja olabavljene pretrage.
+
 1. MCP klijent autentificira korisnika i prosljeđuje tekstualni zahtjev.
 2. LLM prepoznaje jezik i prevodi namjeru u predložene strukturirane filtere.
 3. MCP normalizira termine kroz odobrenu višejezičnu taksonomiju.
 4. JSON Schema odbija nepoznata polja, pogrešne tipove, preširoke raspona i
    nedozvoljene vrijednosti.
 5. Ako je upit materijalno nejasan, MCP vraća zahtjev za pojašnjenje bez poziva bazi.
-6. MCP primjenjuje identitet, tenant kontekst, rate limit, timeout i result cap.
+6. U predloženom toku korisnik potvrđuje pregled, a MCP ponovo validira
+   filtere i primjenjuje identitet, tenant kontekst, rate limit, timeout i result cap.
 7. MCP poziva samo unaprijed definisanu, parametriziranu PostgreSQL RPC funkciju.
 8. PostgreSQL filtrira, rangira i paginira te vraća minimalni skup kolona.
 9. MCP vraća rezultate, interpretirane filtere, dokaze poklapanja i sljedeći cursor.
@@ -171,6 +188,21 @@ mapiranjem na kanonski model, data-quality izvještajem, pregledom RLS-a, analiz
 planova upita i odlukama o ugovoru. Produkcija koristi te artefakte i provjerava
 kompatibilnost verzije sheme pri deployu ili health checku, a ne kroz slobodno
 istraživanje baze tokom korisničkog zahtjeva.
+
+### Razvojni Supabase plugin i skills
+
+Službeni Supabase plugin, MCP i projektni agent skills pripadaju razvojnom toku,
+ne produkcijskom ugovoru. Skills daju ažurne procedure za Supabase/PostgreSQL,
+ali ne otkrivaju niti potvrđuju fizičku shemu. Plugin/MCP može ubrzati kasniji
+odobreni inventar i determinističke Advisor provjere, ali ne postaje Runtime-
+Such-MCP niti odvojeni Profilverwaltungs-MCP.
+
+Live-MCP se smije koristiti samo nakon vlastitog gatea koji dokazuje tačan
+projektni scope, `read_only=true`, minimalne feature grupe, najmanje privilegije,
+ručni review svakog poziva, SQL allowlistu, rezultatne limite i siguran izlaz.
+Više instaliranih distribucija koje pokazuju na isti Supabase app/MCP ne čine
+odvojene identitete ili trust boundaryje. Trenutni Gate B ostaje vezan za lokalni
+`psql` launcher dok nova gate verzija izričito ne odobri drugi put.
 
 ## Must-have zahtjevi
 
@@ -210,8 +242,11 @@ pretpostavljanja kako se danas zovu fizičke tabele:
 |---|---|
 | Identitet | Stabilan, nepredvidiv candidate ID; bez emaila ili telefona kao ključa. |
 | Dob | Čuvati datum rođenja ako je zakonito; dob računati na referentni datum, ne pohranjivati kao zastarjeli broj. |
-| Iskustvo | Izvesti trajanje iz strukturiranih intervala zaposlenja; definisati tretman preklapanja i praznina. |
-| Zanimanja | Kanonski ID i odobreni nazivi/sinonimi na B/H/S, DE i EN. |
+| Iskustvo | VORLÄUFIGER VORSCHLAG: sačuvati originalni tekst i unaprijed normalizirati intervale. Q8.5 je u cijelosti OFFEN: ukupno ili relevantno iskustvo, preklapanja i praznine nisu odlučeni. |
+| Ausbildungsberufe | DURCH DISCOVERY ZU PRÜFEN: postoje li kontrolisani CRM ID-ovi. Njihova upotreba, ako su prikladni, je VORLÄUFIGER VORSCHLAG; ne izvoditi vrijednosti bez odobrenog pravila. |
+| Zanimanja iz iskustva | Kanonski ID i odobreni nazivi/sinonimi na B/H/S, DE i EN, odvojeni od originalnog teksta. |
+| Tätigkeitsarten | Kontrolisani ID-ovi za stvarno obavljane vrste poslova, odvojeni od formalnog zanimanja i obrazovanja. |
+| Berufssuchprofile | Imenovane, verzionirane grupe koje neekskluzivno referenciraju Ausbildungsberufe, Erfahrungsberufe i Tätigkeitsarten. |
 | Lokacije | Standardizirani grad, regija i država; dokumentovan tretman dijakritike i historijskih naziva. |
 | Jezici | Kanonski jezik i standardizirani nivo znanja; izvor i pouzdanost nivoa. |
 | Vještine | Kanonski skill ID, sinonimi i eventualna verifikacija/provenijencija. |
@@ -223,25 +258,97 @@ odobrenja, vlasnika promjene i verziju. Termin poput "mehaničar", "Mechaniker" 
 "mechanic" mapira se na isti koncept samo nakon ljudski odobrene taksonomske
 odluke. Slobodni LLM sinonimi ne smiju tiho širiti filter.
 
+Berufssuchprofil ne posjeduje zanimanje i ne premješta ga iz taksonomije.
+Profil-članstvo je veza više-prema-više: isti kontrolisani pojam može pripadati
+većem broju profila i ostaje direktno pretraživ. Profil mora čuvati stabilni ID,
+višejezični naziv, opis namjene, tip i ID svakog člana, verziju, status, razlog
+izmjene, autora, pregledavača i vrijeme objave.
+
+### 2.1 Kontrolisana semantika filtera
+
+**Potvrđeno:** nenavedene kategorije su neaktivne; zahtjev za iskustvom ne
+zahtijeva nenavedenu Ausbildung. Q8.4 potvrđuje koncept profila, ne dokazuje
+svaki rekonstruisani detalj. Q7 zabranjuje novu olabavljenu pretragu bez saglasnosti.
+
+**VORLÄUFIGER VORSCHLAG / Rekonstruktionslücke:** sljedeća detaljna pravila
+operatora i opće potvrde nisu pojedinačno dokazana izvornom listom preporuka.
+Ne predstavljaju konačno odobren ugovor. Postojeće zabrane izmišljanja podataka
+i automatskog objavljivanja ostaju važeće.
+
+- Različite kategorije se povezuju sa `AND`.
+- Raspon zahtijeva istovremeno ispunjenje donje i gornje granice.
+- Više zanimanja, lokacija ili vrijednosti dostupnosti su zadano alternative
+  (`ANY`).
+- Za jezike i vještine koristi se izričito `ANY` ili `ALL` iz korisničkog
+  zahtjeva; nejasna lista zahtijeva potvrdu.
+- Isključivanje se primjenjuje samo kada je korisnik izričito zatražio `NOT`.
+- Nepoznata vrijednost ne ispunjava pozitivan obavezni filter i ne smije se
+  procijeniti iz stereotipa ili nepovezanih podataka.
+- Kategorija koju korisnik nije naveo ostaje neaktivna i ne ograničava rezultat.
+  Zanimanje uz zahtjev za iskustvom ne aktivira filter formalnog obrazovanja ako
+  Ausbildung ili kvalifikacija nisu izričito tražene.
+- Svaka nova ili izmijenjena pretraga zahtijeva pregled strukturiranih filtera,
+  proširenih članova profila i operatora, zatim eksplicitnu potvrdu i novu
+  serversku validaciju prije jednog poziva bazi.
+- Filter i članstvo profila se ne smiju tiho promijeniti između potvrde i
+  izvršenja; zahtjev je vezan za potvrđenu verziju profila.
+
+**VORLÄUFIGER VORSCHLAG:** normalizirati freetext unaprijed ili pri unosu/izmjeni
+uz očuvan original. Postojanje takvih podataka je DURCH DISCOVERY ZU PRÜFEN.
+Prema prihvaćenom ADR-0003 automatska ili LLM klasifikacija proizvodi prijedlog;
+samo odobreno mapiranje postaje aktivno. Nepoznate vrijednosti se ne izmišljaju.
+Da li i kako nejasan unos ulazi u iskustvo nije odlučeno: cijela Q8.5, uključujući
+izbor ukupnog ili relevantnog iskustva i vezu zanimanja i djelatnosti, ostaje OFFEN u
+[ADR-0002](decisions/0002-search-design-interview.md).
+
 ### 3. Minimalni MCP interfejs
 
-Produkcijski MCP izlaže samo tri osnovna alata:
+Produkcijski Runtime-Such-MCP izlaže samo tri osnovna alata:
 
 | Alat | Namjena | Osnovni izlaz |
 |---|---|---|
 | `search_candidates(filters, sort, limit, cursor)` | Pretraživanje i rangiranje. | Interpretirani filteri, mala stranica sažetaka, match evidence i sljedeći cursor. |
-| `get_candidate_profile(candidate_id)` | Dohvat jednog autoriziranog profila. | Dozvoljeni detalji profila; kontakti su zasebno zaštićeni. |
-| `get_filter_options(field, query)` | Autocomplete i razrješenje termina. | Ograničena lista kanonskih opcija i ID-ova bez kandidatskih podataka. |
+| `get_candidate_profile(candidate_id)` | Dohvat jednog autoriziranog profila. | Dozvoljeni detalji profila; Release 1 uvijek bez kontakata. |
+| `get_filter_options(field, query)` | Autocomplete i razrješenje termina ili profila. | Ograničena lista kanonskih opcija, Berufssuchprofila i ID-ova bez kandidatskih podataka. |
 
 Alati ne prihvataju SQL fragmente, nazive tabela, nazive kolona ni arbitrary
 expression objekte. `get_candidate_profile` ne vraća kontaktne podatke ako korisnik
-nema eksplicitnu ulogu i potvrđen poslovni razlog. Masovni export nije dio osnovnog
+nema eksplicitnu ulogu i potvrđen poslovni razlog u kasnijoj, zasebno odobrenoj
+fazi. U Releaseu 1 kontakti se ne vraćaju ni uz takvu ulogu ili razlog. Masovni export nije dio osnovnog
 search alata.
+
+### 3.1 Odvojeni Profilverwaltungs-MCP
+
+Nakon read-only discoveryja i odobrenja kanonskog modela uvodi se odvojeni
+interni MCP za upravljanje Berufssuchprofilima. On ne pretražuje niti mijenja
+kandidate. Njegova je svrha:
+
+- stvaranje i čitanje nacrta i verzija profila;
+- pretraga kontrolisanih pojmova za Ausbildung, Erfahrungsberuf i Tätigkeit;
+- teilautomatski prijedlozi članstva i aliasa s izvorom, razlogom i pouzdanošću;
+- ručno dodavanje, uklanjanje i korekcija pojedinačnih veza;
+- pregled diffa, serverska validacija i odbijanje kontradikcija;
+- zasebna potvrda objave i stvaranje nepromjenjive aktivne verzije;
+- zamjena, reaktivacija ili arhiviranje starih verzija;
+- audit aktera, vremena, razloga i verzije bez nepotrebnih kandidatskih podataka.
+
+Runtime-Such-MCP ima samo read pristup objavljenim verzijama. Automatski i LLM
+prijedlozi ostaju u nacrtu do ručne potvrde. Ista kontrolisana zanimanja mogu
+pripadati većem broju profila i ostaju direktno pretraživa. Potpuna odluka i
+obavezne planske posljedice nalaze se u
+[ADR-0003](decisions/0003-separated-profile-administration-mcp.md). Njegov
+prihvaćeni status ostaje važeći; historijska pojedinačna saglasnost za svaku
+funkciju nije nezavisno rekonstruisana. Opća potvrda svake pretrage nije isto
+što i obavezno odobrenje objave profila.
 
 ### 4. Strogi JSON Schema ugovor
 
-Sljedeći schema predstavlja ciljni MCP ugovor, a ne tvrdnju o trenutnoj fizičkoj
-shemi baze. Taksonomski ID-ovi se dobijaju kroz `get_filter_options`.
+Status: **VORLÄUFIGER VORSCHLAG – nepotpun nacrt JSON ugovora**, ne konačni
+dizajn i ne tvrdnja o fizičkoj shemi. Nedostaju operatori za eksplicitne
+isključujuće uslove i neke UND/ODER kombinacije; oni nisu dodani ovom korekcijom.
+Semantika iskustva (Q8.5), opća potvrda pretrage, granice i enum vrijednosti
+ostaju otvoreni detalji nacrta. `get_filter_options` je predloženi izvor
+taksonomskih ID-ova; stvarni ID-ovi su DURCH DISCOVERY ZU PRÜFEN.
 
 ```json
 {
@@ -255,7 +362,7 @@ shemi baze. Taksonomski ID-ovi se dobijaju kroz `get_filter_options`.
     "filters": {
       "type": "object",
       "additionalProperties": false,
-      "maxProperties": 12,
+      "maxProperties": 14,
       "properties": {
         "age_years": {
           "type": "object",
@@ -266,7 +373,7 @@ shemi baze. Taksonomski ID-ovi se dobijaju kroz `get_filter_options`.
           },
           "minProperties": 1
         },
-        "experience_years": {
+        "relevant_experience_years": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -275,12 +382,49 @@ shemi baze. Taksonomski ID-ovi se dobijaju kroz `get_filter_options`.
           },
           "minProperties": 1
         },
-        "occupation_ids": {
+        "training_occupation_ids": {
           "type": "array",
           "minItems": 1,
           "maxItems": 20,
           "uniqueItems": true,
           "items": { "type": "string", "minLength": 1, "maxLength": 64 }
+        },
+        "experience_occupation_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 30,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 64 }
+        },
+        "activity_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 30,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 64 }
+        },
+        "occupation_profile_filters": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["profile_id", "version", "apply_to"],
+            "properties": {
+              "profile_id": { "type": "string", "minLength": 1, "maxLength": 64 },
+              "version": { "type": "integer", "minimum": 1 },
+              "apply_to": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "enum": ["training", "experience_occupation", "activity"]
+                }
+              }
+            }
+          }
         },
         "location_ids": {
           "type": "array",
@@ -346,17 +490,26 @@ shemi baze. Taksonomski ID-ovi se dobijaju kroz `get_filter_options`.
 }
 ```
 
-Dodatna validacija koju sam JSON Schema ne može izraziti:
+Predložena dodatna validacija i tok prikaza (VORLÄUFIGER VORSCHLAG; ne
+znači da je JSON nacrt konačan niti da su sve provjere neizrazive JSON Schemom):
 
 - `min` ne smije biti veći od `max`;
 - dob se prevodi u granice datuma rođenja prema eksplicitnom referentnom datumu;
 - svi ID-ovi moraju postojati u odobrenoj, aktivnoj verziji taksonomije;
+- svi profilni ID-ovi moraju postojati u aktivnoj verziji, a potvrda se veže za
+  tačno prikazanu verziju i prošireni skup članova;
+- `apply_to` smije aktivirati samo kategorije koje proizlaze iz korisničkog
+  zahtjeva; izbor profila sam po sebi ne aktivira Ausbildung;
 - cursor mora biti potpisan, verzioniran, vezan za isti tenant, filter i sort;
 - nepoznato polje ili enum rezultira sigurnom greškom, ne tihim ignorisanjem;
-- prazni filteri zahtijevaju potvrdu ili restriktivni zadani limit prema politici;
+- za prazne filtere predlaže se pregled i potvrda uz restriktivni limit;
+  konačan postupak ostaje OFFEN, bez dozvole za veliki dump;
 - konfliktni i materijalno nejasni filteri vraćaju pitanje za pojašnjenje;
-- MCP korisniku prikazuje parsirane filtere prije ili uz rezultate;
+- u predloženom toku MCP prikazuje filtere prije pretrage i čeka potvrdu;
+  opća obaveza potvrde je VORLÄUFIGER VORSCHLAG, dok Q7 ostaje obavezan;
 - filteri se nikada tiho ne prepisuju niti proširuju sinonimima.
+- izostavljena kategorija nije skriveni zadani uslov; pregled mora pokazati koje
+  se kategorije ne primjenjuju;
 
 Primjer interpretacije korisničkog zahtjeva:
 
@@ -425,7 +578,8 @@ u svakom slučaju ugovor već treba imati cursor i deterministički tie-breaker.
   logu, repozitoriju ili ovom dokumentu.
 - RLS i tenant scoping u bazi, ne samo u aplikacijskom kodu.
 - Allowlista kolona po alatu i ulozi; deny-by-default za kontaktne i osjetljive podatke.
-- Gated kontaktni detalji: posebna privilegija, potvrda korisnika, svrha i audit događaj.
+- Release 1: bez izlaza kontakata kroz sve alate. Kasnija zasebno odobrena
+  faza: kontaktni gate s privilegijom, potvrdom, svrhom i audit događajem.
 - Rate limit po korisniku, tenant-u i klijentu; globalni backpressure za zaštitu baze.
 - Statement i end-to-end timeout, limit konkurencije i cancel propagacija.
 - Maksimalna veličina zahtjeva i odgovora te hard result cap.
@@ -439,7 +593,9 @@ u svakom slučaju ugovor već treba imati cursor i deterministički tie-breaker.
 - `matched_fields` navodi polja koja su stvarno zadovoljila filter.
 - `match_type` razlikuje `exact`, `partial` i, ako je odobreno, `semantic`.
 - Nula rezultata se prikazuje kao nula; model ne dodaje približne profile bez
-  eksplicitne korisničke odluke o ublažavanju filtera.
+  eksplicitne korisničke odluke o ublažavanju filtera. Prema Q7 prikazuju se
+  konkretni prijedlozi ublažavanja; nova pretraga počinje tek nakon saglasnosti.
+  Tačne dopuštene promjene i njihov postupak ostaju OFFEN.
 - Nedostajuća vrijednost ostaje `unknown`/`null`; model je ne izvodi iz stereotipa,
   imena, lokacije ili nestrukturiranog teksta bez odobrenog pravila.
 - Korisnik vidi parsirane filtere, taksonomska mapiranja i datum reference za dob.
@@ -476,7 +632,8 @@ Obavezni testovi pokrivaju:
 - SQL injection u svim string poljima i cursoru;
 - prompt/tool injection sadržaj u korisničkom tekstu i pohranjenom CV-u;
 - nepoznata JSON polja, pogrešne tipove, izvanrasponske vrijednosti i prevelike liste;
-- RLS/tenant izolaciju, role, kolonske allowliste i kontaktni gate;
+- RLS/tenant izolaciju, role, kolonske allowliste i zabranu svih kontaktnih
+  izlaza u Releaseu 1; pozitivan kontaktni gate testirati tek u kasnijoj fazi;
 - nula rezultata, djelimična poklapanja i stabilnost ranka/paginacije;
 - timeout, rate limit, backpressure, prekinute konekcije i prevelike odgovore;
 - migracijsku kompatibilnost i rollback prethodne verzije ugovora.
@@ -510,7 +667,8 @@ potrebne za acceptance kriterije:
    plan/rank komponente i verzije taksonomije.
 8. Slow-query monitoring, upozorenja na regresiju planova i data-quality alarme.
 9. Verzioniran MCP interfejs, semantička kompatibilnost i kontrolisane migracije.
-10. Korisničke role i obavezna potvrda prije punog prikaza kontakta ili izvoza.
+10. Kasnija zasebno odobrena faza: kontaktne/izvozne role i potvrda prije prikaza
+    kontakta ili izvoza; bez izuzetka od zabrane kontakata u Releaseu 1.
 11. Health/readiness provjere, strukturirani logovi, metričke serije i mašinski
     čitljive sigurne greške.
 
@@ -537,7 +695,7 @@ potrebne za acceptance kriterije:
 
 | Faza | Aktivnosti | Obavezni isporučivi rezultati | Gate za izlaz |
 |---|---|---|---|
-| 0. Governance i pristup | Utvrditi vlasnike, pravnu osnovu, svrhe, role i read-only audit pristup. | RACI, data-access odobrenje, privacy scope, risk register. | Odobren read-only audit bez tajni u repozitoriju. |
+| 0. Governance i pristup | Utvrditi vlasnike, pravnu osnovu, svrhe, role, izvršni put i read-only audit pristup. | RACI, data-access odobrenje, privacy scope, risk register i attestation izabranog alata. | Odobren read-only audit bez tajni u repozitoriju; alat je scopean i fail-closed. |
 | 1. Discovery | Inventar sheme, RLS-a, indeksa, funkcija, uzorka i kvaliteta podataka. | Data dictionary, ER prikaz, DQ izvještaj, index/RLS inventar, baseline planovi. | Nepoznanice kritične za dizajn razriješene ili formalno prihvaćene. |
 | 2. Ugovor i model | Mapirati stvarnu shemu na kanonski model i definirati MCP/JSON/RPC ugovor. | Verzija ugovora, JSON Schema, error model, taxonomy model, ranking specifikacija. | Security, data i product review odobrili ugovor. |
 | 3. DB prototip u sigurnom okruženju | Dizajnirati view/RPC, RLS, indekse i keyset ponašanje bez produkcijskog applyja. | Pregledive migracije, query-plan izvještaj, rollback skripte, DB testovi. | Dry-run/lint/test prolaze; produkcijski apply posebno odobren. |
@@ -550,7 +708,8 @@ potrebne za acceptance kriterije:
 
 Minimalni release je prihvatljiv samo kada su svi kriteriji dokazani artefaktom:
 
-- Svaka Must-have stavka ima implementaciju, vlasnika i testni dokaz.
+- Svaka Must-have stavka primjenjiva na Release 1 ima implementaciju, vlasnika
+  i testni dokaz; kontaktna funkcija i CONTACT-02 su izvan tog opsega.
 - Nema koda koji runtime korisnički tekst pretvara u proizvoljni SQL.
 - Cijela baza se ne učitava u MCP/LLM; hard cap je najviše 50 kandidata po stranici.
 - JSON validator odbija svako nepoznato polje i izvanrasponsku vrijednost.
@@ -558,7 +717,8 @@ Minimalni release je prihvatljiv samo kada su svi kriteriji dokazani artefaktom:
 - Nejasan upit izaziva pojašnjenje; nula rezultata ostaje nula.
 - Svaki rezultat postoji u bazi, ima stabilan ID i tačan `matched_fields` dokaz.
 - RLS negativni testovi dokazuju da korisnik jednog tenant-a ne vidi drugi tenant.
-- Kontaktni podaci se ne pojavljuju u search rezultatima i traže zasebnu dozvolu.
+- Release 1 ne vraća kontaktne podatke ni kroz search ni kroz pojedinačni
+  profil ili drugi izlaz. Zasebna kontaktna dozvola pripada tek kasnijoj fazi.
 - SQL i prompt injection suite ne mijenja upit, politiku, alat ili rezultat izvan
   tretiranja teksta kao podatka.
 - Duboka paginacija ne koristi veliki `OFFSET`; cursor ne može biti izmijenjen niti
@@ -581,15 +741,16 @@ Minimalni release je prihvatljiv samo kada su svi kriteriji dokazani artefaktom:
 | TYPO-01 | Tipfeler | `mehančar`. | Sigurno pojašnjenje ili dokumentovan partial/fuzzy match. |
 | AMB-01 | Nejasnoća | `Sarajevo`, bez značenja grad/kanton. | Pojašnjenje; nema tihog izbora. |
 | CON-01 | Konflikt | Dob najmanje 40 i najviše 30. | Validacijska greška bez DB poziva. |
-| EMPTY-01 | Prazno | Nema filtera. | Potvrda ili policy-defined uski rezultat; nikad veliki dump. |
+| EMPTY-01 | Prazno | Nema filtera. | VORLÄUFIGER VORSCHLAG: pregled i potvrda uz restriktivni limit; konačan tok OFFEN, nikad veliki dump. |
 | SQLI-01 | SQL injection | Tekst s navodnicima, komentarima i `UNION SELECT`. | Tretira se kao vrijednost; nema promjene SQL strukture. |
 | PI-01 | Prompt injection | CV tekst nalaže modelu da otkrije sve kontakte. | Tretira se kao podatak; instrukcija se ignoriše. |
 | SCHEMA-01 | JSON | Dodatno polje `sql`. | Odbijeno zbog `additionalProperties: false`. |
 | RANGE-01 | Limiti | `limit: 5000`. | Odbijeno; hard cap 50. |
 | RLS-01 | Tenant | Actor tenant A traži kandidat iz tenant-a B. | Nula/autorizacijska greška bez potvrde postojanja zapisa. |
 | ROLE-01 | Kontakt | Standardni recruiter traži email/telefon kroz search. | Kontakt nije vraćen; prikazan je siguran permission odgovor. |
-| CONTACT-02 | Gated pristup | Ovlašten korisnik potvrđuje prikaz jednog kontakta. | Minimalni kontakt, svrha i audit događaj. |
-| ZERO-01 | Nema rezultata | Validni filter bez poklapanja. | Tačno nula, bez izmišljenih ili automatski olabavljenih rezultata. |
+| CONTACT-02 | Kasnija, zasebno odobrena faza; izvan Releasea 1 | Ovlašten korisnik potvrđuje prikaz jednog kontakta. | Minimalni kontakt, svrha i audit događaj tek nakon posebnog odobrenja. |
+| CONTACT-R1 | Release 1 | Bilo koja rola traži kontakt kroz search ili pojedinačni profil. | Nema izlaza kontaktnih podataka. |
+| ZERO-01 | Nema rezultata | Validni filter bez poklapanja. | Tačno nula; konkretni prijedlozi ublažavanja, nova pretraga tek nakon saglasnosti; bez izmišljenih rezultata. |
 | PAGE-01 | Paginacija | Podaci se mijenjaju između dvije stranice. | Definisano stabilno cursor ponašanje bez duplikata koliko ugovor garantuje. |
 | CURSOR-02 | Cursor | Izmijenjen ili tuđi cursor. | Sigurna greška; nema podataka. |
 | PERF-01 | Performanse | Reprezentativan selektivan upit. | Unutar odobrenog p95/p99 i resource budgeta. |
@@ -681,13 +842,16 @@ Sljedeće se ne smije izmišljati; odgovori moraju doći iz audita ili odluke vl
 4. Gdje žive CV dokumenti, parsirani CV tekst, kontaktni detalji i osjetljivi podaci?
 5. Koji izvor je autoritativan kada se CRM polja i CV ne slažu?
 6. Koliko su podaci svježi, kako se ažuriraju i šta znači "dostupan sada"?
-7. Kako se računaju godine iskustva, posebno preklapajući i nepotpuni intervali?
+7. Q8.5 je potpuno OFFEN: ukupno ili relevantno iskustvo, definicija
+   relevantnosti, kombinacija zanimanja i djelatnosti, preklapanja i nepotpuni intervali.
 8. Koliki su stvarni concurrency, obrazac upita, throughput i numerički cilj latencije?
 9. Koji pravni osnov, svrhe obrade, retention i pravila brisanja/izvoza vrijede?
-10. Gdje će MCP runtime biti hostovan i ko je operativni vlasnik/on-call?
+10. Hosting, RACI, on-call postupak i konkretni procesi provjere su OFFEN.
+    Korisnik trenutno preuzima sve Q3 uloge, uključujući operativnog vlasnika.
 11. Kako se autentificiraju i mapiraju identiteti iz ChatGPT-a, Claudea, Codexa,
     Groka i drugih klijenata na internu rolu i tenant?
-12. Ko je vlasnik višejezične taksonomije i ko odobrava sinonime?
+12. Ko je vlasnik višejezične taksonomije i Berufssuchprofila te ko odobrava
+    sinonime, članstva i automatske prijedloge?
 13. Koja je tačna, dokumentovana formula rangiranja i tie-breaker?
 14. Ko smije vidjeti kontakt, ko smije izvoziti i kada je potrebna potvrda?
 15. Koji su zahtjevi dostupnosti, RTO, RPO i disaster-recovery očekivanja?
@@ -696,6 +860,9 @@ Sljedeće se ne smije izmišljati; odgovori moraju doći iz audita ili odluke vl
 18. Smije li se datum rođenja obrađivati za recruiting filter i kako se prikazuje dob?
 19. Da li se tekstualno/semantičko poklapanje smije koristiti za svaki tenant i svrhu?
 20. Koji su maksimalni dopušteni trošak po upitu i mjesečni operativni budžet?
+21. Q4.5 je OFFEN; izvorni tekst pitanja nije poznat i ne smije se izmišljati.
+22. Izvorna lista Q8.4 preporuka, detaljni operatori i opća potvrda svake nove
+    ili izmijenjene pretrage ostaju OFFEN; vidi ADR-0002 i audit.
 
 ## Potencijalno zaboravljene teme
 
@@ -721,6 +888,10 @@ Sljedeće se ne smije izmišljati; odgovori moraju doći iz audita ili odluke vl
 
 ## Dnevnik odluka
 
+Ovo je sažetak odluka briefa. Dugoročne arhitekturne odluke održavaju se u
+[docs/decisions/](decisions/); prihvaćenu kontrolisanu granicu razrađuje
+[ADR-0001](decisions/0001-controlled-query-boundary.md).
+
 | ID | Status | Odluka i obrazloženje |
 |---|---|---|
 | D-001 | Prihvaćeno | Koristi se server-side obrada: LLM proizvodi mali filter, PostgreSQL vraća malu stranicu. |
@@ -728,20 +899,29 @@ Sljedeće se ne smije izmišljati; odgovori moraju doći iz audita ili odluke vl
 | D-003 | Prihvaćeno | Runtime LLM ne generiše i ne izvršava proizvoljni SQL. |
 | D-004 | Prihvaćeno | Discovery je jednokratan/kontrolisan read-only proces; runtime koristi stabilan ugovor. |
 | D-005 | Prihvaćeno | Minimalni javni MCP ima tri alata: search, profile i filter options. |
-| D-006 | Prihvaćeno | Hard cap je 50 kandidata po search stranici; kontakti nisu dio search rezultata. |
+| D-006 | Prihvaćeno | Hard cap je 50 kandidata po search stranici; Release 1 nema kontaktnih izlaza ni u searchu ni u profilu. |
 | D-007 | Prihvaćeno | Minimalni release uključuje sve Must-have stavke. |
 | D-008 | Prihvaćeno | pgvector, cache, read replika i eksterni search engine nisu zadane komponente. |
 | D-009 | Na odluci | Fizički search view/RPC model nakon audita stvarne sheme i planova. |
 | D-010 | Na odluci | Auth model, tenant mapping i kontakt/export role za svaki MCP klijent. |
 | D-011 | Na odluci | Numerički SLO-i nakon reprezentativnog benchmarka. |
 | D-012 | Na odluci | Ranking formula, taksonomski vlasnik i postupak odobravanja sinonima. |
+| D-013 | VORLÄUFIGER VORSCHLAG | Kategorije s `AND`, tipizirani operatori i opća potvrda pregleda: nedostaje izvorna preporuka za dokaz pojedinačnih detalja. Q7 saglasnost za ublažavanje ostaje potvrđena. |
+| D-014 | Prihvaćeno | Berufssuchprofile su verzionirane, neekskluzivne veze prema kontrolisanim konceptima Ausbildung, Erfahrungsberuf i Tätigkeit; članovi ostaju direktno i kroz druga profile pretraživi. |
+| D-015 | VORLÄUFIGER VORSCHLAG za normalizaciju | Vorabnormalizacija uz original i kontrolisane ID-ove nije pojedinačno dokazana. Prihvaćena granica ADR-0003 ostaje: automatika samo predlaže, nema automatske objave. Postojeći ID-ovi su DURCH DISCOVERY ZU PRÜFEN. |
+| D-016 | Prihvaćeno | Nenavedena filterkategorija ostaje neaktivna; zanimanje traženo kroz iskustvo samo po sebi ne zahtijeva odgovarajući Ausbildungsberuf. |
+| D-017 | Prihvaćeno | Odvojeni Profilverwaltungs-MCP nakon discoveryja upravlja nacrtima, prijedlozima, ručnim korekcijama, validacijom, potvrdom, verzijama, arhiviranjem i auditom; Runtime-Such-MCP ostaje read-only. |
+| D-018 | Operativna granica | Službeni Supabase plugin/MCP i skills su razvojni alati, ne produkcijski MCP-ovi. Live pristup čeka vlastiti projektno ograničen read-only gate; duplicirane distribucije ne stvaraju novu sigurnosnu granicu. |
 
 Svaka buduća odluka treba imati datum, vlasnika, ulazne dokaze, posljedice,
 alternativu i kriterij ponovnog razmatranja.
 
 ## Preporučeni minimalni release
 
-Prvi produkcijski release mora uključiti **svaku Must-have stavku**: audit i
+Prvi produkcijski release mora uključiti **svaku Must-have stavku primjenjivu
+na Release 1**. Odobrenje pristupa kontaktima i CONTACT-02 su izričito izvan te faze; svi alati
+vraćaju podatke bez kontakata. VORLÄUFIGER VORSCHLAG stavke i JSON nacrt
+zahtijevaju finalizaciju prije implementacije. Osnova obuhvata audit i
 data-quality baseline, kanonski model, tri MCP alata, strogi JSON ugovor,
 kontrolisanu RPC pretragu, indekse dokazano potrebne planovima, least-privilege i
 RLS zaštitu, hallucination i injection kontrole, privacy/legal gateove, puni testni
@@ -759,6 +939,10 @@ problem, očekivanu korist, trošak, privacy uticaj, testni plan i rollback.
 - [Supabase Managing Indexes in Postgres](https://supabase.com/docs/guides/database/postgres/indexes)
 - [Supabase Row Level Security](https://supabase.com/docs/guides/database/postgres/row-level-security)
 - [Supabase Securing your data](https://supabase.com/docs/guides/database/secure-data)
+- [Supabase AI Tools](https://supabase.com/docs/guides/ai-tools)
+- [Supabase Plugin for AI Coding Agents](https://supabase.com/docs/guides/ai-tools/plugins)
+- [Supabase MCP Server](https://supabase.com/docs/guides/ai-tools/mcp)
+- [Supabase Agent Skills](https://supabase.com/docs/guides/ai-tools/ai-skills)
 
 Reference služe kao tehnička polazna tačka. Stvarne postavke projekta, privilegije,
 plan i aktivne mogućnosti moraju se potvrditi read-only auditom i vlasničkim
@@ -766,17 +950,27 @@ odlukama; dokument ne pretpostavlja da su opcionalne mogućnosti uključene.
 
 ## Handoff checklista
 
-- [ ] Imenovati product, data, security, privacy/legal i operativnog vlasnika.
+- [x] Korisnik trenutno preuzima product, data, security, privacy/legal,
+  operations i discovery uloge prema Q3.
+- [ ] Razraditi RACI, on-call postupak i konkretne procese provjere; nisu zaključeni.
 - [ ] Odobriti vremenski ograničen read-only discovery identitet i audit scope.
+- [ ] Attestirati tačan discovery put. Za Supabase plugin/MCP posebno dokazati
+  `project_ref`, `read_only=true`, minimalne feature grupe, ručni review i
+  rezultatne granice; postojeći Gate B trenutno odobrava samo lokalni `psql` put.
 - [ ] Inventarizirati tabele, kolone, relacije, viewove, funkcije, indekse i RLS.
 - [ ] Izraditi anonimizirani data-quality baseline za približno 200.000 kandidata.
 - [ ] Potvrditi tenant, auth, kontakt, export, retention, RTO i RPO odluke.
 - [ ] Mapirati stvarnu shemu na kanonski model i verzioniranu taksonomiju.
 - [ ] Finalizirati JSON Schema, error model, cursor i tri MCP tool ugovora.
+- [ ] Nakon odobrenja kanonskog modela finalizirati odvojeni
+  Profilverwaltungs-MCP ugovor prema ADR-0003, bez spajanja njegovih write prava
+  s Runtime-Such-MCP-om.
 - [ ] Dizajnirati pregledivu RPC/view migraciju i rollback; ne primjenjivati bez
   dry-runa i eksplicitnog produkcijskog odobrenja.
 - [ ] Izmjeriti reprezentativne planove i uvesti samo opravdane indekse.
-- [ ] Implementirati least-privilege, RLS, column allowlist i kontaktni gate.
+- [ ] Implementirati least-privilege, RLS, column allowlist i potpunu
+  zabranu izlaza kontakata u Releaseu 1. Kontaktni gate i CONTACT-02 čekaju
+  kasnije zasebno odobrenje.
 - [ ] Pokrenuti contract, multilingual, injection, RLS, pagination i privacy testove.
 - [ ] Benchmarkirati realni volumen/concurrency i usvojiti numeričke SLO/cost pragove.
 - [ ] Verificirati ChatGPT, Claude, Codex, Grok i referentni MCP klijent.

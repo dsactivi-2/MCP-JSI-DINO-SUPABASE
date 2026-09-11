@@ -17,8 +17,28 @@ Rad se ne pokreće dok nisu ispunjeni svi uslovi:
 - pregledana je allowlista audit upita;
 - definiran je siguran izlazni direktorij bez tajni i sirovog PII-a;
 - dogovoreni su vremenski prozor, statement timeout i stop kriteriji.
+- izabrani izvršni put ima vlastitu odobrenu gate verziju; odobrenje za lokalni
+  `psql` put ne prenosi se na Supabase plugin/MCP niti obrnuto;
+- za plugin/MCP put posebno su dokazani tačan `project_ref`, `read_only=true`,
+  minimalne feature grupe i ručna potvrda svakog tool poziva.
 
 Ako jedan uslov nedostaje, postupak se zaustavlja i bilježi kao blokiran.
+
+## Put alata
+
+- Projektni skills `supabase` i `supabase-postgres-best-practices` smiju se
+  koristiti za planiranje, review i čitanje javne dokumentacije. Oni nemaju
+  pristup bazi i ne predstavljaju discovery odobrenje.
+- Trenutni [Gate B](../discovery/security-read-only-discovery-preflight-b.md)
+  odobrava, nakon zasebne korisničke potvrde, samo svoj lokalni `psql` launcher.
+- Instalirani Supabase plugin/MCP je interni razvojni alat. Ne smije pristupati
+  projektu, shemi, podacima ili SQL-u dok poseban plugin-gate ne dokaže
+  projektno ograničenje, stvarni read-only identitet, `database,debugging,docs`
+  kao maksimalne feature grupe, query/output limite i sigurno zadržavanje
+  rezultata.
+- Dostupnost alata kao što su `list_tables`, `get_advisors` ili `execute_sql`
+  nije dozvola za njihov poziv. Nejasan ili prekinut write nikada se ne ponavlja
+  kroz drugi connector.
 
 ## Dozvoljeni opseg
 

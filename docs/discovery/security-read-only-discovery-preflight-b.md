@@ -10,6 +10,13 @@ Version A bleibt als historischer Entwurf erhalten. Version B ersetzt keine
 fehlende Nutzerfreigabe. Es besteht keine Erlaubnis für eine
 Datenbankverbindung, SQL-Ausführung oder Ausgabe von Datenbankresultaten.
 
+Die projektlokalen Supabase-Skills dürfen zur Planung und statischen Prüfung
+verwendet werden. Der installierte Supabase-Plugin/MCP ist kein
+Ausführungsmechanismus dieses Gates. Seine derzeitige Verbindung ist weder durch
+dieses Dokument projektgebunden noch als read-only attestiert und besitzt nicht
+die Stream-, Retry- und Ausgabegrenzen des Launchers. Ein MCP-Lauf erfordert
+eine eigene Gate-Version, neue Evidenz und eine neue ausdrückliche Freigabe.
+
 ## 1. Zielbindung ohne Repository-Geheimnisse
 
 Der Ziel-Alias ist eindeutig und nicht geheim. Er bezeichnet nur den erwarteten
@@ -358,6 +365,7 @@ Fehlt ein Feld oder ändert sich ein Hash, ist der Text unwirksam.
 | B2 SQL getrennt und reduziert | PASS – nur statisch |
 | B3 sensitiv klassifiziert | PASS – DRAFT, nicht freigegeben |
 | Kontrollierter Launcher verifiziert | PASS_WITH_GAPS – ausschließlich Fake-\`psql\`, keine DB-Verbindung |
+| Supabase-Plugin/MCP als Gate-B-Ausführungsweg | BLOCKED – nicht Bestandteil dieser Gate-Version |
 | Datenbankname und Host-/Projektkennung geprüft | SKIPPED – keine Verbindung erlaubt |
 | SQL ausgeführt | SKIPPED – verboten |
 | Gate B1 freigegeben | BLOCKED |
@@ -386,4 +394,5 @@ Fehlt ein Feld oder ändert sich ein Hash, ist der Text unwirksam.
 - [Änderungsmatrix A zu B](gate-b-change-matrix.md)
 - [Historischer, nicht erteilter B1-Freigabetext](gate-b1-approval-text.md)
 - [Exakter, nicht erteilter B1-V2-Freigabetext](gate-b1-v2-approval-text.md)
+- [Supabase-Tooling-Regeln](../agents/supabase-tooling.md)
 - [Append-only Arbeitsbericht](../worklogs/2026-09-11-security-read-only-discovery-gate.md)

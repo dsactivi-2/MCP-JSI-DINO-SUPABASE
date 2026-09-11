@@ -7,7 +7,9 @@ Status: Prihvaćeno
 ## Kontekst
 
 CRM s približno 200.000 kandidata mora omogućiti višejezično pretraživanje kroz
-MCP klijente. Slanje cijele baze modelu stvara neprihvatljive rizike za
+MCP klijente. Broj kandidata je projektna procjena, DURCH DISCOVERY ZU PRÜFEN;
+prihvaćena arhitekturna odluka ne predstavlja audit stvarnog broja zapisa.
+Slanje cijele baze modelu stvara neprihvatljive rizike za
 privatnost, trošak, latenciju i tačnost. Slobodno generirani SQL može zaobići
 sigurnosne kontrole, otkriti osjetljive podatke ili proizvesti skupe upite.
 

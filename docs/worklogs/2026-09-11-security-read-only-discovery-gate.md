@@ -388,3 +388,46 @@ werden als neuer Eintrag mit Verweis auf den betroffenen Eintrag angehängt.
 - Sicherheitsgrenze: Kein reales `psql`, kein Netzwerk, keine
   Datenbankverbindung und kein SQL gegen PostgreSQL.
 - Assessment: `PASS_WITH_GAPS / NO-GO`; Freigabestatus bleibt `NICHT ERTEILT`.
+
+### [2026-09-11T08:44:33+02:00] Phase 13 – Supabase-Plugin- und Skills-Integration
+
+- Intent: Die installierten Supabase-Plugin-Distributionen und beide
+  projektlokalen Skills bewerten und ihre sichere Nutzung in Governance,
+  Discovery-Planung und Aktualisierungsablauf verankern.
+- Befunde:
+  - Beide Skill-Verzeichnisse sind vollständig und stimmen mit der vorhandenen
+    Community-Distribution überein; sie helfen sofort bei Planung und statischem
+    Review, stellen aber keine Datenbankverbindung und keine Evidenz dar.
+  - Zwei installierte Plugin-Distributionen verwenden denselben Supabase
+    app/MCP. Sie schaffen keine getrennten Identitäten oder Trust Boundaries.
+  - Die aktive Verbindung ist nicht auf das CRM-Projekt begrenzt; read-only und
+    minimale Feature-Gruppen sind nicht attestiert. Live-Zugriffe bleiben daher
+    blockiert.
+  - Gate B bleibt an den geprüften lokalen `psql`-Launcher gebunden. Ein
+    Supabase-MCP-Pfad benötigt eine eigene Gate-Version und Freigabe.
+- Änderungen:
+  - Verbindliche Agentenregeln, Projektstatus, Discovery-Runbook, Gate-B-
+    Preflight, Implementierungsbrief und Entscheidungskarte wurden um diese
+    Trennung ergänzt.
+  - `docs/agents/supabase-tooling.md` dokumentiert Routing, MCP-Gate und den
+    reproduzierbaren Skills-Updateablauf.
+  - Die beiden Rechercheberichte dokumentieren Installationsstand, Nutzen,
+    Grenzen und aktuelle Vendor-Signale.
+  - `.gitignore` schließt lokale Environment- und `pgpass`-Dateien aus; es wurde
+    keine MCP-Verbindungskonfiguration in das Repository geschrieben.
+- Evidenz:
+  - Relative Markdown-Links: `PASS`, 39 Links.
+  - Gate-B1-V2-Statikprüfung: `PASS`.
+  - Geänderte Zieldokumente mit der bestehenden Gate-B-Stilkonfiguration:
+    `PASS`, 10 Dateien und null Befunde.
+  - `git diff --check`: `PASS`.
+  - Die diagnostische Standardprüfung des gesamten Repositories meldet 431
+    MD013-/MD060-Stilbefunde in 14 Dateien, weil die beabsichtigten Regeln für
+    Zeilenlänge und Tabellen nicht als allgemeines Projektprofil konfiguriert
+    sind. Es existiert bewusst kein allgemeines `.markdownlint.json`; die README
+    benennt diese Lücke jetzt korrekt.
+- Sicherheitsgrenze: Keine Tabellen-, Schema-, Kandidaten-, Kontakt- oder
+  CV-Daten gelesen; kein SQL, keine Migration, kein Deployment und keine
+  externe Berechtigung geändert.
+- Assessment: `PASS_WITH_GAPS / NO-GO`; Skills sind freigegeben für Planung und
+  Review, Live-Plugin-Zugriffe bleiben `BLOCKED`.

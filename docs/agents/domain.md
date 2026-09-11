@@ -1,0 +1,25 @@
+# Domenska dokumentacija
+
+Repozitorij ima jedan domenski kontekst. Njegov rječnik je u korijenskom
+[CONTEXT.md](../../CONTEXT.md), a **docs/decisions/** je jedini ADR direktorij.
+
+## Čitanje prije rada
+
+1. Pročitati [stanje projekta](../project.md) i [CONTEXT.md](../../CONTEXT.md).
+2. Pročitati relevantne odluke iz [docs/decisions/](../decisions/), počevši od
+   [ADR-0001](../decisions/0001-controlled-query-boundary.md).
+3. Za zahtjeve koristiti
+   [implementacijski brief](../SUPABASE_CRM_MCP_IMPLEMENTATION_BRIEF.md), a za
+   discovery [runbook](../runbooks/schema-discovery.md).
+
+## Održavanje
+
+- U issueima, specifikacijama i kodu koristiti pojmove iz domenskog rječnika.
+- Novi razriješeni domenski pojam dodati u `CONTEXT.md`; trenutni status i
+  otvorene uslove održavati u `docs/project.md`.
+- Dugoročne arhitekturne odluke zapisivati isključivo u `docs/decisions/`.
+  Predlošci vještina koriste ovu putanju pri čitanju i pisanju ADR-ova.
+- Konflikt s prihvaćenim ADR-om izričito navesti prije promjene. Zamjenu odluke
+  dokumentirati novim ADR-om i eksplicitno označiti zamijenjenu odluku.
+- Kontekst, README i konfiguracija vještina upućuju na zahtjeve i odluke;
+  ne prepisuju njihov sadržaj.

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Start Matt Wizard"
+  short_description: "Launch the guided Matt project workflow"
+  default_prompt: "Use $start-matt-wizard to launch the interactive new-project workflow in a terminal."
+
+policy:
+  allow_implicit_invocation: false
