@@ -26,6 +26,10 @@ required_gate_markers = (
     "read_only=true",
     "features=database,docs",
     "Read-only ist eine Schreibschutzschicht, keine PII- oder Mandantengrenze.",
+    "Ziel ist Produktion mit echten Kandidatendaten",
+    "FAIL / BLOCKED – Ziel ist Produktion mit echten Kandidatendaten.",
+    "darf der Plugin nicht direkt mit dem bestätigten Produktionsprojekt",
+    "Getrenntes Development-/Testprojekt ohne echte Personen.",
     "`search_docs`",
     "`list_extensions`",
     "`list_tables`",
@@ -42,6 +46,7 @@ for forbidden_literal in (
     "Status: **PASS**",
     "Gesamtbewertung: **GO**",
     "Live-Zugriff ist freigegeben",
+    "Ist das Ziel ein Development-/Testprojekt",
 ):
     if forbidden_literal in gate_text:
         fail(f"unsafe or contradictory gate text found: {forbidden_literal}")

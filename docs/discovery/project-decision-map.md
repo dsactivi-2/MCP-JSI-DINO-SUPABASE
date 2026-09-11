@@ -29,6 +29,7 @@ flowchart TD
     G5[Discovery-Bericht und kanonische Zuordnung]
     OI[Offenes Designinterview]
     G6[JSON-, MCP- und RPC-Vertrag]
+    SE[Optionaler Semantic-Evaluations-Gate]
     G7[Sicherer DB-Prototyp]
     G8[Runtime-Such-MCP]
     G9[Mehrclient- und Sicherheitstests]
@@ -44,6 +45,10 @@ flowchart TD
     G5 --> OI
     OI --> G6
     G5 --> G6
+    G5 -. Discovery-Evidenz .-> SE
+    OI -. Product-Scope .-> SE
+    G6 -. nur bei bestätigtem Bedarf .-> SE
+    SE -. Backend-Entscheidung .-> G7
     G6 --> G7
     G7 --> G8
     G8 --> G9
@@ -62,11 +67,15 @@ Runtime-Such-MCP integriert werden.
 | ID | Fakt | Evidenz | Wirkung |
 | --- | --- | --- | --- |
 | F-01 | Das Repository ist in Governance und Discovery-Vorbereitung; ein Anwendungsscaffold fehlt. | [Projektstatus](../project.md) | Keine Implementierungs- oder Stackentscheidung ist freigegeben. |
-| F-02 | Es wurde noch kein Datenbankaudit durchgeführt. | [Discovery-Runbook](../runbooks/schema-discovery.md) | Physische Tabellen, Spalten, Relationen und RLS-Grenzen bleiben unbekannt. |
+| F-02 | Es wurde noch kein verbundener Datenbankaudit durchgeführt; eine lokale statische Exportanalyse liegt vor. | [Statischer Bericht](crm-schema-static-analysis.md), [Discovery-Runbook](../runbooks/schema-discovery.md) | Exportfakten grenzen spätere Discovery ein, ersetzen Gate B aber nicht. |
 | F-03 | Etwa 200.000 Kandidaten sind eine Projektschätzung; 179 Tabellen sind eine ungeprüfte Nutzerangabe. | [ADR-0002](../decisions/0002-search-design-interview.md) | Beide Zahlen müssen durch Metadaten-Discovery geprüft werden. |
-| F-04 | Der aktuelle Arbeitsbaum enthält geänderte und unversionierte Governance-Dokumente; nichts ist gestaged. | Git-Prüfung dieser Sitzung | Der Git-Diff ist Prüfgegenstand, kein freigegebener Commit. |
+| F-04 | Gate B1 V2 und der Plugin-Gate-P-Entwurf sind versioniert; beide bleiben ohne die jeweils verlangte Evidenz und Freigabe `NO-GO`. | [Projektstatus](../project.md), [Plugin Gate P](supabase-plugin-read-only-gate-draft.md) | Ein vorhandenes Gate-Dokument ist keine Zugriffsfreigabe. |
 | F-05 | Release 1 ist auf allen Ausgabepfaden kontaktfrei. | [ADR-0002](../decisions/0002-search-design-interview.md), [Brief](../SUPABASE_CRM_MCP_IMPLEMENTATION_BRIEF.md) | Discovery-Ausgaben dürfen Kontakte ebenfalls nicht enthalten. |
 | F-06 | Beide offiziellen Supabase-Skills und mehrere Distributionen desselben Supabase app/MCP sind installiert; die aktive Verbindung ist nicht projektgebunden oder read-only attestiert. | [Supabase-Tooling-Regeln](../agents/supabase-tooling.md) | Skills unterstützen Planung sofort; Live-Tools bleiben bis zu einem eigenen Gate blockiert. |
+| F-07 | Das Ziel ist ein Produktionsprojekt mit echten Kandidatendaten. | Explizite Nutzerbestätigung vom 2026-09-11; [Plugin Gate P](supabase-plugin-read-only-gate-draft.md) | Der Entwickler-Plugin darf nicht direkt mit dem Ziel verbunden werden; Live-Evaluation nur gegen getrennte Nicht-Produktion ohne echte Personendaten. |
+| F-08 | Der lokale Export hat den PII-/Secret-Preflight bestanden: 3.121 Zeilen, keine Treffer in den sieben sensiblen Kategorien. | [Statischer Bericht](crm-schema-static-analysis.md) | Die schema-only Analyse durfte fortgesetzt werden; die Rohdatei bleibt außerhalb von Git. |
+| F-09 | Der Export enthält 100 vollständige Table-Blöcke mit 1.104 Spalten und je einem markierten Primary Key; Foreign Keys, Unique- und Identity-Constraints fehlen. | [Statischer Bericht](crm-schema-static-analysis.md) | Physische Namen und Typen sind Exportfakten; Beziehungen bleiben unbewiesen. |
+| F-10 | Die RLS-Sektion nennt 188 Objekte; 88 davon besitzen keinen Table-/Column-Block im Export. | [Statischer Bericht](crm-schema-static-analysis.md) | Der Export ist unvollständig und beweist weder den Gesamtbestand noch effektive RLS-/Rechtewirkung. |
 
 ## Akzeptierte Entscheidungen
 
@@ -91,6 +100,8 @@ Runtime-Such-MCP integriert werden.
 | P-04 | Das Discovery-Gate nutzt die konservativen Grenzen des [Gate-B-Preflights](security-read-only-discovery-preflight-b.md). | Ausdrückliche Freigabe. | Zur Freigabe vorgelegt. |
 | P-05 | Identity-Prüfung, Strukturmetadaten und sensitive Definitionen/Statistiken werden als B1, B2 und B3 separat freigegeben. | Jeweils Review der vorherigen Stufe. | B1 V2 NO-GO; B2/B3 BLOCKED. |
 | P-06 | Ein Supabase-MCP kann später einen alternativen internen Discovery-Pfad bilden, wenn Projektbindung, read-only, minimale Features, Query-/Outputgrenzen und manuelle Freigabe in einer eigenen Gate-Version bewiesen sind. | [Plugin Gate P](supabase-plugin-read-only-gate-draft.md), neue technische Evidenz und ausdrückliche Nutzerfreigabe. | DRAFT / NO-GO; kein Bestandteil von Gate B. |
+| P-07 | Semantische Suche wird nur über den [Evaluations-Gate](../research/semantic-search-evaluation-gate.md) geprüft: erst Baseline, dann gegebenenfalls `pgvector` gegen Vector Bucket/S3 Wrapper. | Discovery-Befunde, Product-Scope, Referenzset und vorab definierte Qualitäts-/SLO-Grenzen. | Eingeplant; keine Technologie gewählt und kein Release-1-Default. |
+| P-08 | Der lokale `crm`-Export wird zuerst statisch und ohne Verbindung nach dem [Schema-Analyseplan](schema-analysis-tasklist.md) geprüft. | Sicherheits-Preflight der Datei. | PASS_WITH_GAPS; [Bericht](crm-schema-static-analysis.md) liegt vor und ersetzt Gate B nicht. |
 
 ## Arbeitsannahmen
 
@@ -109,7 +120,8 @@ Runtime-Such-MCP integriert werden.
 | G1-02 | Dedizierte Identität bereitstellen und ihre effektiven Rechte mit der Gate-Allowlist prüfen. | Nutzer/Operations; nur nach G1-01. | Metadaten-Discovery. |
 | G1-03 | Rohdatenverzeichnis mit restriktiven Rechten erzeugen; Repository-Ausgabe bleibt bis Redaktionsprüfung gesperrt. | Discovery-Sitzung. | Persistenz von Ergebnissen. |
 | G1-04 | B1-Output prüfen und Gate B2 separat freigeben; B3 bleibt bis nach B2 gesperrt. | B1 PASS und Nutzerfreigabe. | Einfache Strukturmetadaten. |
-| G1-05 | Falls statt des geprüften `psql`-Pfads der Supabase-MCP verwendet werden soll, den [plugin-spezifischen Gate-P-Entwurf](supabase-plugin-read-only-gate-draft.md) schließen und testen. | `Always ask` ist attestiert; Projektbindung, read-only, Features, Outputgrenze und neue Freigabe fehlen. | Optionaler MCP-Discovery-Pfad bleibt NO-GO. |
+| G1-05 | Falls der Supabase-MCP evaluiert werden soll, den [plugin-spezifischen Gate-P-Entwurf](supabase-plugin-read-only-gate-draft.md) ausschließlich gegen ein getrenntes Nicht-Produktionsprojekt ohne echte Personendaten schließen und testen. | `Always ask` ist attestiert; geeignetes Nicht-Produktionsprojekt, Projektbindung, read-only, Features, Outputgrenze und neue Freigabe fehlen. | Direkter Produktionspfad ist ausgeschlossen; optionaler Testpfad bleibt NO-GO. |
+| G1-06 | Lokalen `crm`-Schemaexport ohne Ausgabe von Werten preflighten, statisch analysieren und redigieren. | [Schema-Analyseplan](schema-analysis-tasklist.md); kein DB- oder Plugin-Zugriff. | `PASS_WITH_GAPS`; Bericht grenzt relevante Objekte ein, ersetzt aber keine Gate-B-Evidenz. |
 | G3-01 | Fachlich relevante Objekte anhand des Metadateninventars auswählen. | G2-Bericht. | Aggregierte Data-Quality-Abfragen. |
 | G3-02 | Für jede Tiefenprüfung einen exakten, objektgebundenen SQL-Nachtrag freigeben. | G3-01. | Kandidatendaten oder Aggregate. |
 | O-01 | Q4.5 einschließlich ursprünglicher Frage und Optionen. | Nutzer; nicht durch Discovery ableitbar. | Interviewabschluss. |
@@ -117,17 +129,21 @@ Runtime-Such-MCP integriert werden.
 | O-03 | Authentifizierung, Tenant-Modell und RLS-Abbildung. | Discovery-Befunde und Nutzerentscheidung. | Runtime-Sicherheitsvertrag. |
 | O-04 | Altersfilter: rechtliche Grundlage, Zweck und Darstellung. | Privacy/Legal-Entscheidung. | Release-Vertrag für Alter. |
 | O-05 | Ranking, SLO, Hosting, Retention, Export, Verlauf, Cache und UI. | Discovery, Benchmark oder Nutzerentscheidung je Thema. | Spätere Implementierungsphasen. |
+| O-06 | SEM-UC-01/02 und DQ-UC-01 fachlich freigeben sowie entscheiden, ob semantische Suche ein expliziter Modus sein darf. | Discovery-Befunde und Nutzerentscheidung; danach Evaluations-Gate. | Semantic Contract, Backend-Prototyp und ADR. |
 
 ## Kritischer Pfad
 
-1. G1 vollständig freigeben.
-2. Gate-Abfragen ausführen und bei jedem Stop-Signal abbrechen.
-3. Nur Metadaten inventarisieren; keine Kandidatenzeilen lesen.
-4. Relevante Objekte auswählen und einen neuen exakten SQL-Nachtrag prüfen.
-5. Erst nach separater Freigabe aggregierte Qualitäts- und Planprüfungen ausführen.
-6. Befunde redigieren, klassifizieren und den Discovery-Bericht erstellen.
-7. Offene Geschäftsentscheidungen mit belegten Befunden fortsetzen.
-8. Verträge, Prototyp, Runtime und Rollout jeweils hinter ihrem eigenen Gate halten.
+1. Den [statischen `crm`-Bericht](crm-schema-static-analysis.md) menschlich prüfen.
+2. G1 vollständig freigeben.
+3. Gate-Abfragen ausführen und bei jedem Stop-Signal abbrechen.
+4. Nur Metadaten inventarisieren; keine Kandidatenzeilen lesen.
+5. Relevante Objekte auswählen und einen neuen exakten SQL-Nachtrag prüfen.
+6. Erst nach separater Freigabe aggregierte Qualitäts- und Planprüfungen ausführen.
+7. Befunde redigieren, klassifizieren und den Discovery-Bericht erstellen.
+8. Offene Geschäftsentscheidungen mit belegten Befunden fortsetzen.
+9. Nur bei bestätigtem semantischem Bedarf den Evaluations-Gate mit Baseline,
+   Referenzset und isolierten Prototypen ausführen.
+10. Verträge, Prototyp, Runtime und Rollout jeweils hinter ihrem eigenen Gate halten.
 
 Die installierten Skills unterstützen die statische Prüfung in allen Schritten.
 Der Live-Plugin verkürzt diesen kritischen Pfad nicht, solange G1-05 nicht separat
@@ -142,4 +158,5 @@ entworfen, getestet und freigegeben wurde.
 - [ADR-0003](../decisions/0003-separated-profile-administration-mcp.md)
 - [Discovery-Runbook](../runbooks/schema-discovery.md)
 - [Supabase-Tooling-Regeln](../agents/supabase-tooling.md)
+- [Evaluations-Gate für semantische Suche](../research/semantic-search-evaluation-gate.md)
 - [Korrekturmatrix](../reviews/decision-reconstruction-corrections.md)

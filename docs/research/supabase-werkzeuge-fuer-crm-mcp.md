@@ -130,8 +130,9 @@ Gruppen erforderlich.
   Für dieses Projekt zuerst das offizielle MCP-SDK evaluieren.
 - **Reflex:** Löst weder MCP-Auth, Query-Grenze noch Discovery; der UI-Stack ist
   offen.
-- **pgvector jetzt:** Erst erwägen, wenn strukturierte Filter, Taxonomie, FTS
-  und Trigramme einen gemessenen Qualitätsbedarf nicht erfüllen.
+- **Vektorsuche jetzt:** Weder `pgvector` noch Vector Buckets vorziehen. Erst
+  erwägen, wenn strukturierte Filter, Taxonomie, FTS und Trigramme einen
+  gemessenen Qualitätsbedarf nicht erfüllen.
 
 ## 1. Offizieller Supabase-MCP: gutes internes Discovery-Werkzeug, falscher Runtime
 
@@ -271,8 +272,25 @@ Die Dokumentation löst jedoch nicht automatisch die projektspezifische
 Mehrsprachigkeit. B/H/S, Deutsch und Englisch, Diakritik, Flexionen und
 fachlich erlaubte Synonyme müssen gegen echte Datenverteilungen und eine
 kontrollierte Taxonomie getestet werden. FTS darf keine stillen
-LLM-Synonymerweiterungen einführen. `pg_trgm` und `pgvector` bleiben nachgelagerte
-Benchmark-Entscheidungen, wie bereits im Brief vorgesehen.
+LLM-Synonymerweiterungen einführen. `pg_trgm` und jeder Vektorpfad bleiben
+nachgelagerte Benchmark-Entscheidungen, wie bereits im Brief vorgesehen.
+
+Supabase Vector Buckets können Embeddings in einem S3-basierten Vector Store
+halten und über den S3 Vector Wrapper als Foreign Table aus PostgreSQL abgefragt
+werden. Damit ist ein SQL-Join zwischen Similarity-Ergebnis und autoritativen
+CRM-Zeilen technisch möglich. Das ersetzt weder die Erzeugung des Query-
+Embeddings noch den Nachweis, dass selektive CRM-Filter vor dem endgültigen
+`top_k` korrekt wirken. Vector Buckets sind derzeit Public Alpha, der Wrapper
+unterstützt nur den dokumentierten `<===>`-Distanzoperator, und Supabase ordnet
+sie eher großen backendorientierten Workloads zu. Für den geschätzten CRM-Umfang
+ist deshalb kein Vorteil gegenüber `pgvector` oder dem nichtvektoriellen
+Baseline belegt ([Vector Buckets](https://supabase.com/docs/guides/storage/vector/introduction),
+[Querying Vectors](https://supabase.com/docs/guides/storage/vector/querying-vectors)).
+
+Der verbindliche Prüfweg steht im
+[Evaluations-Gate für semantische Suche](semantic-search-evaluation-gate.md).
+Er trennt explizite Kandidatensuche, Ähnlichkeitssuche, Dublettenprüfung und die
+außerhalb dieses Projekts liegende Call-Memory-Verknüpfung.
 
 ## 6. Branching und eigener Edge-MCP
 
@@ -370,9 +388,10 @@ deshalb als allgemeiner Kandidatenzugang abzulehnen.
    wenn der Auth-POC für alle Zielclients bestanden ist.
 6. Lokale Supabase-Umgebung, Migrationen, pgTAP, `db lint`, Typgenerierung und
    MCP Inspector in die reproduzierbare Testkette aufnehmen.
-7. FTS, `pg_trgm`, Branching und später eventuell `pgvector` ausschließlich
-   anhand anonymisierter Tests, Query-Pläne, Qualitätsmessungen und Kosten
-   entscheiden.
+7. FTS, `pg_trgm` und später eventuell `pgvector` oder Vector Bucket/S3 Wrapper
+   ausschließlich nach dem dokumentierten Evaluations-Gate anhand
+   anonymisierter Tests, Query-Pläne, Qualitätsmessungen, Lifecycle und Kosten
+   entscheiden. Branching bleibt eine getrennte Umgebungsentscheidung.
 
 ## Offene Prüfungen
 
@@ -386,6 +405,9 @@ deshalb als allgemeiner Kandidatenzugang abzulehnen.
   Backpressure und MCP-Auth-Interoperabilität erfüllen.
 - Welche PostgreSQL-Textsuchkonfigurationen und Indizes die realen B/H/S-,
   deutschen und englischen Daten benötigen.
+- Ob ein Vektorpfad nach dem nichtvektoriellen Baseline überhaupt Mehrwert
+  liefert und, falls ja, ob `pgvector` oder Vector Bucket/S3 Wrapper
+  Filterkorrektheit, SLO, Privacy, Lifecycle und Kosten besser erfüllt.
 - Welches SDK nach der noch offenen Stack-Entscheidung tatsächlich gewählt wird.
 
 ## Quellenstand

@@ -204,6 +204,11 @@ Više instaliranih distribucija koje pokazuju na isti Supabase app/MCP ne čine
 odvojene identitete ili trust boundaryje. Trenutni Gate B ostaje vezan za lokalni
 `psql` launcher dok nova gate verzija izričito ne odobri drugi put.
 
+Korisnik je 2026-09-11 potvrdio da je ciljni Supabase projekt produkcijski i da
+sadrži stvarne podatke kandidata. Razvojni Supabase Plugin/MCP zato se ne smije
+direktno povezati s tim projektom. Njegova eventualna evaluacija zahtijeva
+zaseban development/test projekt bez stvarnih osobnih podataka.
+
 ## Must-have zahtjevi
 
 ### 1. Read-only inventar i data-quality audit
@@ -220,6 +225,13 @@ Audit mora evidentirati bez izmjena:
   identifikacionih brojeva ili drugih nepotrebnih ličnih podataka;
 - reprezentativne `EXPLAIN (ANALYZE, BUFFERS)` planove u sigurnom testnom okruženju
   ili na odobrenim read-only upitima uz kontrolu opterećenja.
+
+Korisnički dostavljen Schema Visualizer izvoz može prije konekcije dati statičku
+preliminarnu evidenciju prema
+[schema-analysis tasklisti](discovery/schema-analysis-tasklist.md). Sirova
+datoteka ostaje izvan Git-a, sadržaj je nepouzdan podatak i ništa iz izvoza se
+ne izvršava. Takav izvoz ne zamjenjuje provjeru RLS-a, prava, tenant granica,
+indeksa, funkcija, row counta ili data qualityja kroz odobreni discovery.
 
 Data-quality izvještaj mora kvantificirati:
 
@@ -656,7 +668,9 @@ potrebne za acceptance kriterije:
    tie-breakerom.
 2. `pg_trgm` fuzzy pretraga za tipografske greške te odobreni višejezični sinonimi.
 3. Hibridni search u kojem se prvo primjenjuju deterministički filteri, zatim tekstualni
-   ili semantički rank samo nad suženim skupom.
+   ili semantički rank samo nad suženim skupom. Semantički put slijedi
+   [evaluacijski gate](research/semantic-search-evaluation-gate.md); backend nije
+   unaprijed izabran.
 4. Materialized search view kada mjerenja pokažu da su normalizirani joinovi preskupi;
    definirati refresh, svježinu i propagaciju brisanja.
 5. Cache tek nakon mjerenja, prvenstveno za taksonomije i dokazano česte identične
@@ -674,8 +688,10 @@ potrebne za acceptance kriterije:
 
 ## Nice-to-have zahtjevi
 
-1. `pgvector` samo ako stvarni upiti zahtijevaju semantičku sličnost koju strukturirani
-   filteri, FTS, sinonimi i trigrami ne rješavaju dovoljno dobro.
+1. Vektorski backend samo ako stvarni upiti zahtijevaju semantičku sličnost koju
+   strukturirani filteri, FTS, sinonimi i trigrami ne rješavaju dovoljno dobro.
+   `pgvector` i Vector Bucket/S3 Wrapper porede se tek nakon discoveryja; Vector
+   Bucket je trenutno Alpha i nije zadana komponenta.
 2. Semantički search tek nakon strukturiranog sužavanja kandidata.
 3. LLM reranking samo nad najviše 50-100 rezultata koje je baza već autorizirala i
    vratila, nikada nad cijelom bazom.
@@ -697,8 +713,8 @@ potrebne za acceptance kriterije:
 |---|---|---|---|
 | 0. Governance i pristup | Utvrditi vlasnike, pravnu osnovu, svrhe, role, izvršni put i read-only audit pristup. | RACI, data-access odobrenje, privacy scope, risk register i attestation izabranog alata. | Odobren read-only audit bez tajni u repozitoriju; alat je scopean i fail-closed. |
 | 1. Discovery | Inventar sheme, RLS-a, indeksa, funkcija, uzorka i kvaliteta podataka. | Data dictionary, ER prikaz, DQ izvještaj, index/RLS inventar, baseline planovi. | Nepoznanice kritične za dizajn razriješene ili formalno prihvaćene. |
-| 2. Ugovor i model | Mapirati stvarnu shemu na kanonski model i definirati MCP/JSON/RPC ugovor. | Verzija ugovora, JSON Schema, error model, taxonomy model, ranking specifikacija. | Security, data i product review odobrili ugovor. |
-| 3. DB prototip u sigurnom okruženju | Dizajnirati view/RPC, RLS, indekse i keyset ponašanje bez produkcijskog applyja. | Pregledive migracije, query-plan izvještaj, rollback skripte, DB testovi. | Dry-run/lint/test prolaze; produkcijski apply posebno odobren. |
+| 2. Ugovor i model | Mapirati stvarnu shemu na kanonski model i definirati MCP/JSON/RPC ugovor; odlučiti odobrene semantičke slučajeve upotrebe prije tehničkog izbora. | Verzija ugovora, JSON Schema, error model, taxonomy model, ranking specifikacija i po potrebi semantic evaluation plan. | Security, data i product review odobrili ugovor i scope evaluacije. |
+| 3. DB prototip u sigurnom okruženju | Dizajnirati view/RPC, RLS, indekse i keyset ponašanje bez produkcijskog applyja; samo uz odobren scope porediti nevectorski baseline, `pgvector` i Vector Bucket/S3 Wrapper. | Pregledive migracije, query-plan izvještaj, rollback skripte, DB testovi i po potrebi reproducibilan semantic benchmark. | Dry-run/lint/test prolaze; semantički gate ima odluku; produkcijski apply posebno odobren. |
 | 4. MCP servis | Implementirati tri alata, auth, validator, limite, sigurne greške i audit. | MCP server, konfiguracija bez tajni, contract testovi, operativni runbook. | Integracijski i sigurnosni testovi prolaze. |
 | 5. Višeklijentska validacija | Testirati ChatGPT, Claude, Codex, Grok i referentni MCP klijent. | Compatibility matrix, jezični testovi, UX pojašnjenja, poznata ograničenja. | Nema kritičnih razlika ugovora ili curenja podataka. |
 | 6. Benchmark i SLO | Load, soak i query-plan test na reprezentativnom volumenu. | Benchmark izvještaj, numerički SLO-i, capacity/cost budget, alarm pragovi. | Mjerljivi ciljevi usvojeni i zadovoljeni. |
@@ -758,6 +774,8 @@ Minimalni release je prihvatljiv samo kada su svi kriteriji dokazani artefaktom:
 | LOAD-01 | Concurrency | Odobren broj paralelnih korisnika. | SLO zadovoljen; backpressure aktivan iznad praga. |
 | MIG-01 | Migracija | MCP v1 radi tokom deploya kompatibilne DB promjene. | Ugovor ostaje funkcionalan ili rollout staje. |
 | DEL-01 | Brisanje | Kandidat je zakonito obrisan. | Nestaje iz searcha, viewa, cachea, exporta i embeddinga prema SLA-u. |
+| SEM-01 | Semantički filteri | Globalno sličan kandidat ne zadovoljava tenant, aktivni status ili jezični minimum. | Nikada se ne vraća; tvrdi filteri važe prije konačnog limita, bez post-filter gubitka. |
+| SEM-02 | Semantički lifecycle | Kandidat ili izvorni tekst je ispravljen/izbrisan, a stari embedding još postoji. | Stari embedding je nevažeći ili uklonjen unutar SLA-a i ne može vratiti kandidata. |
 | CLIENT-01 | Interoperabilnost | Isti tool schema u svakom ciljnom klijentu. | Jednaki tipovi, greške, limiti i autorizacija. |
 
 ## Opservabilnost i operacije
@@ -830,6 +848,7 @@ ograničen, a retention kraći ili jednak opravdanoj operativnoj/pravnoj potrebi
 | CV prompt injection | Promjena ponašanja modela. | Izolacija sadržaja, encoding i zabrana tretiranja podataka kao instrukcija. |
 | Vendor razlike | Jedan MCP klijent radi, drugi ne. | Minimalan standardni ugovor i compatibility matrix. |
 | Semantička pristranost | Nepravedno rangiranje. | Deterministički filteri, fairness monitoring i ljudski pregled. |
+| Alpha/FDW zavisnost | Breaking promjena, nedokazan filter pushdown ili nestabilna latencija Vector Bucketa. | Evaluacijski gate, izolirani prototip, planovi/granični testovi, feature flag i rollback. |
 | Nekontrolisan export | Masovno iznošenje PII-a. | Odvojena privilegija, potvrda, limit, watermark/audit gdje je prikladno. |
 
 ## Otvorena pitanja i nedostajuće informacije
@@ -863,6 +882,9 @@ Sljedeće se ne smije izmišljati; odgovori moraju doći iz audita ili odluke vl
 21. Q4.5 je OFFEN; izvorni tekst pitanja nije poznat i ne smije se izmišljati.
 22. Izvorna lista Q8.4 preporuka, detaljni operatori i opća potvrda svake nove
     ili izmijenjene pretrage ostaju OFFEN; vidi ADR-0002 i audit.
+23. Da li su SEM-UC-01, SEM-UC-02 i DQ-UC-01 dozvoljeni i koji mjerljivi problem
+    opravdava vektorski backend? Ako postoji dokaz, koji backend prolazi
+    [evaluacijski gate](research/semantic-search-evaluation-gate.md)?
 
 ## Potencijalno zaboravljene teme
 
@@ -901,7 +923,7 @@ Ovo je sažetak odluka briefa. Dugoročne arhitekturne odluke održavaju se u
 | D-005 | Prihvaćeno | Minimalni javni MCP ima tri alata: search, profile i filter options. |
 | D-006 | Prihvaćeno | Hard cap je 50 kandidata po search stranici; Release 1 nema kontaktnih izlaza ni u searchu ni u profilu. |
 | D-007 | Prihvaćeno | Minimalni release uključuje sve Must-have stavke. |
-| D-008 | Prihvaćeno | pgvector, cache, read replika i eksterni search engine nisu zadane komponente. |
+| D-008 | Prihvaćeno | `pgvector`, Vector Buckets, cache, read replika i eksterni search engine nisu zadane komponente. |
 | D-009 | Na odluci | Fizički search view/RPC model nakon audita stvarne sheme i planova. |
 | D-010 | Na odluci | Auth model, tenant mapping i kontakt/export role za svaki MCP klijent. |
 | D-011 | Na odluci | Numerički SLO-i nakon reprezentativnog benchmarka. |
@@ -911,7 +933,8 @@ Ovo je sažetak odluka briefa. Dugoročne arhitekturne odluke održavaju se u
 | D-015 | VORLÄUFIGER VORSCHLAG za normalizaciju | Vorabnormalizacija uz original i kontrolisane ID-ove nije pojedinačno dokazana. Prihvaćena granica ADR-0003 ostaje: automatika samo predlaže, nema automatske objave. Postojeći ID-ovi su DURCH DISCOVERY ZU PRÜFEN. |
 | D-016 | Prihvaćeno | Nenavedena filterkategorija ostaje neaktivna; zanimanje traženo kroz iskustvo samo po sebi ne zahtijeva odgovarajući Ausbildungsberuf. |
 | D-017 | Prihvaćeno | Odvojeni Profilverwaltungs-MCP nakon discoveryja upravlja nacrtima, prijedlozima, ručnim korekcijama, validacijom, potvrdom, verzijama, arhiviranjem i auditom; Runtime-Such-MCP ostaje read-only. |
-| D-018 | Operativna granica | Službeni Supabase plugin/MCP i skills su razvojni alati, ne produkcijski MCP-ovi. Live pristup čeka vlastiti projektno ograničen read-only gate; duplicirane distribucije ne stvaraju novu sigurnosnu granicu. |
+| D-018 | Operativna granica | Službeni Supabase plugin/MCP i skills su razvojni alati, ne produkcijski MCP-ovi. Potvrđeni cilj je produkcija sa stvarnim kandidatima, pa se razvojni Plugin ne povezuje direktno s njim. Live evaluacija zahtijeva zaseban development/test projekt bez stvarnih osobnih podataka i vlastiti gate; duplicirane distribucije ne stvaraju novu sigurnosnu granicu. |
+| D-019 | Na odluci nakon evaluacije | Semantička pretraga se ne bira po vendor funkciji. Nakon discoveryja i product odluke gate poredi nevectorski baseline, `pgvector` i Vector Bucket/S3 Wrapper; Call Memory ostaje izvan opsega. |
 
 Svaka buduća odluka treba imati datum, vlasnika, ulazne dokaze, posljedice,
 alternativu i kriterij ponovnog razmatranja.
@@ -927,14 +950,17 @@ kontrolisanu RPC pretragu, indekse dokazano potrebne planovima, least-privilege 
 RLS zaštitu, hallucination i injection kontrole, privacy/legal gateove, puni testni
 set, observability i mjerljive ciljeve nakon benchmarka.
 
-Nakon toga se komponente dodaju na osnovu dokaza. `pgvector`, cache, read replike i
-OpenSearch/Elasticsearch **nisu zadane postavke**. Svaka od njih mora imati izmjeren
-problem, očekivanu korist, trošak, privacy uticaj, testni plan i rollback.
+Nakon toga se komponente dodaju na osnovu dokaza. `pgvector`, Vector Buckets,
+cache, read replike i OpenSearch/Elasticsearch **nisu zadane postavke**. Svaka
+od njih mora imati izmjeren problem, očekivanu korist, trošak, privacy uticaj,
+testni plan i rollback.
 
 ## Službene reference
 
 - [Supabase Database overview](https://supabase.com/docs/guides/database/overview)
 - [Supabase Full Text Search](https://supabase.com/docs/guides/database/full-text-search)
+- [Supabase Vector Buckets](https://supabase.com/docs/guides/storage/vector/introduction)
+- [Supabase Querying Vectors](https://supabase.com/docs/guides/storage/vector/querying-vectors)
 - [Supabase Database Functions](https://supabase.com/docs/guides/database/functions)
 - [Supabase Managing Indexes in Postgres](https://supabase.com/docs/guides/database/postgres/indexes)
 - [Supabase Row Level Security](https://supabase.com/docs/guides/database/postgres/row-level-security)
@@ -968,6 +994,9 @@ odlukama; dokument ne pretpostavlja da su opcionalne mogućnosti uključene.
 - [ ] Dizajnirati pregledivu RPC/view migraciju i rollback; ne primjenjivati bez
   dry-runa i eksplicitnog produkcijskog odobrenja.
 - [ ] Izmjeriti reprezentativne planove i uvesti samo opravdane indekse.
+- [ ] Ako product odobri semantički scope, izvršiti
+  [evaluacijski gate](research/semantic-search-evaluation-gate.md) i zapisati ADR
+  prije izbora ili konfiguracije vektorskog backenda.
 - [ ] Implementirati least-privilege, RLS, column allowlist i potpunu
   zabranu izlaza kontakata u Releaseu 1. Kontaktni gate i CONTACT-02 čekaju
   kasnije zasebno odobrenje.

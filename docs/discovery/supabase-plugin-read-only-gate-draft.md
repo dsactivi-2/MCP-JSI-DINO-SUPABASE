@@ -17,6 +17,12 @@ Der Nutzer hat am 2026-09-11 bestätigt, dass die Codex-App-Berechtigung auf
 Bestätigungsschicht. Sie beweist weder Projektbindung noch Read-only-Ausführung
 oder Datenschutzgrenzen.
 
+Der Nutzer hat außerdem bestätigt, dass das Ziel ein Produktionsprojekt mit
+echten Kandidatendaten ist. Damit ist eine direkte Verbindung des Supabase-
+Entwickler-Plugins zu diesem Projekt nach der aktuellen Sicherheitsregel
+ausgeschlossen. Der Entwurf kann nur mit einem getrennten Development- oder
+Testprojekt ohne echte Personendaten fortgesetzt werden.
+
 ## 1. Zweck und Abgrenzung
 
 Der Gate-Entwurf soll klären, ob der Supabase-Plugin später einen eng
@@ -84,12 +90,14 @@ Read-only ist eine Schreibschutzschicht, keine PII- oder Mandantengrenze.
 | PG-03 | Projektbindung | `project_ref` stammt aus einem lokalen Attest und Account-Werkzeuge sind im resultierenden Tool-Katalog nicht verfügbar. | BLOCKED |
 | PG-04 | Read-only-Nachweis | `read_only=true` ist in der effektiven Verbindung attestiert; Mutationswerkzeuge sind nicht verfügbar. | BLOCKED |
 | PG-05 | Minimale Features | Erste Stufe enthält ausschließlich `database,docs`; alle anderen Gruppen sind deaktiviert. | BLOCKED |
-| PG-06 | Zielklassifikation | Development-/Testprojekt ohne echte Personen oder separat genehmigte Ausnahme für produktionsnahe Metadaten. | OFFEN |
+| PG-06 | Zielklassifikation | Getrenntes Development-/Testprojekt ohne echte Personen. | FAIL / BLOCKED – Ziel ist Produktion mit echten Kandidatendaten. |
 | PG-07 | Output-Grenze | Exakter Tool-Call, Schemafilter, Detailmodus, erwartete Maximalgröße, Redaktionsweg und Speicherort sind vorab festgelegt. | BLOCKED |
 | PG-08 | Identität und Rechte | OAuth-Benutzer, Organisation, Ziel-Alias und wirksamer DB-Kontext sind geprüft; keine Owner-, Migration-, Superuser- oder BYPASSRLS-Nutzung. | BLOCKED |
 | PG-09 | Abschließende Freigabe | Nutzer genehmigt den vollständigen Gate-Stand und genau einen ersten Tool-Call in einer neuen Nachricht. | NICHT ERTEILT |
 
-Gesamtbewertung: **NO-GO**. `PG-00` allein entsperrt keinen Live-Zugriff.
+Gesamtbewertung: **NO-GO**. `PG-00` allein entsperrt keinen Live-Zugriff. Wegen
+`PG-06` darf der Plugin nicht direkt mit dem bestätigten Produktionsprojekt
+verbunden werden.
 
 ## 5. Tool-Allowlist nach Stufen
 
@@ -102,7 +110,8 @@ Ohne weitere Freigabe zulässig:
 ### P1 – erster möglicher Verbindungsnachweis
 
 Erst nach `PG-02` bis `PG-08` und einer neuen ausdrücklichen Freigabe darf ein
-einziger kleiner Smoke-Test geplant werden. Bevorzugter Kandidat ist
+einziger kleiner Smoke-Test gegen ein getrenntes Development- oder Testprojekt
+ohne echte Personendaten geplant werden. Bevorzugter Kandidat ist
 `list_extensions`, weil er keine Kandidatenzeilen lesen soll. Der exakte
 Tool-Call muss vorher angezeigt werden; dieser Entwurf autorisiert ihn nicht.
 
@@ -173,9 +182,10 @@ wiederholt werden.
 Vor einer späteren Live-Freigabe müssen folgende Punkte ausdrücklich geklärt
 werden:
 
-1. Ist das Ziel ein Development-/Testprojekt ohne echte Kandidatendaten oder ein
-   produktionsnahes System?
-2. Kann Codex den vorhandenen Connector tatsächlich mit `project_ref`,
+1. Welches getrennte Development-/Testprojekt ohne echte Kandidatendaten darf
+   für den Plugin-Gate verwendet werden? Seine Erstellung oder Befüllung ist
+   eine separat freizugebende externe Änderung.
+2. Kann Codex den Connector für dieses Nicht-Produktionsprojekt tatsächlich mit `project_ref`,
    `read_only=true` und eingeschränkten Features konfigurieren, oder wird eine
    separate MCP-Verbindung benötigt?
 3. Welches einzelne Schema darf P2 später inventarisieren?
@@ -190,9 +200,11 @@ abgeleitet.
 
 Der nächste Schritt ist ausschließlich eine lokale Capability-Prüfung der
 Connector-Konfiguration und seines Tool-Katalogs. Dabei wird kein Supabase-
-Projektwerkzeug aufgerufen. Erst wenn `PG-02` bis `PG-08` mit überprüfbarer
-Evidenz geschlossen sind, darf ein separater Freigabetext für genau einen
-`list_extensions`-Aufruf erstellt werden.
+Projektwerkzeug aufgerufen. Parallel muss ein getrenntes Development- oder
+Testprojekt ohne echte Personendaten ausgewählt oder nach separater Freigabe
+erstellt werden. Erst wenn `PG-02` bis `PG-08` mit überprüfbarer Evidenz
+geschlossen sind, darf ein separater Freigabetext für genau einen
+`list_extensions`-Aufruf gegen dieses Nicht-Produktionsprojekt erstellt werden.
 
 ## Quellen
 

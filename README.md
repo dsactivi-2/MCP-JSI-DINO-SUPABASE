@@ -25,9 +25,12 @@ Pročitati [stanje projekta](docs/project.md), zatim
 | [Q8.4.2 istraživanje](docs/research/berufssuchprofile-q8-4-2.md) | Primarne reference i evaluacija kontrolisanih Berufssuchprofila. |
 | [Audit i matrica korekcija](docs/reviews/decision-reconstruction-corrections.md) | Odobrene dokumentacijske korekcije, evidencija i otvorene odluke; izvorni audit ostaje historijski nalaz. |
 | [Discovery runbook](docs/runbooks/schema-discovery.md) | Preduslovi i postupak odobrenog read-only audita. |
+| [Statička CRM schema analiza](docs/discovery/crm-schema-static-analysis.md) | Redigirani inventar lokalnog Schema Visualizer izvoza bez bazne konekcije. |
+| [Plan statičke schema analize](docs/discovery/schema-analysis-tasklist.md) | Siguran tok i checklist za lokalni Schema Visualizer export bez bazne konekcije. |
 | [Supabase-Plugin Gate P](docs/discovery/supabase-plugin-read-only-gate-draft.md) | Neizvršivi NO-GO nacrt za eventualni projektno ograničen read-only Plugin pristup. |
 | [Supabase tooling](docs/agents/supabase-tooling.md) | Obavezno usmjeravanje za instalirane Supabase skills i blokirani Live-MCP pristup. |
 | [Istraživanje Supabase alata](docs/research/supabase-werkzeuge-fuer-crm-mcp.md) | Procjena plugina, MCP-a, skillsa, CLI-ja i kasnijih razvojnih alata. |
+| [Gate semantičke pretrage](docs/research/semantic-search-evaluation-gate.md) | Kriteriji, faze i stop-uslovi za poređenje FTS-a, `pgvector`-a i Vector Bucketa. |
 | [Objašnjenje Supabase skillsa](docs/research/supabase-agent-skills-einfach-erklaert.md) | Sadržaj, granice i postupak ažuriranja projektnih kopija skillsa. |
 | [Issue tracker](docs/agents/issue-tracker.md), [triage oznake](docs/agents/triage-labels.md), [domenska pravila](docs/agents/domain.md) | Lokalni Matt Pocock setup. |
 
@@ -50,6 +53,14 @@ referenci. Lint sam ne potvrđuje sve linkove. Ako alat ili referenca nisu
 dostupni, zabilježiti nedostatak.
 
 Build, test i typecheck komande bit će definirane nakon izbora stacka i scaffolda.
+
+## Lokalna provjera plana schema izvoza
+
+Provjera ne čita izvornu produkcijsku datoteku i ne uspostavlja konekciju:
+
+```bash
+rtk proxy /opt/homebrew/bin/python3 tests/docs/schema_analysis_tasklist_static_test.py
+```
 
 ## Lokalna provjera Gate-B1-V2 launchera
 

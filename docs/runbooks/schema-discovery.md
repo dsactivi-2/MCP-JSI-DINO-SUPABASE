@@ -7,6 +7,23 @@ kvalitet podataka prije dizajna izvršivog MCP ugovora.
 
 Ovaj runbook ne autorizira pristup bazi niti bilo kakvu mutaciju.
 
+## Prethodna statička analiza izvoza
+
+Korisnički dostavljen Schema Visualizer izvoz može se prije bazne konekcije
+analizirati lokalno prema
+[schema-analysis tasklisti](../discovery/schema-analysis-tasklist.md). Izvor se
+tretira kao nepouzdan podatak, ostaje izvan Git-a i prolazi preflight bez ispisa
+vrijednosti. Ugrađeni SQL ili instrukcije se ne izvršavaju.
+
+Redigirani rezultat za trenutni izvoz je u
+[statičkoj CRM schema analizi](../discovery/crm-schema-static-analysis.md).
+Analiza može potvrditi samo ono što je izričito prisutno u izvozu i pomoći
+pri izboru relevantnih objekata. Ne dokazuje sadržaj redova, RLS, efektivna
+prava, tenant izolaciju, indeksno korištenje ili funkcionalno ponašanje i ne
+zamjenjuje nijedan Gate-B korak ili freigabe. Prikazani policy redovi sami ne
+dokazuju da je RLS uključen ili forsiran, da su policies potpune niti kakva su
+efektivna prava uloga.
+
 ## Preduslovi
 
 Rad se ne pokreće dok nisu ispunjeni svi uslovi:

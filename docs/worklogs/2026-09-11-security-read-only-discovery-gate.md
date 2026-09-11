@@ -468,3 +468,92 @@ werden als neuer Eintrag mit Verweis auf den betroffenen Eintrag angehängt.
   Datenzugriff; keine Connector-Konfiguration, Migration oder externe Änderung.
 - Assessment: `DRAFT / NO-GO`; `Always ask` erfüllt nur `PG-00`. Live-Plugin-
   Zugriff bleibt bis zur Schließung von `PG-02` bis `PG-09` blockiert.
+
+### [2026-09-11T09:21:59+02:00] Phase 15 – Produktionsklassifikation
+
+- Explizite Nutzerantwort: Das Ziel ist ein Supabase-Produktionsprojekt mit
+  echten Kandidatendaten.
+- Normalisierte Wirkung:
+  - `PG-06` wechselt von `OFFEN` zu `FAIL / BLOCKED`.
+  - Der Supabase-Entwickler-Plugin/MCP darf nicht direkt mit diesem Ziel
+    verbunden werden.
+  - Eine spätere Plugin-Evaluation benötigt ein getrenntes Development- oder
+    Testprojekt ohne echte Personendaten, Projektbindung, `read_only=true`,
+    minimale Features und eine neue ausdrückliche Freigabe.
+  - Der bestehende lokale Gate-B-Pfad wird durch diese Entscheidung nicht
+    freigegeben oder verändert.
+- Aktualisiert: `AGENTS.md`, Projektstatus, Implementierungsbrief, Tooling-
+  Regeln, Entscheidungskarte, Plugin-Gate-P-Entwurf und dessen Statiktest.
+- Sicherheitsgrenze: Kein Supabase-Projektwerkzeug und kein Datenbankzugriff.
+- Assessment: `DRAFT / NO-GO`; direkter Produktions-Plugin-Pfad ausgeschlossen.
+
+### [2026-09-11T09:28:09+02:00] Phase 16 – Gate für semantische Suche
+
+- Nutzerauftrag: Nutzen und Einordnung von Supabase Vector Buckets mit
+  „Query from Postgres“ prüfen und den Prüfweg bis zum aktuellen Planungsstand
+  nachziehen.
+- Normalisierte Wirkung:
+  - Semantische Kandidatensuche ist als optionale Evaluationsgrenze nach
+    Discovery eingeplant, nicht als Release-1-Default oder Technologieentscheid.
+  - Der Gate vergleicht zuerst strukturierte Filter, Taxonomie, FTS und
+    `pg_trgm`, danach nur bei belegter Qualitätslücke `pgvector` und Vector
+    Bucket/S3 Wrapper auf demselben Referenzset.
+  - Explizite Ähnlichkeitssuche, Dublettenprüfung und Call-Memory bleiben
+    getrennte Fälle mit eigener Product-, Privacy- und Berechtigungsentscheidung.
+  - Filterkorrektheit vor dem finalen `top_k`, RLS/Tenant-Isolation,
+    Kontaktverbot, Embedding-Lifecycle, Fairness, SLO, Kosten und Alpha-Risiko
+    sind verbindliche Prüfbereiche.
+- Aktualisiert: README, Projektstatus, Implementierungsbrief, Tooling-Regeln,
+  Entscheidungskarte und Supabase-Werkzeugrecherche; neuer
+  `semantic-search-evaluation-gate.md`.
+- Sicherheitsgrenze: Kein Supabase-Projektwerkzeug, kein Datenbankzugriff, keine
+  Bucket-/Wrapper-Konfiguration und kein Embedding realer Kandidatendaten.
+- Assessment: `PLANNED / NO TECHNOLOGY SELECTED`; Gate liegt nach Discovery und
+  vor einer optionalen Backend-Implementierung.
+
+### [2026-09-11T09:35:32+02:00] Phase 17 – Schemaexport-Analyseplan
+
+- Nutzerauftrag: Den empfohlenen Ablauf für den bereitgestellten `crm` Schema-
+  Visualizer-Export als kleine Aufgabenliste dauerhaft dokumentieren und an den
+  maßgeblichen Stellen verlinken.
+- Neuer Plan:
+  - `docs/discovery/schema-analysis-tasklist.md` definiert Preflight,
+    Strukturanalyse, Domänenklassifikation, Datenschutzreview, Evidenzstatus,
+    redigierte Ausgaben und Abschlussprüfung.
+  - Der Roh-Export bleibt außerhalb von Git; sein lokaler Pfad wird nicht in
+    versionierten Dokumenten gespeichert.
+  - Die Nutzerangabe von ungefähr 3.120 Zeilen ist noch nicht technisch geprüft.
+  - Priorität: zuerst `crm`, danach getrennt `crm_api` und `crm_auth`;
+    `crm_audit`, `auth` und `graphql` bleiben zunächst zurückgestellt.
+- Nachgezogen: `AGENTS.md`, README, Projektstatus, Implementierungsbrief,
+  Discovery-Runbook und Entscheidungskarte.
+- Schutztest: `tests/docs/schema_analysis_tasklist_static_test.py` prüft NO-GO-
+  Grenzen, Evidenzmarker, Zielpfade und Querverweise, ohne die Rohdatei zu lesen.
+- Sicherheitsgrenze: Rohdatei nicht geöffnet oder kopiert; kein SQL, kein
+  Supabase-Plugin, keine Datenbankverbindung und keine externe Änderung.
+- Assessment: `READY / NOT STARTED`; statische Voranalyse kann beginnen, ersetzt
+  aber keine Gate-B-Evidenz oder Zugriffsfreigabe.
+
+### [2026-09-11T09:42:44+02:00] Phase 18 – Statische CRM-Schemaanalyse
+
+- Sicherheits-Preflight: 113.547 Byte, 3.121 Zeilen, ASCII/UTF-8; null Treffer
+  für Credential/Token, Connection String, private URL, Datenzeile, E-Mail,
+  Telefon und CV-/Freitextwert.
+- Statischer Befund: 100 vollständige Table-Blöcke, 1.104 Spalten und 100
+  markierte Primary Keys; keine markierten Foreign-Key-, Unique- oder
+  Identity-Constraints. 84 ID-förmige Nicht-PK-Spalten bleiben reine
+  Beziehungskandidaten.
+- Unvollständigkeit: 188 Objektnamen in der RLS-Sektion, davon 88 ohne
+  Table-/Column-Block. Policy-Zeilen beweisen weder RLS enable/force noch
+  effektive Rechte.
+- Ergebnis: `docs/discovery/crm-schema-static-analysis.md` erstellt;
+  Aufgabenliste, README, Projektstatus, Entscheidungskarte und Runbook
+  nachgezogen. ADR-0002 blieb unverändert.
+- Sicherheitsgrenze: kein SQL, kein Supabase-Plugin/MCP, keine
+  Datenbankverbindung, keine externe Änderung und kein Git-Commit.
+- Verifikation: Tasklist-Statiktest `PASS`; 277 relative Markdown-Links
+  `PASS`; Gate-B-Markdownlint für sieben Zieldateien `PASS` mit null Befunden;
+  `git diff --check` `PASS`; Bericht-Crosscheck bestätigt alle 100 Tabellen und
+  1.104 Spalten ohne fehlenden Inventareintrag.
+- Assessment: `PASS_WITH_GAPS`; menschlicher Review und Gate-B-Metadaten-
+  Discovery bleiben erforderlich.

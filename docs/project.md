@@ -30,10 +30,15 @@ MCP-kompatibilne klijente.
   odvojeni MCP za upravljanje Berufssuchprofilima.
 - [Discovery runbook](runbooks/schema-discovery.md) određuje preduslove i
   postupak read-only audita.
+- [Plan statičke schema analize](discovery/schema-analysis-tasklist.md) vodi
+  preflight i obradu korisnički dostavljenog izvoza bez bazne konekcije.
 - [Supabase tooling](agents/supabase-tooling.md) razdvaja projektne skills,
   razvojni Supabase plugin/MCP i strogo kontrolisani Gate-B put.
 - [Supabase-Plugin Gate P](discovery/supabase-plugin-read-only-gate-draft.md)
   dokumentuje neizvršivi `DRAFT / NO-GO` za mogući alternativni read-only put.
+- [Evaluacijski gate semantičke pretrage](research/semantic-search-evaluation-gate.md)
+  određuje kako se nakon discoveryja porede nevectorski baseline, `pgvector` i
+  Vector Buckets bez prethodnog izbora tehnologije.
 - [AGENTS.md](../AGENTS.md) definira pravila rada agenata u repozitoriju.
 
 Ako se dokumenti ne slažu, rad se zaustavlja dok se konflikt ne razriješi
@@ -58,6 +63,17 @@ ipak još sadrži account i write alate, pa
 [Plugin Gate P](discovery/supabase-plugin-read-only-gate-draft.md) ostaje
 `NO-GO`. Nije izveden nijedan projektni ili bazni Plugin poziv.
 
+Korisnik je također potvrdio da je ciljni Supabase projekt produkcijski i da
+sadrži stvarne podatke kandidata. Službeni razvojni Plugin/MCP ne smije se
+direktno povezati s tim projektom. Eventualni Live-Plugin test zahtijeva zaseban
+development/test projekt bez stvarnih osobnih podataka i novu freigabe.
+
+Korisnik je dostavio lokalni Schema Visualizer tekstualni izvoz za shemu `crm`
+izvan repozitorija i naveo približno 3.120 linija. Datoteka još nije
+preflightovana niti analizirana. Sljedeći lokalni korak prati
+[schema-analysis tasklist](discovery/schema-analysis-tasklist.md); sirovi export
+ostaje izvan Git-a i ne zamjenjuje Gate B.
+
 Setup koristi postojeći namjenski Linear projekt **Dino problem baza CRM** u
 timu **Activi (ACT)**. Identitet i workflow su u
 [issue trackeru](agents/issue-tracker.md), pet postojećih kanonskih oznaka u
@@ -69,7 +85,21 @@ Aplikacijski scaffold ne postoji. Jezik, framework, runtime, package manager,
 hosting, auth model i fizički database ugovor još nisu odabrani ili potvrđeni.
 Dokumentacijske provjere opisane su u
 [README.md](../README.md#provjera-dokumentacije); aplikacijske provjere još
-nisu uspostavljene. Audit baze nije proveden.
+nisu uspostavljene. Povezani audit baze nije proveden. Lokalni, schema-only
+Schema Visualizer izvoz za korisnički scope `crm` statički je analiziran bez
+bazne konekcije. Redigirani
+[izvještaj](discovery/crm-schema-static-analysis.md) dokazuje 100 potpunih
+table blokova, 1.104 kolone i primary key u svakom prikazanom bloku. Ne
+prikazuje foreign-key, unique ni identity constraints. RLS sekcija navodi 188
+objektnih naziva, od kojih 88 nema table/column blok; zato je rezultat
+`PASS_WITH_GAPS` i nije zamjena za Gate-B discovery.
+
+Semantička pretraga je planirana samo kao evaluacijska grana nakon discoveryja,
+ne kao komponenta Releasea 1 po zadanim postavkama. Nisu kreirani Vector Bucket,
+S3 Vector Wrapper, embedding pipeline ni produkcijska konfiguracija. Gate prvo
+traži dokaz kvalitetne praznine nakon strukturiranih filtera, taksonomije, FTS-a
+i po potrebi `pg_trgm`, zatim izolirano poređenje s `pgvector`-om i Vector
+Bucketom. Call-memory integracija ostaje izvan opsega ovog projekta.
 
 Design intervju o toku pretrage, filterima, potvrdi, historiji i izvozu je u
 toku. Njegove potvrđene, djelimične i otvorene odluke vode se u
@@ -114,7 +144,13 @@ Prema Q9 prvo se razjašnjavaju sigurnosni preduslovi i odobrenje audita,
 zatim slijedi read-only discovery, a tek potom nastavak intervjua. Korisnikova
 navedena brojka od 179 tabela je DURCH DISCOVERY ZU PRÜFEN.
 
-Nakon odobrenja opsega slijedi
+Prije bazne konekcije dozvoljena je statička, lokalna analiza korisnički
+dostavljenog schema izvoza nakon sigurnosnog preflighta. Ona može suziti popis
+relevantnih objekata, ali ne potvrđuje podatke, RLS, prava, tenant granice,
+indekse ili runtime ponašanje.
+
+Prije povezivanja prioritetni su ljudski review statičkog izvještaja te zasebni
+schema-only izvozi za `crm_api` i `crm_auth`. Nakon odobrenja opsega slijedi
 [discovery runbook](runbooks/schema-discovery.md). Daljnji rad prati
 [faze implementacije](SUPABASE_CRM_MCP_IMPLEMENTATION_BRIEF.md#faze-implementacije-i-isporučivi-rezultati)
 i [kriterije prihvata](SUPABASE_CRM_MCP_IMPLEMENTATION_BRIEF.md#kriteriji-prihvata).

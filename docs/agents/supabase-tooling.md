@@ -56,6 +56,12 @@ Plugin/MCP put mora prije prvog database poziva dokazati:
 metapodatke. Mutirajući projekt-, branch-, migration-, Edge-Function- i Storage-
 alati nisu dio read-only discovery opsega.
 
+Isto vrijedi za Vector Buckets i S3 Vector Wrapper: kreiranje bucketa ili
+indeksa, upis embeddinga, instalacija wrappera i kreiranje foreign tablea su
+mutacije izvan trenutnog opsega. Njihova eventualna evaluacija slijedi tek nakon
+discoveryja i zasebnog
+[gatea semantičke pretrage](../research/semantic-search-evaluation-gate.md).
+
 Trenutni [Gate B](../discovery/security-read-only-discovery-preflight-b.md)
 ostaje vezan za svoj lokalni `psql` launcher. Plugin/MCP zahtijeva novu
 gate verziju; odobrenje jednog puta ne prenosi se na drugi.
@@ -64,6 +70,11 @@ Prvi [Supabase-Plugin Gate-P nacrt](../discovery/supabase-plugin-read-only-gate-
 je `DRAFT / NO-GO`. Korisnik je postavku `Always ask` potvrdio, ali trenutni
 Tool-Katalog i dalje prikazuje account i write alate. Zato projektna vezanost,
 read-only i minimalne feature grupe još nisu dokazani.
+
+Ciljni CRM Supabase projekt je potvrđena produkcija sa stvarnim podacima
+kandidata. Razvojni Plugin/MCP se ne smije direktno povezati s njim. Svaki
+budući Live-Plugin test mora koristiti zaseban development/test projekt bez
+stvarnih osobnih podataka i proći vlastiti Gate P.
 
 ## Ažuriranje skillsa i plugina
 
