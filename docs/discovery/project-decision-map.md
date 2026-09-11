@@ -76,6 +76,8 @@ Runtime-Such-MCP integriert werden.
 | F-08 | Der lokale Export hat den PII-/Secret-Preflight bestanden: 3.121 Zeilen, keine Treffer in den sieben sensiblen Kategorien. | [Statischer Bericht](crm-schema-static-analysis.md) | Die schema-only Analyse durfte fortgesetzt werden; die Rohdatei bleibt außerhalb von Git. |
 | F-09 | Der Export enthält 100 vollständige Table-Blöcke mit 1.104 Spalten und je einem markierten Primary Key; Foreign Keys, Unique- und Identity-Constraints fehlen. | [Statischer Bericht](crm-schema-static-analysis.md) | Physische Namen und Typen sind Exportfakten; Beziehungen bleiben unbewiesen. |
 | F-10 | Die RLS-Sektion nennt 188 Objekte; 88 davon besitzen keinen Table-/Column-Block im Export. | [Statischer Bericht](crm-schema-static-analysis.md) | Der Export ist unvollständig und beweist weder den Gesamtbestand noch effektive RLS-/Rechtewirkung. |
+| F-11 | Die `crm_api`-Tabellenansicht zeigt 0 Tabellen; Views, Funktionen und RPCs wurden nicht inventarisiert. | Nutzerbereitgestellter Schema-Visualizer-Screenshot | Nur die Abwesenheit sichtbarer Tabellen ist belegt. |
+| F-12 | Der `crm_auth`-Export enthält sechs Tabellen für User-/Employee-Mapping, Rollen, Berechtigungen, Rollenzuordnung und Scopes sowie sechs SELECT-Policies. | [Statischer `crm_auth`-Bericht](crm-auth-schema-static-analysis.md) | Auth-Bausteine sind physisch belegt; effektive Rechte, FKs und Tenant-Isolation bleiben offen. |
 
 ## Akzeptierte Entscheidungen
 
@@ -133,7 +135,8 @@ Runtime-Such-MCP integriert werden.
 
 ## Kritischer Pfad
 
-1. Den [statischen `crm`-Bericht](crm-schema-static-analysis.md) menschlich prüfen.
+1. Die statischen Berichte für [`crm`](crm-schema-static-analysis.md) und
+   [`crm_auth`](crm-auth-schema-static-analysis.md) menschlich prüfen.
 2. G1 vollständig freigeben.
 3. Gate-Abfragen ausführen und bei jedem Stop-Signal abbrechen.
 4. Nur Metadaten inventarisieren; keine Kandidatenzeilen lesen.

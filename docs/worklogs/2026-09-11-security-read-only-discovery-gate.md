@@ -557,3 +557,22 @@ werden als neuer Eintrag mit Verweis auf den betroffenen Eintrag angehängt.
   1.104 Spalten ohne fehlenden Inventareintrag.
 - Assessment: `PASS_WITH_GAPS`; menschlicher Review und Gate-B-Metadaten-
   Discovery bleiben erforderlich.
+
+### [2026-09-11T09:51:24+02:00] Phase 19 – Statische `crm_auth`-Analyse
+
+- `crm_api`: Schema Visualizer zeigt 0 Tabellen; Views, Funktionen und RPCs
+  bleiben durch Gate B zu prüfen.
+- Sicherheits-Preflight `crm_auth`: 2.964 Byte, 108 Zeilen, UTF-8; null Treffer
+  in allen sieben Secret-/PII-Kategorien.
+- Statischer Befund: sechs Tabellen, 28 Spalten, zwei zusammengesetzte Primary Keys,
+  drei Unique-Marker und keine angezeigten Foreign-Key- oder Identity-
+  Constraints.
+- Auth-Strukturen: User-/Employee-Mapping, Rollen, Berechtigungen, Role-
+  Permission-Zuordnung, User-Rollen und User-Scopes. Die sechs angezeigten
+  SELECT-Policies beweisen keine effektive RLS-/Grant-Wirkung.
+- Ergebnis: `docs/discovery/crm-auth-schema-static-analysis.md` erstellt;
+  README, Aufgabenliste, Projektstatus und Entscheidungskarte aktualisiert.
+- Sicherheitsgrenze: kein SQL, kein Supabase-Plugin/MCP, keine
+  Datenbankverbindung, keine externe Änderung und kein Git-Commit.
+- Assessment: `PASS_WITH_GAPS`; menschlicher Security-Review und Gate B bleiben
+  erforderlich.

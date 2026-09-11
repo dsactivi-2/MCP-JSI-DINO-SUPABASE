@@ -16,8 +16,9 @@ datoteka ostaje izvan repozitorija.
 - [x] CRM-Schemaexport sigurno provjeriti.
 - [x] `crm` statički analizirati.
 - [x] Relevantne tabele priorizirati.
-- [ ] Kasniji izvoz `crm_api` provjeriti.
-- [ ] Kasniji izvoz `crm_auth` provjeriti.
+- [x] `crm_api` Tabellenansicht provjeriti: Schema Visualizer prikazuje 0
+  tabela; views, funkcije i RPC-ji ostaju otvoreni.
+- [x] Izvoz `crm_auth` sigurno preflightati, statički analizirati i redigirati.
 - [x] `auth`, `crm_audit`, `graphql`, `extensions` i `firstschema` do zasebne
   freigabe odgoditi.
 - [x] Nedostajuću RLS-, index-, policy-, function- i trigger-evidenciju
@@ -137,8 +138,10 @@ docs/discovery/crm-schema-static-analysis.md
 
 Nakon završenog i pregledanog `crm` izvještaja:
 
-1. `crm_api` – zaseban schema-only izvoz i analiza pristupnog sloja;
-2. `crm_auth` – zaseban schema-only izvoz uz pojačan security review;
+1. `crm_api` – Tabellenansicht prikazuje 0 tabela; druge objektne vrste ostaju
+   za Gate B;
+2. `crm_auth` – schema-only izvoz analiziran; security review i Gate-B potvrda
+   ostaju otvoreni;
 3. `firstschema` – prvo utvrditi svrhu samo iz sigurnog inventara;
 4. `extensions` – kasniji tehnički inventar;
 5. `crm_audit` – odgoditi do posebnog scopea zbog auditne osjetljivosti;

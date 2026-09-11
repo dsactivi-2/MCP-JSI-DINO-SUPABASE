@@ -94,6 +94,13 @@ prikazuje foreign-key, unique ni identity constraints. RLS sekcija navodi 188
 objektnih naziva, od kojih 88 nema table/column blok; zato je rezultat
 `PASS_WITH_GAPS` i nije zamjena za Gate-B discovery.
 
+Schema Visualizer je za `crm_api` prikazao 0 tabela; to ne dokazuje odsustvo
+viewova, funkcija ili RPC-ja. Zasebni lokalni `crm_auth` izvoz je statički
+analiziran u [redigiranom izvještaju](discovery/crm-auth-schema-static-analysis.md):
+šest tabela modelira korisnik-zaposlenik mapiranje, uloge, dozvole, role-
+permission veze, user-role veze i scopeove. Prikazani policies i ID-kolone ne
+dokazuju efektivnu RLS zaštitu, tenant izolaciju ili foreign keys.
+
 Semantička pretraga je planirana samo kao evaluacijska grana nakon discoveryja,
 ne kao komponenta Releasea 1 po zadanim postavkama. Nisu kreirani Vector Bucket,
 S3 Vector Wrapper, embedding pipeline ni produkcijska konfiguracija. Gate prvo
@@ -149,8 +156,8 @@ dostavljenog schema izvoza nakon sigurnosnog preflighta. Ona može suziti popis
 relevantnih objekata, ali ne potvrđuje podatke, RLS, prava, tenant granice,
 indekse ili runtime ponašanje.
 
-Prije povezivanja prioritetni su ljudski review statičkog izvještaja te zasebni
-schema-only izvozi za `crm_api` i `crm_auth`. Nakon odobrenja opsega slijedi
+Prije povezivanja prioritetan je ljudski review oba statička izvještaja. Nakon
+odobrenja opsega slijedi
 [discovery runbook](runbooks/schema-discovery.md). Daljnji rad prati
 [faze implementacije](SUPABASE_CRM_MCP_IMPLEMENTATION_BRIEF.md#faze-implementacije-i-isporučivi-rezultati)
 i [kriterije prihvata](SUPABASE_CRM_MCP_IMPLEMENTATION_BRIEF.md#kriteriji-prihvata).
