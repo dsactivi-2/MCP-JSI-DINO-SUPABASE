@@ -7,22 +7,13 @@ import tempfile
 import time
 from pathlib import Path
 
-
-REPO_ROOT = Path(__file__).resolve().parents[2]
-STREAM_GUARD = REPO_ROOT / "scripts/discovery/gate_b1_stream_guard.py"
-
-
-def fail(message: str) -> None:
-    raise SystemExit(f"FAIL: {message}")
-
-
-def process_exists(pid: int) -> bool:
-    try:
-        os.kill(pid, 0)
-    except ProcessLookupError:
-        return False
-    return True
-
+from gate_b1_test_support import (
+    STREAM_GUARD_PATH,
+    fail,
+    guard_arguments,
+    guard_environment,
+    wait_for_pid_exit,
+)
 
 with tempfile.TemporaryDirectory(prefix="gate-b1-signal-test.") as temp_dir:
     test_root = Path(temp_dir)
@@ -43,35 +34,9 @@ with tempfile.TemporaryDirectory(prefix="gate-b1-signal-test.") as temp_dir:
     )
     fake_psql.chmod(0o700)
 
-    environment = {
-        "GATE_B1_EXPECTED_DATABASE_NAME": "TEST_DATABASE",
-        "PGSERVICE": "dino_crm_discovery_target_01",
-        "PGSERVICEFILE": str(test_root / "service.conf"),
-        "PGPASSFILE": str(test_root / "pgpass"),
-    }
+    environment = guard_environment(test_root)
     process = subprocess.Popen(
-        [
-            "/opt/homebrew/bin/python3",
-            str(STREAM_GUARD),
-            "--psql",
-            str(fake_psql),
-            "--sql",
-            str(sql_path),
-            "--raw",
-            str(raw_path),
-            "--manifest",
-            str(manifest_path),
-            "--gate-id",
-            "DISCOVERY-GATE-B1-V2-2026-09-11",
-            "--target-alias",
-            "dino_crm_discovery_target_01",
-            "--sql-sha256",
-            "0" * 64,
-            "--window-end-epoch",
-            str(int(time.time()) + 60),
-            "--timeout-seconds",
-            "60",
-        ],
+        ["/opt/homebrew/bin/python3", "-B", *guard_arguments(test_root, fake_psql)],
         env=environment,
     )
 
@@ -89,11 +54,7 @@ with tempfile.TemporaryDirectory(prefix="gate-b1-signal-test.") as temp_dir:
     process.send_signal(signal.SIGTERM)
     process.wait(timeout=5)
 
-    for _ in range(200):
-        if not process_exists(child_pid):
-            break
-        time.sleep(0.01)
-    if process_exists(child_pid):
+    if not wait_for_pid_exit(child_pid):
         os.killpg(child_pid, signal.SIGKILL)
         fail("SIGTERM left fake psql running")
 

@@ -126,12 +126,17 @@ def main() -> int:
     process: subprocess.Popen[bytes] | None = None
     selector: selectors.BaseSelector | None = None
     handling_signal = False
+    spawn_in_progress = False
+    pending_interrupt = False
     previous_signal_handlers: dict[int, signal.Handlers] = {}
     pending = bytearray()
 
     def handle_signal(_signal_number: int, _frame: object) -> None:
-        nonlocal handling_signal
+        nonlocal handling_signal, pending_interrupt
         if handling_signal:
+            return
+        if spawn_in_progress:
+            pending_interrupt = True
             return
         handling_signal = True
         raise ProtocolStop("launcher_interrupted")
@@ -195,6 +200,7 @@ def main() -> int:
     try:
         for signal_number in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP):
             previous_signal_handlers[signal_number] = signal.signal(signal_number, handle_signal)
+        spawn_in_progress = True
         process = subprocess.Popen(
             command,
             stdout=subprocess.PIPE,
@@ -202,6 +208,10 @@ def main() -> int:
             env=child_env,
             start_new_session=True,
         )
+        spawn_in_progress = False
+        if pending_interrupt:
+            handling_signal = True
+            raise ProtocolStop("launcher_interrupted")
         assert process.stdout is not None
         selector = selectors.DefaultSelector()
         selector.register(process.stdout, selectors.EVENT_READ)
@@ -242,12 +252,17 @@ def main() -> int:
     except ProtocolStop as error:
         stop_reason = str(error)
     finally:
-        for signal_number, previous_handler in previous_signal_handlers.items():
-            signal.signal(signal_number, previous_handler)
-        if selector is not None:
-            selector.close()
-        if process is not None:
-            terminate(process)
+        handling_signal = True
+        try:
+            if process is not None:
+                terminate(process)
+        finally:
+            try:
+                if selector is not None:
+                    selector.close()
+            finally:
+                for signal_number, previous_handler in previous_signal_handlers.items():
+                    signal.signal(signal_number, previous_handler)
 
     ended_at = int(time.time())
     status = "STOP" if stop_reason else "PASS"

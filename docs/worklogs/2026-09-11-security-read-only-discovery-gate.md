@@ -353,3 +353,38 @@ werden als neuer Eintrag mit Verweis auf den betroffenen Eintrag angehängt.
 - Sicherheitsgrenze: Kein reales `psql`, kein Netzwerk, keine
   Datenbankverbindung und kein SQL gegen PostgreSQL.
 - Assessment: `PASS_WITH_GAPS / NO-GO`; Freigabestatus bleibt `NICHT ERTEILT`.
+
+### [2026-09-11T05:25:41+02:00] Phase 12 – Signal-Race-Review-Follow-up
+
+- Intent: Den verbliebenen harten Standards-Befund des Matt-`/code-review`
+  test-first schließen und den Test-Harness ohne Verhaltensänderung bündeln.
+- Review-Ausgang: Spec-Achse `PASS` mit null Befunden; Standards-Achse `FAIL`
+  wegen eines Signals im `Popen`-Zuweisungsfenster, eines zweiten Signals
+  während Cleanup und dupliziertem Python-Test-Harness.
+- RED-Evidenz:
+  - Ein deterministisches SIGTERM zwischen Child-Start und `Popen`-Zuweisung
+    ließ Fake-`psql` weiterlaufen.
+  - Nach dessen Minimalfix ließ ein deterministisches zweites SIGTERM während
+    Cleanup Fake-`psql` weiterlaufen.
+- Korrekturen:
+  - Signale im Spawn-Fenster werden vorgemerkt und unmittelbar nach sicherer
+    Prozesszuweisung als `launcher_interrupted` verarbeitet.
+  - Während Child-Terminierung und Selector-Cleanup bleibt der Guard aktiv;
+    frühere Signalhandler werden erst danach wiederhergestellt.
+  - Gemeinsame Guard-Argumente, Umgebung, Import- und Prozess-Wartehilfen liegen
+    in `tests/discovery/gate_b1_test_support.py`.
+- Finale SHA-256-Werte:
+  - B1-V2-SQL:
+    `0f586d02a663f9df543a7b7c1b8efde876c2b96d6079cd79e02c3a7359710317`.
+  - Launcher:
+    `fdceaa1503d01c0149ac12062a9a19cf90b5997fcf04ca14614533da672b0690`.
+  - Stream-Guard:
+    `b3c4fbe8053641ef93e70c126dbc7e5fe10892af3cc41743e5c7c9c0ce5252b7`.
+- Sauberer Checkout: Lokaler Clone unter
+  `/private/tmp/gate-b1-race-clean-clone.HrAms7/repo`; 14 Launcher-Gruppen,
+  fünf Guard-/Cleanup-Prüfungen einschließlich beider Signal-Races, statische
+  Gate-Prüfung, 39 Links, Bash-Syntax, Markdownlint und `git diff --check`
+  bestanden. `git status --short` blieb nach den Tests leer.
+- Sicherheitsgrenze: Kein reales `psql`, kein Netzwerk, keine
+  Datenbankverbindung und kein SQL gegen PostgreSQL.
+- Assessment: `PASS_WITH_GAPS / NO-GO`; Freigabestatus bleibt `NICHT ERTEILT`.
