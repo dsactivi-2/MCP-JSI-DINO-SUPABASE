@@ -113,6 +113,9 @@ Bestätigung darf dadurch nicht auf andere Filter oder Versionen übertragen wer
   Datenqualitätsaudit finalisiert.
 - Jede Umsetzungsplanung muss getrennte Identitäten, Rechte, Deployments,
   Tests, Auditierung und Rollback für Such- und Verwaltungs-MCP berücksichtigen.
+- SQL-, Schema- und Teständerungen beider MCP-Grenzen folgen dem automatisierten
+  Entwicklungs- und Freigabepfad aus
+  [ADR-0004](0004-automated-database-development.md).
 - Die Umsetzung darf nicht mit einem allgemeinen Werkzeug wie
   `update_profile(anything)` beginnen; Mutationen benötigen kleine, typisierte
   Operationen und erwartete Versionsnummern.

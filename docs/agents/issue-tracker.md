@@ -4,6 +4,12 @@ Ovaj repozitorij koristi postojeći namjenski projekt **Dino problem baza CRM**.
 Identitet projekta i pripadnost timu potvrđeni su read-only provjerom
 2026-09-10.
 
+Read-only inventar 2026-09-11 vratio je nula issuea u ovom projektu. Lokalni
+[plan Release-1 automatizacijskih ticketa](../planning/release-1-automation-tickets.md)
+zato koristi privremene ključeve `AUTO-01` do `AUTO-08`; oni nisu Linear ID-ovi.
+Vanjski upis i povezivanje zavisnosti čeka zasebnu freigabe i završetak blokirajućih
+design odluka.
+
 | Polje | Vrijednost |
 | --- | --- |
 | Workspace | `activi` |

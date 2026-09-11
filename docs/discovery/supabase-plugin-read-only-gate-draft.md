@@ -41,11 +41,15 @@ zulässig.
 
 Die offizielle Supabase-MCP-Dokumentation unterstützt diese Parameter:
 
+<!-- markdownlint-disable MD013 -->
+
 | Parameter | Zweck |
 | --- | --- |
 | `project_ref=<id>` | Bindet den MCP an genau ein Projekt und deaktiviert Account-Werkzeuge. |
 | `read_only=true` | Führt SQL über einen Read-only-PostgreSQL-Nutzer aus. |
 | `features=<groups>` | Aktiviert nur die genannten Tool-Gruppen. |
+
+<!-- markdownlint-enable MD013 -->
 
 Nicht ausführbare Zielvorlage für einen späteren, separat konfigurierten MCP:
 
@@ -82,6 +86,8 @@ Read-only ist eine Schreibschutzschicht, keine PII- oder Mandantengrenze.
 
 ## 4. Pflichtprüfungen vor dem ersten Live-Aufruf
 
+<!-- markdownlint-disable MD013 -->
+
 | ID | Prüfung | PASS-Bedingung | Aktueller Status |
 | --- | --- | --- | --- |
 | PG-00 | Manuelle Bestätigung | Codex steht auf `Always ask`; jeder Tool-Call wird vor Ausführung geprüft. | USER-ATTESTED PASS |
@@ -94,6 +100,8 @@ Read-only ist eine Schreibschutzschicht, keine PII- oder Mandantengrenze.
 | PG-07 | Output-Grenze | Exakter Tool-Call, Schemafilter, Detailmodus, erwartete Maximalgröße, Redaktionsweg und Speicherort sind vorab festgelegt. | BLOCKED |
 | PG-08 | Identität und Rechte | OAuth-Benutzer, Organisation, Ziel-Alias und wirksamer DB-Kontext sind geprüft; keine Owner-, Migration-, Superuser- oder BYPASSRLS-Nutzung. | BLOCKED |
 | PG-09 | Abschließende Freigabe | Nutzer genehmigt den vollständigen Gate-Stand und genau einen ersten Tool-Call in einer neuen Nachricht. | NICHT ERTEILT |
+
+<!-- markdownlint-enable MD013 -->
 
 Gesamtbewertung: **NO-GO**. `PG-00` allein entsperrt keinen Live-Zugriff. Wegen
 `PG-06` darf der Plugin nicht direkt mit dem bestätigten Produktionsprojekt
@@ -185,11 +193,13 @@ werden:
 1. Welches getrennte Development-/Testprojekt ohne echte Kandidatendaten darf
    für den Plugin-Gate verwendet werden? Seine Erstellung oder Befüllung ist
    eine separat freizugebende externe Änderung.
-2. Kann Codex den Connector für dieses Nicht-Produktionsprojekt tatsächlich mit `project_ref`,
+2. Kann Codex den Connector für dieses Nicht-Produktionsprojekt tatsächlich mit
+   `project_ref`,
    `read_only=true` und eingeschränkten Features konfigurieren, oder wird eine
    separate MCP-Verbindung benötigt?
 3. Welches einzelne Schema darf P2 später inventarisieren?
-4. Darf eine kompakte Liste interner Tabellennamen im Tool-Ergebnis an das Modell
+4. Darf eine kompakte Liste interner Tabellennamen im Tool-Ergebnis an das
+   Modell
    gelangen, oder muss ausschließlich der externe `psql`-Raw-Pfad verwendet
    werden?
 

@@ -7,6 +7,15 @@ installiert und mit der vorhandenen Community-Distribution abgeglichen;
 Live-Plugin ebenfalls installiert, aber kein Datenbankzugriff und keine
 Architektur- oder Produktionsfreigabe
 
+## Aktuelle Projektgrenze
+
+Korrekturstand 2026-09-11: `Always ask` ist nutzerbestätigt. Ein eigenes
+Plugin-Gate allein reicht für das produktive CRM nicht: der Developer-MCP darf
+nicht mit dem bestätigten Produktionsziel mit realen Kandidatendaten verbunden
+werden. Nur eine separate Nicht-Produktions-Evaluation ohne solche Daten wäre
+zulässig; sie ist nicht geplant. Die Installationsaussagen sind historische
+Prüfstände. Maßgeblich bleibt [Supabase tooling](../agents/supabase-tooling.md).
+
 ## Klare Antwort
 
 `npx skills add supabase/agent-skills` lädt zwei offizielle **Arbeitsanleitungen
@@ -19,7 +28,8 @@ für KI-Coding-Agenten** in das aktuelle Projekt:
 Ein Skill ist bildlich ein Handbuch, das der Agent bei einer passenden Aufgabe
 liest. Er ist **kein Programmteil unseres späteren CRM**, kein SDK und keine
 Verbindung zur Datenbank. Der Befehl meldet sich nicht bei Supabase an, verlangt
-keinen Supabase-Schlüssel und richtet keinen MCP-Server ein. Supabase trennt diese
+keinen Supabase-Schlüssel und richtet keinen MCP-Server ein. Supabase trennt
+diese
 Bausteine ausdrücklich: Skills liefern Wissen; MCP stellt eine Live-Verbindung
 zum Projekt her; ein Plugin bündelt beides
 ([Supabase AI Tools](https://supabase.com/docs/guides/ai-tools),
@@ -31,6 +41,7 @@ Der nackte Befehl findet im öffentlichen GitHub-Repository beide Skills und
 installiert beide. Mit `--skill supabase` oder
 `--skill supabase-postgres-best-practices` ließe sich nur einer auswählen
 ([offizielles Repository](https://github.com/supabase/agent-skills),
+<!-- markdownlint-disable-next-line MD013 -->
 [Supabase-Installationsanleitung](https://supabase.com/docs/guides/ai-tools/ai-skills)).
 
 Standardmäßig ist die Installation **projektbezogen**. Für Codex ist der
@@ -39,7 +50,9 @@ Projektpfad `.agents/skills/`; mit `--global` wäre der Codex-Pfad
 kann erkannte Agenten sowie Symlink oder Kopie zur Auswahl anbieten. Die
 empfohlene Symlink-Variante hält eine kanonische Kopie unter `.agents/skills/`
 und verlinkt sie bei Bedarf in agentenspezifische Verzeichnisse
+<!-- markdownlint-disable-next-line MD013 -->
 ([Skills-CLI: Scope und Installationsarten](https://github.com/vercel-labs/skills#installation-scope),
+<!-- markdownlint-disable-next-line MD013 -->
 [Codex-Pfade im CLI-Quellcode](https://github.com/vercel-labs/skills/blob/main/src/agents.ts#L214-L221)).
 
 Installiert werden die jeweiligen Skill-Ordner, nicht nur ein kurzer Prompt:
@@ -52,17 +65,22 @@ Installiert werden die jeweiligen Skill-Ordner, nicht nur ein kurzer Prompt:
 Die CLI kopiert bei einer Mehrdatei-Skillquelle alle Dateien des Skill-Ordners.
 Die Skills-CLI kann außerdem ein `skills-lock.json` im Projektstamm führen,
 damit Quelle und Version später geprüft oder wiederhergestellt werden können
+<!-- markdownlint-disable-next-line MD013 -->
 ([Installer-Quellcode](https://github.com/vercel-labs/skills/blob/main/src/installer.ts),
+<!-- markdownlint-disable-next-line MD013 -->
 [Lockfile-Quellcode](https://github.com/vercel-labs/skills/blob/main/src/local-lock.ts)).
 Im aktuellen Repository existiert kein solches Lockfile. Die vorhandenen
 Projektkopien stimmen inhaltlich mit der installierten Supabase-Community-
-Distribution überein; ihre Provenienz muss bei Updates deshalb über vollständigen
-Ordner- und Git-Diff-Review statt nur über eine Frontmatter-Version geprüft werden.
+Distribution überein; ihre Provenienz muss bei Updates deshalb über
+vollständigen
+Ordner- und Git-Diff-Review statt nur über eine Frontmatter-Version geprüft
+werden.
 
 Danach sieht ein unterstützter Agent zunächst Name und Beschreibung. Erkennt er
 zum Beispiel eine Supabase-, RLS- oder SQL-Aufgabe, lädt er das passende
 `SKILL.md` und bei Bedarf einzelne Dateien aus `references/`. Die Skills werden
 also **bei Bedarf gelesen**; sie laufen nicht dauerhaft im Hintergrund
+<!-- markdownlint-disable-next-line MD013 -->
 ([Supabase-Repository: Usage und Struktur](https://github.com/supabase/agent-skills#usage)).
 
 ## Was `supabase` dem Agenten beibringt
@@ -86,16 +104,20 @@ Dieser Skill ist das allgemeine Supabase-Handbuch. In einfachen Worten sagt er:
   Funktion in ein nicht exponiertes Schema, braucht eine ausdrückliche
   Identitätsprüfung und eng entzogene Ausführungsrechte.
 - CLI-Befehle und Flags immer mit `--help` prüfen. Vor Migrationen Advisors und
-  Security-Checkliste nutzen; Fehler anhand der aktuellen Debugging-Dokumentation
+  Security-Checkliste nutzen; Fehler anhand der aktuellen
+  Debugging-Dokumentation
   untersuchen.
 
 Der aktuelle Originaltext steht im
+<!-- markdownlint-disable-next-line MD013 -->
 [`supabase`-Skill](https://github.com/supabase/agent-skills/blob/main/skills/supabase/SKILL.md).
 
 ## Was `supabase-postgres-best-practices` erklärt
 
 Dieser Skill ist eine Sammlung einzelner PostgreSQL-Regeln mit falschen und
 richtigen SQL-Beispielen. Die Regeln sind nach Wirkung geordnet:
+
+<!-- markdownlint-disable MD013 -->
 
 | Priorität | Thema | Bedeutung für uns |
 | --- | --- | --- |
@@ -108,14 +130,19 @@ richtigen SQL-Beispielen. Die Regeln sind nach Wirkung geordnet:
 | niedrig-mittel | Diagnose | `EXPLAIN`, Statistiken und Vacuum verstehen |
 | niedrig | Spezialfunktionen | FTS und JSONB gezielt einsetzen |
 
+<!-- markdownlint-enable MD013 -->
+
 Die Referenzen enthalten unter anderem Regeln für fehlende, partielle,
 zusammengesetzte und abdeckende Indizes, Foreign-Key-Indizes, Datentypen,
 Constraints, RLS, Rechte, Keyset-Pagination, Volltextsuche und JSONB. Ein für
 unser Projekt besonders passendes Beispiel empfiehlt, in RLS-Prüfungen
 verwendete Spalten zu indexieren und stabile Funktionen so aufzurufen, dass sie
 nicht unnötig pro Zeile neu ausgewertet werden
+<!-- markdownlint-disable-next-line MD013 -->
 ([Skill-Übersicht](https://github.com/supabase/agent-skills/blob/main/skills/supabase-postgres-best-practices/SKILL.md),
+<!-- markdownlint-disable-next-line MD013 -->
 [Regelverzeichnis](https://github.com/supabase/agent-skills/tree/main/skills/supabase-postgres-best-practices/references),
+<!-- markdownlint-disable-next-line MD013 -->
 [RLS-Performance-Regel](https://github.com/supabase/agent-skills/blob/main/skills/supabase-postgres-best-practices/references/security-rls-performance.md)).
 
 ## Nutzen und Grenzen für unseren CRM-MCP
@@ -125,7 +152,8 @@ Der Nutzen ist konkret, aber begrenzt:
 - Schon jetzt erinnern die Skills den Agenten bei Plänen und Reviews an
   Sicherheits- und PostgreSQL-Fallen, ohne Kandidatendaten zu öffnen.
 - Nach dem genehmigten read-only Discovery helfen sie beim Prüfen von Audit-SQL,
-  RLS, Tenant-Trennung, Indizes, Query-Plänen und der kontrollierten RPC-Funktion.
+  RLS, Tenant-Trennung, Indizes, Query-Plänen und der kontrollierten
+  RPC-Funktion.
 - Sie passen damit gut zu unserer Grenze: Das LLM schlägt nur einen validierten
   JSON-Filter vor; PostgreSQL filtert, autorisiert und paginiert.
 
@@ -155,6 +183,7 @@ Datenbankzugriff frei.
 ### Später
 
 Nach der Discovery-Freigabe die Skills beim Review der read-only Audit-Abfragen
+<!-- markdownlint-disable-next-line MD013 -->
 nutzen. Erst danach über RLS, RPC, CLI, pgTAP, `db lint`, generierte Typen und ein
 Runtime-SDK entscheiden. Der inzwischen installierte Supabase-MCP bleibt bis zu
 einem eigenen projektgebundenen, read-only und feature-reduzierten Gate ohne
@@ -174,7 +203,10 @@ Die verbindliche Nutzungs- und Aktualisierungsroute steht in
 ## Quellen
 
 - [Supabase: Agent Skills](https://supabase.com/docs/guides/ai-tools/ai-skills)
+<!-- markdownlint-disable-next-line MD013 -->
 - [Supabase: AI Tools und Begriffsabgrenzung](https://supabase.com/docs/guides/ai-tools)
+<!-- markdownlint-disable-next-line MD013 -->
 - [Supabase: offizielles Agent-Skills-Repository](https://github.com/supabase/agent-skills)
 - [Vercel Labs: offizielle Skills-CLI](https://github.com/vercel-labs/skills)
+<!-- markdownlint-disable-next-line MD013 -->
 - [Supabase: Plugin für AI Coding Agents](https://supabase.com/docs/guides/ai-tools/plugins)

@@ -576,3 +576,20 @@ werden als neuer Eintrag mit Verweis auf den betroffenen Eintrag angehängt.
   Datenbankverbindung, keine externe Änderung und kein Git-Commit.
 - Assessment: `PASS_WITH_GAPS`; menschlicher Security-Review und Gate B bleiben
   erforderlich.
+
+### [2026-09-11T10:07:34+02:00] Phase 20 – Gate-B-Vorbereitung nach Exportreview
+
+- B2-Minimalscope auf `crm`, `crm_api` und `crm_auth` begrenzt; alle übrigen
+  Anwendungs-, Plattform-, Audit- und Secret-Schemas bleiben ausgeschlossen.
+- Cross-Schema-Namen dürfen nur als direkt referenzierte Constraint- oder
+  Triggerziele eines erlaubten Quellobjekts erscheinen; dies entsperrt keine
+  Prüfung des Zielschema.
+- B2-Allowlist-Hash aktualisiert und ein statischer Scope-/Hash-Test ergänzt.
+- Gate-Status unverändert: B1 V2 `NO-GO`, B2 bis zu geprüftem B1 PASS
+  `BLOCKED`, B3 `DRAFT / BLOCKED`.
+- Lokaler Metadatencheck: Target-Attest, Connection-Service und Credentialdatei
+  existieren als reguläre, symlinkfreie Dateien des aktuellen Nutzers mit
+  Modus `0600`; Inhalte wurden nicht gelesen. Das zwingend erforderliche
+  Approval-Attest fehlt.
+- Sicherheitsgrenze: keine Attest-/Credentialdatei angelegt, keine Verbindung,
+  kein SQL-Lauf, kein Supabase-Plugin/MCP und keine externe Änderung.

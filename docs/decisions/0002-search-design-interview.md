@@ -16,6 +16,8 @@ offen.
 
 ## Statusbegriffe
 
+<!-- markdownlint-disable MD013 -->
+
 | Status | Bedeutung |
 | --- | --- |
 | `BESTÄTIGT` | Der Nutzer hat die Entscheidung ausdrücklich getroffen. |
@@ -27,6 +29,8 @@ offen.
 | `ARBEITSANNAHME` | Unbestätigte Ausgangsannahme, keine festgestellte Tatsache. |
 | `DURCH DISCOVERY ZU PRÜFEN` | Technische Bestandsaussage ohne abgeschlossene Prüfung. |
 
+<!-- markdownlint-enable MD013 -->
+
 ## Fragen, Antworten und gekennzeichnete Vorschläge
 
 Korrekturstand 2026-09-11: Der Nutzer hat die Korrekturen aus dem
@@ -34,6 +38,7 @@ Korrekturstand 2026-09-11: Der Nutzer hat die Korrekturen aus dem
 freigegeben. Die Freigabe bestätigt keine unbelegten Detailregeln. Insbesondere
 bleiben Q8.4 grundsätzlich bestätigt, Q8.5 vollständig offen und die allgemeine
 Bestätigungspflicht vor jeder Suche ein Vorschlag. Die
+<!-- markdownlint-disable-next-line MD013 -->
 [Änderungsmatrix](../reviews/decision-reconstruction-corrections.md) dokumentiert
 die Übernahme und die weiterhin offenen Punkte.
 
@@ -60,7 +65,8 @@ mehrere Unternehmen?
 **Frage:** Wer übernimmt Product, Data, Security, Privacy/Legal, Operations und
 Discovery?
 
-**Antwort:** `BESTÄTIGT` – Der Nutzer übernimmt derzeit alle genannten Rollen. RACI,
+**Antwort:** `BESTÄTIGT` – Der Nutzer übernimmt derzeit alle genannten Rollen.
+RACI,
 On-call-Ablauf und konkrete Prüfprozesse bleiben `OFFEN`. Die
 organisatorischen und sicherheitsbezogenen Risiken dieser Rollenkombination
 bleiben sichtbar und werden nicht als unabhängige Prüfung dargestellt.
@@ -94,7 +100,8 @@ Person ist nicht verpflichtend vorgesehen.
 **Frage:** Soll das System Filter automatisch lockern, null Ergebnisse anzeigen
 und Lockerungen vorschlagen oder sofort ähnliche Kandidaten anzeigen?
 
-**Antwort:** `BESTÄTIGT` – Option B: Die exakte Suche bleibt unverändert. Bei null
+**Antwort:** `BESTÄTIGT` – Option B: Die exakte Suche bleibt unverändert. Bei
+null
 Treffern werden konkrete Lockerungen vorgeschlagen; eine geänderte Suche beginnt
 erst nach ausdrücklicher Zustimmung. Die genaue Gestaltung eines vorab
 genehmigten Fallback-Plans ist noch offen.
@@ -107,9 +114,12 @@ Kategorie miteinander verbunden werden?
 **Belegter Entscheidungsstand:** Globale Optionen A und B sind `ABGELEHNT`.
 Ihre ursprünglichen Definitionen sind nicht überliefert und werden nicht
 ergänzt. Option C sollte angepasst werden. Die spätere Zustimmung zu allen
-empfohlenen Q8.4-Punkten für alle Kategorien ist belegt; die damalige vollständige
+empfohlenen Q8.4-Punkten für alle Kategorien ist belegt; die damalige
+vollständige
 Empfehlungsliste fehlt. Deshalb ist die genaue Detailsemantik eine
 **Rekonstruktionslücke**, keine pauschal bestätigte Regelmenge.
+
+<!-- markdownlint-disable MD013 -->
 
 | Kategorie | Regel und Evidenzstatus |
 | --- | --- |
@@ -122,6 +132,8 @@ Empfehlungsliste fehlt. Deshalb ist die genaue Detailsemantik eine
 | Ausschlüsse | `VORLÄUFIGER VORSCHLAG`: ausdrücklich gesetzte Ausschlüsse als `NOT`. |
 | Fehlende Werte | `VORLÄUFIGER VORSCHLAG`: kein positiver Pflichtfiltertreffer; das geltende Verbot erfundener Werte bleibt bestehen. |
 | Nicht genannte Filter | `BESTÄTIGT`: inaktiv, keine Einschränkung der Suche. |
+
+<!-- markdownlint-enable MD013 -->
 
 **VORLÄUFIGER VORSCHLAG – Soll-Ablauf:** Vor jeder neuen oder geänderten Suche
 werden Filter, Operatoren und aufgelöste Profilmitglieder angezeigt. Nach
@@ -175,7 +187,8 @@ geeignete IDs zu verwenden ist ein Vorschlag, keine bestätigte Bestandsaussage.
 für direkte Suchen verwendet werden?
 
 **Antwort:** `BESTÄTIGT` – Ein Profil darf kontrollierte
-Ausbildungsberufe, Erfahrungsberufe und Tätigkeitsarten referenzieren, ohne diese
+Ausbildungsberufe, Erfahrungsberufe und Tätigkeitsarten referenzieren, ohne
+diese
 Elemente zu besitzen oder für andere Verwendungen zu sperren. Derselbe Beruf
 darf gleichzeitig mehreren Profilen zugeordnet und weiterhin direkt gesucht
 werden. Die Beziehungen sind damit nicht exklusiv und viele-zu-viele.
@@ -186,6 +199,7 @@ Vorschläge, manuelle Zuordnungen und Korrekturen, Diff, Validierung,
 Veröffentlichungsbestätigung, unveränderliche Versionen, Archivierung und Audit.
 Der Runtime-Such-MCP liest nur veröffentlichte Profilversionen und besitzt keine
 Profil-Schreibrechte. Verbindliche Details stehen in
+<!-- markdownlint-disable-next-line MD013 -->
 [ADR-0003](0003-separated-profile-administration-mcp.md); die fachliche Grundlage
 enthält der [Recherchebericht](../research/berufssuchprofile-q8-4-2.md).
 
@@ -229,6 +243,15 @@ Geschäftsentscheidungen mit den tatsächlichen Befunden fortgesetzt.
 **Vom Nutzer angegebene Ausgangslage:** Die Datenbank enthält 179 Tabellen.
 Diese Zahl ist noch durch das Metadateninventar zu verifizieren.
 
+**Vom Nutzer am 2026-09-11 ergänzte Ausgangslage:** Die vorhandenen Daten seien
+im Supabase-Projekt im Wesentlichen nur hochgeladen worden; die Datenbank sei
+noch nicht auf das Zielvorhaben ausgerichtet, korrekt eingerichtet oder mit den
+benötigten Zugriffspfaden verdrahtet. Diese Beschreibung ist
+`DURCH DISCOVERY ZU PRÜFEN`. Insbesondere sind Beziehungen, Constraints,
+RLS-Aktivierung und -Wirksamkeit, Grants und Rollen, Indizes, API-Grenzen,
+Authentifizierung, Tenant-Isolation und operative Datenflüsse nicht als
+funktionsfähig bestätigt.
+
 ## Offene Fragen
 
 ### Q4.5 – Vom Nutzer als offen markiert
@@ -259,6 +282,154 @@ Bis zur Präzisierung wird keine Antwort abgeleitet.
 - Exportumfang, Formate, Felder, Limits und Schutzmaßnahmen.
 - Zulässige Cache-Dauer und erforderliche Datenaktualität.
 - Authentifizierung, Tenant-Modell, Hosting, Ranking und numerische SLOs.
+
+### Q10 – Datenbank-Zielzustand und Übergang
+
+**Status:** `TEILWEISE BESTÄTIGT`
+
+**Q10.1 – Herkunft und maßgebliche Datenquelle:** `BESTÄTIGT` – Die
+Datenbank wurde aus dem bestehenden CRM gedumpt und anschließend in Supabase
+geladen. Das ursprüngliche CRM wird nicht weiter betrieben und erhält keine
+neuen oder geänderten Kandidatendaten. Supabase ist nicht die einzige Kopie;
+als weitere Sicherungs- oder Referenzstände nennt der Nutzer einen lokalen
+SQL-Dump, einen Container in OrbStack und ein ZIP-Backup. Diese Artefakte wurden
+nicht geöffnet, ausgeführt, entpackt oder inhaltlich geprüft. Noch `OFFEN` sind
+Zeitpunkt, Vollständigkeit, Gleichstand und vorgesehene Rolle der drei Stände
+sowie die Entscheidung, welcher Datenbestand als maßgebliche Ausgangsbasis
+dient. Ihre Existenz belegt ohne Prüfung weder Wiederherstellbarkeit noch
+Gleichstand mit dem Supabase-Datenbestand. Alle drei Stände sind als sensible
+Rohartefakte außerhalb von Git zu behandeln; Inhalte oder personenbezogene
+Daten dürfen nicht in Chat, Logs oder Repository-Ausgaben gelangen.
+
+**Q10.1d – Lokaler Preflight der Sicherungsstände:** `ABGELEHNT` – Der Nutzer
+möchte derzeit keine lokale read-only Bestandsprüfung von SQL-Dump,
+OrbStack-Container oder ZIP-Backup durchführen. Die drei Stände bleiben daher
+unverifiziert und dürfen vorerst weder als Beleg für Vollständigkeit und
+Gleichstand noch als nachgewiesener Restore verwendet werden. Ein späterer
+Restore-Nachweis gemäß Q10.2a benötigt einen anderen, separat freizugebenden
+Prüfweg.
+
+**Q10.1e – Vorläufige Ausgangsbasis:** `BESTÄTIGT` – Die aktuelle
+Supabase-Datenbank ist trotz der ungeprüften Sicherungsstände die vorläufige
+Arbeitsbasis für read-only Discovery und weitere Planung. Diese Entscheidung
+bestätigt weder Vollständigkeit noch fachliche oder technische Eignung des
+Datenbestands. Die anderen Kopien bleiben unangetastet; vor der ersten Mutation
+ist weiterhin der separat geprüfte Restore-Nachweis gemäß Q10.2a erforderlich.
+
+**Q10.2 – Getrennte Development-/Staging-Umgebung:** `BESTÄTIGT` – Der Nutzer
+möchte kein separates Development-/Staging-Projekt bereitstellen. Planung,
+Prüfung und eine später separat freizugebende Umsetzung sollen direkt am
+bestehenden Produktionsprojekt erfolgen; als Begründung nennt der Nutzer
+vorhandene Backups.
+
+Diese Entscheidung hebt die bestehenden Sicherheitsgates nicht auf. Bis zur
+separaten Freigabe einer konkreten Mutation bleiben ausschließlich die
+dokumentierten read-only Discovery-Schritte zulässig. Vor einem späteren
+In-place-Umbau sind Backup-Umfang, Wiederherstellbarkeit, zulässiges
+Zeitfenster,
+Transaktions- und Rollback-Strategie sowie Stopkriterien noch `OFFEN`.
+
+**Q10.2a – Sicherheitsstandard für direkte Produktionsänderungen:**
+`BESTÄTIGT` – Für jede spätere Änderungsstufe gilt die Reihenfolge read-only
+Audit, konkreter Migrationsplan, nachgewiesener Restore, Dry-run beziehungsweise
+Preflight, separate Freigabe, kleine kontrollierte Änderung, Prüfung und erst
+danach der nächste Schritt. Die Zustimmung zu diesem Ablauf ist keine
+Freigabe eines Datenbankzugriffs oder einer konkreten Mutation.
+
+**Q10.2b – Dedizierter Discovery-Zugang:** `BESTÄTIGT` – Am 2026-09-11 wurde
+gefragt: „Gibt es bereits eine eigens angelegte PostgreSQL-Read-only-Rolle für
+diesen Discovery-Zugriff?“ Der Nutzer antwortete: „nein richte einen ein“.
+Normalisierte Antwort: Eine solche Rolle besteht laut Nutzer nicht; ihre
+Einrichtung ist beauftragt. Der Bootstrap-Zweig „neue Rolle“ ist damit gewählt.
+Eine erneute Grundsatzbestätigung der Rollenanlage ist nicht erforderlich.
+
+Die konkrete Ausführung ist noch nicht erfolgt. Restore-Nachweis,
+zulässiger synthetischer Laufzeitnachweis und gebundener Produktionspreflight
+fehlen weiterhin. Die Antwort bestätigt diese Nachweise nicht und ändert
+weder Q10.2a noch die ausgeschlossenen Backup-Prüfungen oder das Verbot des
+Produktionszugriffs über den Supabase-Developer-Plugin. Diese Voraussetzungen
+bleiben getrennt von dem erteilten Einrichtungsauftrag offen.
+
+**Q10.2c – Backup-Rhythmus und Restore-Test:** `BESTÄTIGT ALS NUTZERANGABE` –
+Am 2026-09-11 wurde gefragt, ob bereits ein Backup dieser Supabase-Datenbank
+erfolgreich wiederhergestellt wurde. Der Nutzer antwortete: „nein aber es gibt
+jeden tag ein backup“. Normalisierte Antwort: Es bestehen laut Nutzer tägliche
+Backups; ein erfolgreicher Wiederherstellungstest liegt nicht vor. Backupstatus,
+Umfang und Wiederherstellbarkeit wurden nicht technisch geprüft. Diese Angabe
+ersetzt keinen Restore-Nachweis und ist keine Ausnahme von Q10.2a.
+
+**Q10.2d – Begrenzte Restore-Ausnahme für die Leserolle:** `BESTÄTIGT` –
+Am 2026-09-11 wurde vorgeschlagen: „Rollenanlage nach bestandenen
+Sicherheitsprüfungen; Wiederherstellungstest weiterhin vor Änderungen an
+Tabellen oder Daten.“ Auf die Frage, ob diese Ausnahme von der bisherigen
+Regel festgehalten und damit fortgefahren werden darf, antwortete der Nutzer
+„ja“.
+
+Normalisierte Entscheidung: Für die beauftragte Anlage der dedizierten Rolle
+`dino_crm_discovery_ro_v1` entfällt der vorherige Restore-Test. Diese enge
+Ausnahme ersetzt insoweit Q10.2a und die älteren Voraussetzungen in Q10.2b/c.
+Sie akzeptiert für diesen Schritt das verbleibende Risiko ungeprüfter
+Wiederherstellbarkeit der laut Nutzer täglich erstellten Backups. Vor Änderungen
+an Tabellen oder Daten bleibt ein erfolgreicher Restore-Nachweis erforderlich.
+
+Ziel-/Identitätsbindung, Prüfung effektiver Rechte, synthetischer
+SQL-Laufzeitnachweis, begrenzte Ausführung und Post-Check bleiben erforderlich.
+Die Ausnahme erlaubt weder globale PUBLIC-Rechteänderungen noch Zugriff über
+den Supabase-Developer-Plugin, Öffnen abgelehnter Backup-Artefakte oder spätere
+Discovery-Gates. Neue Testumgebungen und globale Installationen sind damit
+nicht automatisch freigegeben. Die Rolle ist noch nicht angelegt.
+
+**Q10.2e – Isolierter synthetischer Rollentest:** `BESTÄTIGT` – Am 2026-09-11
+wurde gefragt, ob ein neuer temporärer PostgreSQL-17-Container aus dem bereits
+vorhandenen Image ohne Netzwerk, eingebundene Dateien oder echte Daten für den
+Rollentest gestartet und anschließend entfernt werden darf. Der Nutzer
+antwortete: „Ja, isolierten Testcontainer erlauben“.
+Dies erweitert ausschließlich die bisherige Testgrenze „bereits vorhandene
+Umgebung“. Backup-Importe, gehostetes Staging und globale Installationen bleiben
+ausgeschlossen. Die Entfernung betrifft nur den eigens erzeugten Testcontainer.
+
+**Q10.2f – Sichtbarer Projektabgleich:** `BESTÄTIGT` – Der Nutzer wurde gebeten,
+die Übersicht des richtigen CRM-Projekts in Chrome zu öffnen. Zunächst war
+„JSI AI“ sichtbar; dessen Kennung passte nicht zur gespeicherten Verbindung.
+Nach dem Hinweis antwortete der Nutzer: „jetzt ist es die richitge ich habs
+geändert“. Die anschließende Übersicht zeigte „JSI Base“. Ihre sichtbare
+Projektkennung stimmt nach unabhängigem Hashvergleich exakt mit dem vollständigen
+gespeicherten Pooler-Benutzernamen überein. Die reine Zielauswahl autorisiert
+keine Änderungen an bestehenden PUBLIC- oder Funktionsrechten.
+
+**Q10.2g – Gezielte Prüfung öffentlich erreichbarer Definer-Funktionen:**
+`BESTÄTIGT` – Auf die Frage, ob genau die bestehenden öffentlich erreichbaren
+SECURITY-DEFINER-Funktionen und ihre Berechtigungen lesend untersucht werden
+dürfen, ohne sie auszuführen oder Kandidatendaten zu lesen, antwortete der Nutzer
+„ja“. Der in der Produktions-Preflight-Dokumentation beschriebene Prüfbereich
+ist damit freigegeben: Identität/Signatur, Eigentümer, ACL, Sprache und Definition
+nur der betroffenen Funktionen im bereits bestätigten Projekt „JSI Base“.
+Rohe Definitionen und enthaltene Werte bleiben ausschließlich in begrenzter
+lokaler Verarbeitung; an Modell, Chat und Git gehen nur redigierte Befunde.
+Unsichere oder unvollständige Verarbeitung ist STOP. Die Freigabe umfasst
+keine Funktionsausführung, Kandidatenabfrage, Rechteänderung oder Aufweichung
+des Rollen-Gates.
+
+**Q10.3 – Kurzfristig Option A, schrittweise zu Option D:** `BESTÄTIGT` – Die
+importierten CRM-Tabellen bleiben in der kurzfristigen Phase unverändert. Für
+Release 1 werden nur die benötigten kontrollierten Strukturen, Beziehungen und
+Suchzugriffe additiv ergänzt. Diese Erweiterungen sind keine Wegwerflösung,
+sondern kompatible erste Bausteine des späteren kanonischen Zielmodells.
+
+Der Übergang zu Option D erfolgt anschließend in kleinen, separat geprüften und
+freigegebenen Migrationsschnitten. Jeder Schnitt benötigt Quellen-Mapping,
+Data-Lineage, Abgleich von IDs, Mengen und fachlichen Ergebnissen, RLS- und
+Vertragstests sowie einen nachgewiesenen Rückweg. Die bisherige Quelle wird
+nicht
+im selben Schritt destruktiv entfernt. Erst nach vollständiger Abnahme darf sie
+separat archiviert und in einer späteren Freigabe zur Löschung vorgeschlagen
+werden.
+
+Da das ursprüngliche CRM nicht weiter betrieben wird, ist keine dauerhafte
+Synchronisierung mit diesem Altsystem vorgesehen. Ob andere aktive Schreiber auf
+den Supabase-Datenbestand zugreifen, bleibt `DURCH DISCOVERY ZU PRÜFEN`.
+Der read-only Audit bestimmt die physischen Strukturen, Mappings und sicheren
+Schnittgrenzen; er ändert nicht mehr die bestätigte Grundrichtung A nach D.
 
 ## Fortschreibung während des Interviews
 

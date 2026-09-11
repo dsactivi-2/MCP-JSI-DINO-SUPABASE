@@ -11,6 +11,9 @@ Repozitorij ima jedan domenski kontekst. Njegov rječnik je u korijenskom
 3. Za zahtjeve koristiti
    [implementacijski brief](../SUPABASE_CRM_MCP_IMPLEMENTATION_BRIEF.md), a za
    discovery [runbook](../runbooks/schema-discovery.md).
+4. Za SQL razvoj, testiranje, optimizaciju i release provjere koristiti
+   [ADR-0004](../decisions/0004-automated-database-development.md) i
+   [runbook automatizacije](../runbooks/database-development-automation.md).
 
 ## Održavanje
 
@@ -23,3 +26,5 @@ Repozitorij ima jedan domenski kontekst. Njegov rječnik je u korijenskom
   dokumentirati novim ADR-om i eksplicitno označiti zamijenjenu odluku.
 - Kontekst, README i konfiguracija vještina upućuju na zahtjeve i odluke;
   ne prepisuju njihov sadržaj.
+- Lokalni planovi ticketa žive pod `docs/planning/`, koriste privremene ključeve
+  i dobijaju stvarne Linear ID-ove tek nakon odobrenog vanjskog upisa.

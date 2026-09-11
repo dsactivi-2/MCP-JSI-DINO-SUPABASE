@@ -2,6 +2,7 @@
 -- Target alias: dino_crm_discovery_target_01
 -- Prerequisite: Gate B1 reviewed and separately approved as PASS.
 -- Names, types, relationships, flags, size classes, and row estimates only.
+-- Source scope: crm, crm_api, and crm_auth only.
 
 BEGIN TRANSACTION READ ONLY;
 SET LOCAL statement_timeout = '5s';
@@ -9,15 +10,13 @@ SET LOCAL lock_timeout = '1s';
 SET LOCAL idle_in_transaction_session_timeout = '15s';
 SET LOCAL search_path = pg_catalog, information_schema;
 
--- SQL-GATE-B2-001: non-system schemas
+-- SQL-GATE-B2-001: approved discovery schemas
 SELECT
   'SQL-GATE-B2-001' AS query_id,
   namespace.nspname AS schema_name,
   pg_catalog.pg_get_userbyid(namespace.nspowner) AS schema_owner
 FROM pg_catalog.pg_namespace AS namespace
-WHERE namespace.nspname NOT IN ('pg_catalog', 'information_schema')
-  AND namespace.nspname NOT LIKE 'pg_toast%'
-  AND namespace.nspname NOT LIKE 'pg_temp_%'
+WHERE namespace.nspname IN ('crm', 'crm_api', 'crm_auth')
 ORDER BY schema_name
 LIMIT 5001;
 
@@ -48,9 +47,7 @@ FROM pg_catalog.pg_class AS relation
 JOIN pg_catalog.pg_namespace AS namespace
   ON namespace.oid = relation.relnamespace
 WHERE relation.relkind IN ('r', 'p', 'v', 'm', 'f', 'S')
-  AND namespace.nspname NOT IN ('pg_catalog', 'information_schema')
-  AND namespace.nspname NOT LIKE 'pg_toast%'
-  AND namespace.nspname NOT LIKE 'pg_temp_%'
+  AND namespace.nspname IN ('crm', 'crm_api', 'crm_auth')
 ORDER BY schema_name, relation_name
 LIMIT 5001;
 
@@ -77,9 +74,7 @@ JOIN pg_catalog.pg_namespace AS namespace
 WHERE attribute.attnum > 0
   AND NOT attribute.attisdropped
   AND relation.relkind IN ('r', 'p', 'v', 'm', 'f')
-  AND namespace.nspname NOT IN ('pg_catalog', 'information_schema')
-  AND namespace.nspname NOT LIKE 'pg_toast%'
-  AND namespace.nspname NOT LIKE 'pg_temp_%'
+  AND namespace.nspname IN ('crm', 'crm_api', 'crm_auth')
 ORDER BY schema_name, relation_name, ordinal_position
 LIMIT 5001;
 
@@ -108,9 +103,7 @@ LEFT JOIN pg_catalog.pg_class AS referenced_relation
   ON referenced_relation.oid = constraint_entry.confrelid
 LEFT JOIN pg_catalog.pg_namespace AS referenced_namespace
   ON referenced_namespace.oid = referenced_relation.relnamespace
-WHERE namespace.nspname NOT IN ('pg_catalog', 'information_schema')
-  AND namespace.nspname NOT LIKE 'pg_toast%'
-  AND namespace.nspname NOT LIKE 'pg_temp_%'
+WHERE namespace.nspname IN ('crm', 'crm_api', 'crm_auth')
 ORDER BY schema_name, relation_name, constraint_name
 LIMIT 5001;
 
@@ -128,9 +121,7 @@ JOIN pg_catalog.pg_namespace AS namespace
 LEFT JOIN pg_catalog.pg_policy AS policy
   ON policy.polrelid = relation.oid
 WHERE relation.relkind IN ('r', 'p')
-  AND namespace.nspname NOT IN ('pg_catalog', 'information_schema')
-  AND namespace.nspname NOT LIKE 'pg_toast%'
-  AND namespace.nspname NOT LIKE 'pg_temp_%'
+  AND namespace.nspname IN ('crm', 'crm_api', 'crm_auth')
 GROUP BY
   namespace.nspname,
   relation.relname,
@@ -139,9 +130,11 @@ GROUP BY
 ORDER BY schema_name, relation_name
 LIMIT 5001;
 
+-- Empty results do not prove absence of grants to other roles.
 -- SQL-GATE-B2-006: explicit table and view grant names and flags
 SELECT
   'SQL-GATE-B2-006' AS query_id,
+  'ROLE_VISIBLE_ONLY' AS coverage,
   table_schema,
   table_name,
   grantor,
@@ -149,7 +142,7 @@ SELECT
   privilege_type,
   is_grantable
 FROM information_schema.table_privileges
-WHERE table_schema NOT IN ('pg_catalog', 'information_schema')
+WHERE table_schema IN ('crm', 'crm_api', 'crm_auth')
 ORDER BY table_schema, table_name, grantee, privilege_type
 LIMIT 5001;
 
@@ -169,15 +162,15 @@ SELECT
 FROM pg_catalog.pg_proc AS routine
 JOIN pg_catalog.pg_namespace AS namespace
   ON namespace.oid = routine.pronamespace
-WHERE namespace.nspname NOT IN ('pg_catalog', 'information_schema')
-  AND namespace.nspname NOT LIKE 'pg_toast%'
-  AND namespace.nspname NOT LIKE 'pg_temp_%'
+WHERE namespace.nspname IN ('crm', 'crm_api', 'crm_auth')
 ORDER BY routine_schema, routine_name, arguments
 LIMIT 5001;
 
+-- A separate reviewed catalog/owner attestation must establish completeness.
 -- SQL-GATE-B2-008: explicit routine grant names and flags
 SELECT
   'SQL-GATE-B2-008' AS query_id,
+  'ROLE_VISIBLE_ONLY' AS coverage,
   routine_schema,
   routine_name,
   specific_name,
@@ -186,7 +179,7 @@ SELECT
   privilege_type,
   is_grantable
 FROM information_schema.routine_privileges
-WHERE routine_schema NOT IN ('pg_catalog', 'information_schema')
+WHERE routine_schema IN ('crm', 'crm_api', 'crm_auth')
 ORDER BY routine_schema, routine_name, grantee
 LIMIT 5001;
 
@@ -219,9 +212,7 @@ JOIN pg_catalog.pg_class AS table_relation
   ON table_relation.oid = index_entry.indrelid
 JOIN pg_catalog.pg_namespace AS table_namespace
   ON table_namespace.oid = table_relation.relnamespace
-WHERE table_namespace.nspname NOT IN ('pg_catalog', 'information_schema')
-  AND table_namespace.nspname NOT LIKE 'pg_toast%'
-  AND table_namespace.nspname NOT LIKE 'pg_temp_%'
+WHERE table_namespace.nspname IN ('crm', 'crm_api', 'crm_auth')
 ORDER BY table_schema, table_name, index_name
 LIMIT 5001;
 
@@ -244,9 +235,7 @@ JOIN pg_catalog.pg_proc AS routine
 JOIN pg_catalog.pg_namespace AS routine_namespace
   ON routine_namespace.oid = routine.pronamespace
 WHERE NOT trigger_entry.tgisinternal
-  AND namespace.nspname NOT IN ('pg_catalog', 'information_schema')
-  AND namespace.nspname NOT LIKE 'pg_toast%'
-  AND namespace.nspname NOT LIKE 'pg_temp_%'
+  AND namespace.nspname IN ('crm', 'crm_api', 'crm_auth')
 ORDER BY schema_name, relation_name, trigger_name
 LIMIT 5001;
 
@@ -259,6 +248,7 @@ SELECT
 FROM pg_catalog.pg_extension AS extension
 JOIN pg_catalog.pg_namespace AS namespace
   ON namespace.oid = extension.extnamespace
+WHERE namespace.nspname IN ('crm', 'crm_api', 'crm_auth')
 ORDER BY extension_name
 LIMIT 5001;
 
@@ -272,6 +262,12 @@ SELECT
   publication.pubdelete,
   publication.pubtruncate
 FROM pg_catalog.pg_publication AS publication
+WHERE EXISTS (
+  SELECT 1
+  FROM pg_catalog.pg_publication_tables AS publication_tables
+  WHERE publication_tables.pubname = publication.pubname
+    AND publication_tables.schemaname IN ('crm', 'crm_api', 'crm_auth')
+)
 ORDER BY publication_name
 LIMIT 5001;
 
@@ -282,6 +278,7 @@ SELECT
   publication_tables.schemaname AS schema_name,
   publication_tables.tablename AS relation_name
 FROM pg_catalog.pg_publication_tables AS publication_tables
+WHERE publication_tables.schemaname IN ('crm', 'crm_api', 'crm_auth')
 ORDER BY publication_name, schema_name, relation_name
 LIMIT 5001;
 

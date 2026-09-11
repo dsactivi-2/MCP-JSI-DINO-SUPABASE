@@ -2,11 +2,14 @@
 
 Recruiter treba pronaći relevantne kandidate u CRM-u s približno 200.000 zapisa
 koristeći B/H/S, njemački ili engleski. Obim je projektna procjena
-(DURCH DISCOVERY ZU PRÜFEN), ne potvrđen broj zapisa. Upit opisuje poslovne kriterije poput
+(DURCH DISCOVERY ZU PRÜFEN), ne potvrđen broj zapisa. Upit opisuje poslovne
+kriterije poput
 zanimanja, iskustva, lokacije, jezika, vještina i dostupnosti. Prikaz rezultata
 treba omogućiti ljudsku procjenu prikladnosti kandidata.
 
 ## Rječnik
+
+<!-- markdownlint-disable MD013 -->
 
 | Pojam | Značenje u ovom projektu |
 | --- | --- |
@@ -27,6 +30,8 @@ treba omogućiti ljudsku procjenu prikladnosti kandidata.
 | Tenant | Autorizacijski opseg; njegovo stvarno postojanje i mapiranje tek se utvrđuju. |
 | Discovery | Odobreni read-only postupak utvrđivanja sheme i kvaliteta podataka. |
 
+<!-- markdownlint-enable MD013 -->
+
 Rječnik opisuje poslovne koncepte, ne fizičke tabele, kolone ili postojeće role.
 Nepoznate vrijednosti i neslaganja izvora ostaju otvorena do audita i odluke
 odgovornog vlasnika.
@@ -42,3 +47,6 @@ odgovornog vlasnika.
   otvorene odluke aktivnog design intervjua.
 - [Discovery runbook](docs/runbooks/schema-discovery.md) određuje postupak
   provjere nepoznatih činjenica.
+- [ADR-0004](docs/decisions/0004-automated-database-development.md) i
+  [runbook automatizacije](docs/runbooks/database-development-automation.md)
+  određuju kako se nakon discoveryja SQL piše, provjerava, optimizira i pušta.

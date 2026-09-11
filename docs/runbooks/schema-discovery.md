@@ -24,6 +24,17 @@ zamjenjuje nijedan Gate-B korak ili freigabe. Prikazani policy redovi sami ne
 dokazuju da je RLS uključen ili forsiran, da su policies potpune niti kakva su
 efektivna prava uloga.
 
+## Konsolidovani pristupni put
+
+[Zugangsplan](../discovery/access-plan-consolidated.md) određuje bootstrap,
+restore, izbor B1-verzije i per-query coverage. B1 V2 nije automatski sljedeći
+lauf; nova rola traži vlastiti V3 paket. B2/B3 SQL nacrti nemaju implementirane
+launchere/markere; precizna objektallowlista i njihove freigabe tek slijede.
+Trenutni uski B2 scope ne dokazuje globalni Q9 inventar. Developer-MCP ne smije
+pristupiti potvrđenom produkcijskom projektu sa stvarnim kandidatima; eventualni
+plugin-gate vrijedi samo za zasebnu neprodukcijsku evaluaciju bez takvih
+podataka.
+
 ## Preduslovi
 
 Rad se ne pokreće dok nisu ispunjeni svi uslovi:
@@ -83,7 +94,8 @@ identifikacione brojeve ili nepotrebne lične podatke.
 6. Prikupiti samo agregirane data-quality metrike za ključna search polja.
 7. Izvršiti samo pregledane query-plan provjere unutar odobrenog opterećenja.
 8. Redigirati i pregledati rezultate prije zapisivanja u repozitorij.
-9. Dokumentirati potvrđene činjenice odvojeno od pretpostavki i otvorenih odluka.
+9. Dokumentirati potvrđene činjenice odvojeno od pretpostavki i otvorenih
+   odluka.
 10. Ukinuti ili deaktivirati privremeni pristup prema odobrenom postupku.
 
 ## Stop kriteriji
@@ -112,6 +124,11 @@ Discovery paket mora sadržavati samo pregledane i minimizirane artefakte:
 - mapiranje na kanonski model;
 - listu potvrđenih činjenica, rizika i otvorenih odluka.
 
+Nakon prihvata discovery paketa njegovi redigirani schema, index i plan nalazi
+postaju ulaz u
+[runbook automatizacije baze](database-development-automation.md). Discovery
+ne generira niti primjenjuje implementacijske migracije.
+
 ## Verifikacija
 
 Završna provjera potvrđuje:
@@ -123,5 +140,6 @@ Završna provjera potvrđuje:
 - otvorena pitanja nisu predstavljena kao činjenice;
 - privremeni pristup je zatvoren ili predan odgovornom vlasniku na zatvaranje.
 
+<!-- markdownlint-disable-next-line MD013 -->
 Ako bilo koja provjera ne uspije, rezultat je `FAIL` ili `PASS_WITH_GAPS`, nikada
 `PASS`.
