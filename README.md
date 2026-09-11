@@ -27,6 +27,9 @@ Pročitati [stanje projekta](docs/project.md), zatim
 | [ADR-0004](docs/decisions/0004-automated-database-development.md) | Prihvaćena automatizacija SQL razvoja, testiranja, optimizacije i release gateova. |
 | [Runbook automatizacije baze](docs/runbooks/database-development-automation.md) | Redoslijed lokalnih, CI, performance i produkcijskih provjera nakon scaffolda. |
 | [Plan automatizacijskih ticketa](docs/planning/release-1-automation-tickets.md) | Blockers-first nacrt ticketa prije zasebne Linear freigabe. |
+| [SDK integracijski plan](docs/planning/sdk-integration-plan.md) | Ažurirani prijedlog MCP/Supabase sklopa, token granice i SDK-01–08 gateovi; nije implementacija. |
+| [SDK primarna provjera](docs/research/mcp-supabase-sdk-integration.md) | Verzijske korekcije, auth/transport rizici i optimizacije iz službenih izvora. |
+| [Provjera SDK dokumentacije](docs/reviews/2026-09-11-sdk-documentation-verification.md) | Lokalna verifikacija dopune i granice preostalog integracijskog dokaza. |
 | [Q8.4.2 istraživanje](docs/research/berufssuchprofile-q8-4-2.md) | Primarne reference i evaluacija kontrolisanih Berufssuchprofila. |
 | [Audit i matrica korekcija](docs/reviews/decision-reconstruction-corrections.md) | Odobrene dokumentacijske korekcije, evidencija i otvorene odluke; izvorni audit ostaje historijski nalaz. |
 | [Discovery runbook](docs/runbooks/schema-discovery.md) | Preduslovi i postupak odobrenog read-only audita. |

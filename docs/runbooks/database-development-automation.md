@@ -68,6 +68,18 @@ incident/on-call/rollback postupak; kasnija dorada nije zamjena tog gatea.
 
 ## Stop kriteriji
 
+Za promjene MCP SDK-a, auth/DB adaptera ili middlewarea primijeniti i
+[SDK-01–08](../planning/sdk-integration-plan.md#provjerljivi-gateovi-i-radni-paketi)
+u postojećim AUTO/AUTH/OPS/CLIENT paketima. Dependency upgrade zahtijeva
+fiksiran skup verzija, contract/auth/transport regresiju i provjeren povratak.
+Protokolski testovi prate odabranu verziju; starije sesije nisu univerzalni
+zahtjev novog transporta. Zelen Fake-MCP ili Inspector ne zamjenjuje stvarni
+sintetički DB privilege/RLS/RPC test.
+
+Neprovjeren MCP audience/downstream credential put, korisnički kontekst
+podijeljen između zahtjeva, alpha komponenta bez odluke ili middleware koji
+blokira streaming zaustavljaju promociju jednako kao neuspjeli DB gate.
+
 - migracija mijenja importovanu tabelu u aditivnoj A fazi;
 - lokalni ili CI tok zavisi od produkcijskog credentiala ili ručnog skrivenog
   koraka;

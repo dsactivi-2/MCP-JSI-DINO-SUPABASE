@@ -103,6 +103,14 @@ export narrows discovery but does not authorize or replace Gate B.
   development or test project without real personal data and its own approved
   gate.
 
+### Runtime SDK integration
+
+- Before selecting or changing MCP SDKs, Supabase runtime clients, auth
+  middleware or HTTP transports, read
+  [SDK integration plan](docs/planning/sdk-integration-plan.md).
+- Keep SDK generation, protocol version and runtime adapter aligned. Documented
+  recommendations are not installed dependencies or proven authentication.
+
 ### Issue tracker
 
 Use the dedicated Linear project Dino problem baza CRM in team Activi (`ACT`).

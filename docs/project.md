@@ -36,6 +36,9 @@ MCP-kompatibilne klijente.
   određuje razvojne, CI, performance i release gateove nakon discoveryja.
 - [Plan automatizacijskih ticketa](planning/release-1-automation-tickets.md)
   daje blockers-first redoslijed prije zasebne Linear freigabe.
+- [SDK integracijski plan](planning/sdk-integration-plan.md) razrađuje MCP,
+  Supabase adapter, token granice i provjere; dokumentovani prijedlog nije
+  instalacija niti potvrđen stack.
 - [Plan statičke schema analize](discovery/schema-analysis-tasklist.md) vodi
   preflight i obradu korisnički dostavljenog izvoza bez bazne konekcije.
 - [Supabase tooling](agents/supabase-tooling.md) razdvaja projektne skills,
@@ -93,6 +96,17 @@ read-only 2026-09-10.
 
 Aplikacijski scaffold ne postoji. Jezik, framework, runtime, package manager,
 hosting, auth model i fizički database ugovor još nisu odabrani ili potvrđeni.
+Q11 potvrđuje lokalnu SDK konsolidaciju i paralelnu provjeru. Ažurirani
+[plan](planning/sdk-integration-plan.md) preferira evaluaciju TypeScript
+MCP SDK-a v2 i uskog Supabase adaptera; `@supabase/server` je uslovljen auth
+ugovorom, a `@supabase/middleware` dodatnom potrebom i alpha odlukom.
+[Primarna provjera](research/mcp-supabase-sdk-integration.md) koriguje raniji
+v1 paketni primjer i odvaja MCP tokene od downstream DB credentiala.
+SDK-01–08 su planirane provjere u postojećim radnim paketima, ne izvršeni
+testovi. SDK odabir ne uklanja Q9, Discovery, AUTO-02 ili release gateove.
+[Provjera SDK dokumentacije](reviews/2026-09-11-sdk-documentation-verification.md)
+odvaja lokalni rezultat i preostale gapove.
+
 Dokumentacijske provjere opisane su u
 [README.md](../README.md#provjera-dokumentacije); aplikacijske provjere još
 nisu uspostavljene. Povezani audit baze nije proveden. Lokalni, schema-only

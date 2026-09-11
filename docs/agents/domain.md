@@ -14,6 +14,9 @@ Repozitorij ima jedan domenski kontekst. Njegov rječnik je u korijenskom
 4. Za SQL razvoj, testiranje, optimizaciju i release provjere koristiti
    [ADR-0004](../decisions/0004-automated-database-development.md) i
    [runbook automatizacije](../runbooks/database-development-automation.md).
+5. Za MCP SDK, auth middleware ili Supabase runtime adapter koristiti
+   [SDK plan](../planning/sdk-integration-plan.md) i njegovu primarnu provjeru.
+   Preporuka, potvrđena odluka i izvršeni integration test imaju odvojene statuse.
 
 ## Održavanje
 

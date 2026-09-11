@@ -26,6 +26,14 @@ starog test-ID-a imaju stabilnu REQ-ID kao identitet acceptance slučaja.
 Fachliche Sollwerte nastaju iz potvrđenih pravila i ručno pregledanih primjera,
 nezavisno od generiranih validatora i implementacije.
 
+## SDK razrada postojećih kriterija
+
+[SDK integracijski plan](sdk-integration-plan.md) povezuje provjerene SDK
+mogućnosti s postojećim auth, contract, transport i runtime granicama.
+SDK-01–08 su planirani testovi, ne izvršena evidencija. Izbor konkretne
+biblioteke ostaje OFFEN u AUTO-02; sigurnosni kriteriji vrijede i za alternativni
+adapter. Dodatni middleware nije obavezan proizvod.
+
 ## Jedinstveni release status i provjerljiva abnahme
 
 Dugi redovi su namjerno tabelarni radi potpunog mappinga.
@@ -45,6 +53,7 @@ Dugi redovi su namjerno tabelarni radi potpunog mappinga.
 | REQ-TAX-01 | R1 obavezno | Brief MH2; Q8.4 | Data/Product | TAX-01 | DATA-01 | B/H/S-DE-EN ID/naziv/sinonim/odobrenje/vlasnik/verzija; samo odobreni sinonimi ekvivalentni; dvosmislenost traži pojašnjenje (LANG-02, TYPO-01, AMB-01). |
 | REQ-PROF-01 | R1 obavezno | ADR-0003; Q8.4.2 | Data/Product | TAX-01 | DATA-01 | Verzionirani neekskluzivni profili odvajaju tri kategorije; isti pojam pripada dvama profilima i ostaje direktno pretraživ; brisanje članstva ne mijenja druge profile. |
 | REQ-CONTRACT-01 | R1 obavezno | ADR-0001/0004; Brief MH4 | Product/Security | AUTO-02, AUTO-05 | DEC-01 | Jedan odobren input/output/error/cursor ugovor izvodi sheme, validatore i tipove; drift blokira CI; unknown field/type/range/ID se odbija (SCHEMA-01, RANGE-01, CON-01). |
+| REQ-SDK-01 | R1 integracija; biblioteke OFFEN | Q11; SDK plan; ADR-0001/0004 | Security/Operations | AUTO-02, AUTO-03, AUTH-01, AUTO-05, OPS-01, CLIENT-01, REL-01 | DEC-01; odobren stack i scaffold | SDK-01/05/08: usklađene SDK/protokol/runtime verzije, lockfile i alpha odluka; stvarni HTTP/proxy test, upgrade/povratak i podržani klijenti. V1/v2 importi i legacy/novi transport ne miješaju se. |
 | REQ-FILTER-01 | R1 obavezno; detalji OFFEN | Q5, Q8, Q8.5; Brief MH2.1 | Product/Privacy | SEARCH-02 | SEARCH-01, DEC-01 | Dob/ref-datum, iskustvo, zanimanja, aktivnosti, lokacija, jezici, vještine, dostupnost, svježina i text prema odobrenom ugovoru; uključene/isključene granične vrijednosti nezavisno provjerene. Q8.5 se ne pretpostavlja. |
 | REQ-FILTER-02 | R1 obavezno | Q8 potvrđeni dio | Product | SEARCH-02 | SEARCH-01 | Izostavljeno ostaje neaktivno; iskustvo ne aktivira Ausbildung; L-OMIT-01 nikad ne dodaje dob ili jezik. |
 | REQ-FILTER-03 | R1 obavezno | Q7; ADR-0001 | Product | SEARCH-02 | SEARCH-01 | ZERO-01: tačno nula i prijedlog; bez nove pretrage dok korisnik ne potvrdi konkretnu promjenu. Opća potvrda ostaje prijedlog. |
@@ -55,7 +64,7 @@ Dugi redovi su namjerno tabelarni radi potpunog mappinga.
 | REQ-PAGE-01 | R1 obavezno | Brief acceptance | Data/Security | SEARCH-02 | SEARCH-01 | PAGE-01/CURSOR-02: duboke stranice bez velikog OFFSET-a, potpis/version/filter/sort/tenant veze; manipulacija i promjena konteksta odbijeni; snapshot garancija dokumentovana. |
 | REQ-TOOL-02 | R1 obavezno | Brief MH3 | Security/Product | TOOL-02 | DATA-01, AUTH-01, AUTO-05 | get_candidate_profile vraća jedan dozvoljeni profil, sigurno tretira nepostojeći/tuđi ID i nema kontakata ni u tekstualnom fallbacku (RLS-01, CONTACT-R1). |
 | REQ-TOOL-03 | R1 obavezno | Brief MH3 | Data/Product | TOOL-03 | TAX-01, AUTH-01, AUTO-05 | get_filter_options ograničeno razrješava dozvoljeno polje, query, pojmove i profile; bez kandidatskih podataka, SQL identifikatora i neograničenih lista. |
-| REQ-AUTH-01 | R1 obavezno; model OFFEN | ADR-0001; Brief MH6 | Security | AUTH-01 | AUTO-02, AUTO-03 | Svaki poziv validira identitet, audience i svrhu; tuđi/istekli token i nedozvoljeni scope odbijeni. Tenant/rola dolaze iz potvrđenog modela, ne iz korisničkog JSON-a. |
+| REQ-AUTH-01 | R1 obavezno; model OFFEN | ADR-0001; Brief MH6 | Security | AUTH-01 | AUTO-02, AUTO-03 | SDK-02/03: svaki poziv validira identitet, issuer, MCP audience i svrhu; tuđi/istekli token i nedozvoljeni scope odbijeni. Downstream credential je zasebno odobren, bez MCP token passthrougha. Tenant/rola dolaze iz potvrđenog modela, a paralelni zahtjevi ne dijele korisnički kontekst. |
 | REQ-AUTH-02 | R1 obavezno | ADR-0001/0003; Brief MH6 | Security | AUTH-02 | AUTH-01, DATA-01, AUTO-04 | Negativni DB testovi rola/tenant/kolona/routine/view i PUBLIC prava; bez owner/superuser/BYPASSRLS/migration prava u runtimeu (RLS-01, ROLE-01). |
 | REQ-CONTACT-01 | R1 obavezno | Q4; Brief acceptance | Privacy/Security | AUTH-02, CLIENT-01 | AUTH-01 | CONTACT-R1 na svim alatima, strukturiranom/tekst izlazu, greškama, logovima i promptima: nijedna rola ne dobija kontakte. |
 | REQ-LIMIT-01 | R1 obavezno | Brief MH6/9 | Operations/Security | OPS-01 | AUTO-03, AUTO-05 | Per-user/tenant/client rate, globalni backpressure, concurrency, request/response size, timeout i cancel negativni testovi; jedan kvar ne ostavlja DB upit aktivnim (PERF-02, LOAD-01). |

@@ -8,6 +8,8 @@
 - Alias nije dokaz ciljne konfiguracije, pristupa ili vlasništva.
 - Korekcija 2026-09-11: prema korisničkom odobrenju nalaza audita; bez
   implementacije ili pristupa bazi.
+- SDK dopuna 2026-09-11: Q11 dokumentacijska konsolidacija; ažurirani
+  integracijski prijedlog i provjere, bez instalacije ili konačnog stack izbora.
 
 Opseg: dokumentacija; bez pristupa produkcijskim podacima i bez promjena baze
 
@@ -178,14 +180,24 @@ flowchart LR
 
 ### Tok produkcijskog upita
 
+Tehničku implementaciju ovog toka razrađuje
+[SDK integracijski plan](planning/sdk-integration-plan.md). On odvaja službeni
+MCP SDK od Supabase auth/DB adaptera i opcionalne middleware kompozicije.
+TypeScript v2 je kandidat; raniji `@modelcontextprotocol/sdk` primjer pripada
+v1 generaciji. Izbor tačne verzije/protokola i podržanih klijenata prolazi
+AUTO-02. Ni SDK biblioteka ni razvojni Supabase plugin nisu gotov CRM runtime.
+
 VORLÄUFIGER VORSCHLAG za tok potvrde: prije svake nove ili izmijenjene
 pretrage prikazati filtere i zatražiti potvrdu, zatim ponoviti validaciju.
 Opća obaveza potvrde još nije konačna odluka. Q7 zasebno obavezno zahtijeva
 saglasnost prije izvršavanja olabavljene pretrage.
 
-1. MCP klijent autentificira korisnika i prosljeđuje tekstualni zahtjev.
-2. LLM prepoznaje jezik i prevodi namjeru u predložene strukturirane filtere.
-3. MCP normalizira termine kroz odobrenu višejezičnu taksonomiju.
+1. MCP klijent dobija korisnički zahtjev; njegov LLM prepoznaje jezik i
+   prevodi namjeru u predložene strukturirane filtere za određeni alat.
+2. Server autentificira svaki MCP zahtjev/poziv i provjerava njegovu publiku,
+   svrhu i opseg; klijentska prijava nije zamjena server-side provjere.
+3. MCP normalizira termine kroz odobrenu višejezičnu taksonomiju. Osnovni tok
+   ne zahtijeva dodatni OpenAI model poziv u serveru.
 4. JSON Schema odbija nepoznata polja, pogrešne tipove, preširoke raspona i
    nedozvoljene vrijednosti.
 5. Ako je upit materijalno nejasan, MCP vraća zahtjev za pojašnjenje bez poziva
@@ -194,7 +206,8 @@ saglasnost prije izvršavanja olabavljene pretrage.
    filtere i primjenjuje identitet, tenant kontekst, rate limit, timeout i
    result cap.
 7. MCP poziva samo unaprijed definisanu, parametriziranu PostgreSQL RPC
-   funkciju.
+   funkciju kroz odobren DB identitet. MCP token se ne prosljeđuje automatski
+   downstream API-ju; credential/token ugovor je zaseban preduslov AUTH-01.
 8. PostgreSQL filtrira, rangira i paginira te vraća minimalni skup kolona.
 9. MCP vraća rezultate, interpretirane filtere, dokaze poklapanja i sljedeći
    cursor.
@@ -701,6 +714,14 @@ ugovor i mjerene planove.
 - Sigurne, mašinski čitljive greške bez SQL detalja, stack tracea ili PII-a.
 - Redovna revizija grantova, RLS testova, ključeva i pristupnih logova.
 
+Za SDK implementaciju ovih obaveza važe
+[SDK-02/03/06](planning/sdk-integration-plan.md#provjerljivi-gateovi-i-radni-paketi).
+Native MCP auth primitive su prvi kandidat; Supabase wrapper se dodaje samo
+uz dokazan token ugovor. `withClaims` nije obavezni login gate, a RLS-scoped
+client sam ne garantuje read-only. Runtime ne koristi admin client. Auth
+kontekst pripada zahtjevu; zajednički promjenjivi client ne smije prenijeti
+prava između korisnika.
+
 ### 7. Kontrole protiv halucinacija i manipulacije
 
 - Rezultati smiju sadržavati samo zapise koje je vratila baza.
@@ -915,6 +936,11 @@ Minimalni release je prihvatljiv samo kada su svi kriteriji dokazani artefaktom:
 
 ## Test-matrica
 
+SDK-specifični slučajevi SDK-01–08 vode se u
+[integracijskom planu](planning/sdk-integration-plan.md#provjerljivi-gateovi-i-radni-paketi)
+i mapirani su na postojeće R1 pakete. Razrađuju verzije, OAuth/downstream
+granice, izolaciju, transport, limite i upgrade; nisu izvršeni testovi.
+
 LANG-EQ-01 je nezavisni poslovni oracle za tri jezična primjera: zanimanje
 mehaničar, **grad** Sarajevo, dob 25–35, iskustvo najmanje 5 godina, jezik
 njemački bez izmišljenog nivoa i dostupnost sada. Ausbildung, vještine i
@@ -1118,6 +1144,9 @@ vlasnika:
 23. Da li su SEM-UC-01, SEM-UC-02 i DQ-UC-01 dozvoljeni i koji mjerljivi problem
     opravdava vektorski backend? Ako postoji dokaz, koji backend prolazi
     [evaluacijski gate](research/semantic-search-evaluation-gate.md)?
+24. Koji tačan MCP SDK/protokol/runtime skup prolazi klijentsku matricu i
+    opravdava Supabase wrapper ili alpha middleware? Koji odobren token put
+    povezuje MCP resource sa DB identitetom bez token passthrougha?
 
 ## Potencijalno zaboravljene teme
 
@@ -1176,6 +1205,7 @@ Ovo je sažetak odluka briefa. Dugoročne arhitekturne odluke održavaju se u
 | D-019 | Na odluci nakon evaluacije | Semantička pretraga se ne bira po vendor funkciji. Nakon discoveryja i product odluke gate poredi nevectorski baseline, `pgvector` i Vector Bucket/S3 Wrapper; Call Memory ostaje izvan opsega. |
 | D-020 | Prihvaćeno | Kratkoročno se gradi aditivna opcija A bez izmjene importovanih tabela; isti kompatibilni elementi zatim se kroz provjerene migracijske rezove proširuju u kanonski cilj opcije D. |
 | D-021 | Prihvaćeno | ADR-0004 uvodi Supabase-native automatizaciju: AI priprema samo diff, a lokalni reset, lint, pgTAP, contract, plan, CI, dry-run i freigabe čine obavezni put. pganalyze i drugi dodatni alati ulaze samo nakon mjerljivog triggera. |
+| D-022 | Q11 dokumentacija potvrđena; stack OFFEN | SDK plan razrađuje TypeScript MCP v2, uslovni Supabase auth/DB adapter i opcionalnu alpha middleware. Native MCP auth prvo; token granice, verzije i SDK-01–08 zahtijevaju dokaz. Nema novog runtime model poziva, instalacije ili produkcijske freigabe. |
 
 <!-- markdownlint-enable MD013 -->
 

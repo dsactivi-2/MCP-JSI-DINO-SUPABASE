@@ -22,6 +22,8 @@ treba omogućiti ljudsku procjenu prikladnosti kandidata.
 | Relevante Berufserfahrung | VORLÄUFIGER VORSCHLAG: trajanje stručno odgovarajućih radnih perioda. Cijela Q8.5 je OFFEN, uključujući izbor ukupnog ili relevantnog iskustva i način obračuna; ovo nije potvrđena definicija. |
 | Aktiver Filter | Korisnik ga je izričito naveo ili potvrdio u pregledu; nenavedena kategorija je neaktivna i ne ograničava rezultat. |
 | Profilverwaltungs-MCP | Interna upravljačka granica za nacrte, provjeru i verzionirano objavljivanje Berufssuchprofila; odvojena je od read-only Runtime-Such-MCP-a. |
+| Runtime-Such-MCP | Kontrolisana read-only granica za pretragu, pojedinačni profil i dozvoljene filteropcije; korisnikov identitet i dozvoljeni opseg vrijede za svaki poziv. |
+| Autentificirani akter | Provjereni pozivalac; sama prijava ne daje pravo na svaki kandidat, profil ili administrativnu radnju. |
 | Kanonski model | Dogovoreni domenski pojmovi na koje se mapira stvarna shema. |
 | Taksonomija | Verzija odobrenih pojmova, identifikatora i višejezičnih sinonima. |
 | Dokaz poklapanja | Podatak koji objašnjava zbog čega kandidat zadovoljava filter. |
@@ -41,6 +43,8 @@ odgovornog vlasnika.
 - [Stanje projekta](docs/project.md) prati fazu, otvorene uslove i naredni cilj.
 - [Implementacijski brief](docs/SUPABASE_CRM_MCP_IMPLEMENTATION_BRIEF.md)
   definira zahtjeve i kriterije prihvata.
+- [SDK integracijski plan](docs/planning/sdk-integration-plan.md) čuva
+  tehničku razradu i otvorene provjere; SDK detalji nisu domenski pojmovi.
 - [ADR-0001](docs/decisions/0001-controlled-query-boundary.md) definira
   prihvaćenu arhitekturnu granicu.
 - [ADR-0002](docs/decisions/0002-search-design-interview.md) čuva potvrđene i

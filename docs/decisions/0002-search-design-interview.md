@@ -431,6 +431,35 @@ den Supabase-Datenbestand zugreifen, bleibt `DURCH DISCOVERY ZU PRÜFEN`.
 Der read-only Audit bestimmt die physischen Strukturen, Mappings und sicheren
 Schnittgrenzen; er ändert nicht mehr die bestätigte Grundrichtung A nach D.
 
+### Q11 – SDK-Erkenntnisse in die Projektplanung übernehmen
+
+**Auftrag vom 2026-09-11, normalisiert:** Die gelesenen MCP-/Supabase-SDK-
+Informationen mit `ask-matt` in die passenden Projektunterlagen einarbeiten,
+die Spezifikation konsistent aktualisieren und parallel Integrationslücken
+sowie weitere Optimierungen prüfen.
+
+**Status:** `BESTÄTIGT` für lokale Dokumentationsaktualisierung und parallele
+Recherche. Die SDKs sind dokumentarisch untersucht; ihre Installation und das
+reibungslose Zusammenspiel im Projekt sind nicht nachgewiesen.
+
+**Planungsvorschlag:** Offizielles MCP-SDK v2 als Protokollschicht und zuerst
+seine nativen Auth-Hilfen evaluieren; `@supabase/server` als möglicher Adapter
+bei passendem
+Identitätsvertrag; `@supabase/middleware` nur bei nachgewiesenem Zusatznutzen.
+Die TypeScript-Variante passt direkt zu diesen JavaScript-Paketen. Dieser
+Vorteil ist keine endgültige Sprach-, Hosting- oder Authentscheidung.
+
+**OFFEN:** Stack-/Versionsauswahl, Alpha-Akzeptanz, OAuth-/Tokenvertrag,
+DB-Identitätsabbildung und praktische Integrationsnachweise. Q9, Q8.5, Q4.5,
+ADR-0001/0003/0004 sowie bestehende Discovery- und Produktionsfreigaben bleiben
+unverändert. Es wurden weder Installation noch Datenbankzugriff, Deployment
+oder Linear-Writes beauftragt.
+
+Die aktualisierte technische Fassung liegt im
+[SDK-Integrationsplan](../planning/sdk-integration-plan.md); Quellen und
+unabhängige Prüfung stehen in der
+[SDK-Recherche](../research/mcp-supabase-sdk-integration.md).
+
 ## Fortschreibung während des Interviews
 
 Vor jeder neuen Interviewrunde wird dieses Dokument gelesen. Nach jeder

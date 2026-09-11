@@ -35,6 +35,20 @@ Kein Anwendungscode oder Stack wird durch diesen Plan ausgewählt. Die
 bestehende Interview-/Scaffold-Sperre gilt; die gewünschte formale Entkopplung
 späterer Interviewthemen ist [ENTWURF E-01](decision-drafts.md).
 
+## SDK-Integration in diesen Plan
+
+Die [angepasste SDK-Fassung](sdk-integration-plan.md) ergänzt bestehende Pakete
+um SDK-01–08. Sie ersetzt die frühere pauschale Empfehlung
+„MCP-SDK plus Supabase-Wrapper“ durch einen geprüften Kandidaten: MCP v2,
+ein zuständiger MCP-Auth-Adapter und ein getrennt kontrollierter DB-Adapter.
+Supabase Server wird nur bei passendem Tokenvertrag gewählt; zusätzliche
+Alpha-Middleware muss Nutzen und Kompatibilität belegen.
+
+Quellenrecherche und Dokumentation sind jetzt möglich. Installations-, Auth-,
+Transport- und DB-Tests bleiben an AUTO-02/03 und ihre bisherigen Blocker
+gebunden. Es entstehen keine zusätzlichen Dienste oder Linear-Tickets allein
+aufgrund verfügbarer SDKs.
+
 ## Pakete mit Owner, Blockern und Evidenz
 
 Die angegebenen Rollen werden derzeit vom Nutzer übernommen. Die verlinkten
@@ -58,13 +72,13 @@ innerhalb dieser Gruppe. Diese Tabelle ersetzt keinen ausführbaren Test.
 | DISC-06 | Data/Discovery | DISC-04, DISC-05 | Relevante Objekte wählen; eigene DQ-/EXPLAIN-Gates, genehmigte Last, aggregierter Qualitäts- und Planbericht; globale Scope-Lücken schließen | REQ-DISC-06 | DISCOVERY NÖTIG |
 | AUTO-01 | Discovery/Data | DISC-03, DISC-04, DISC-05, DISC-06 | Abgenommener vollständiger Discovery-Bericht mit Fakten/Annahmen/Coverage; kein eigener Sammellauf aller Gates | REQ-DISC-03–06 | BLOCKED |
 | DEC-01 | Product/Data/Security | AUTO-01 | Verbleibendes Interview gemäß Q9 abschließen; Q8.5, Q4.5, Operatoren, Auth, Alter, Ranking, Betrieb entscheiden; Quellen sofort in ADR-0002 erfassen | REQ-CONTRACT-01, REQ-FILTER-01 | OFFEN; E-01 nicht vorausgesetzt |
-| AUTO-02 | Product/Data/Security | DEC-01 | Gemeinsamer kanonischer JSON/MCP/RPC/Error/Cursor-Vertrag und Stack-/Hostingentscheidung; Freigabe, kein erneuter Interviewabschluss als eigene Aufgabe | REQ-CONTRACT-01 | BLOCKED |
-| AUTO-03 | Operations | AUTO-02, ENV-01 | Isolierter lokaler Scaffold, gepinnte Runtime/CLI/Images, synthetische Seeds; getestete lokale Zielbindung; keine gehostete Stagingpflicht | REQ-AUTO-01 | BLOCKED |
+| AUTO-02 | Product/Data/Security | DEC-01 | Gemeinsamer JSON/MCP/RPC/Error/Cursor-Vertrag; Stack/Hosting und SDK-01-Auswahl mit Protokollgeneration, Alpha-Abwägung und Token-/Adaptervertrag; Freigabe | REQ-CONTRACT-01, REQ-SDK-01 | BLOCKED |
+| AUTO-03 | Operations | AUTO-02, ENV-01 | Isolierter lokaler Scaffold, gepinnte Runtime/CLI/Images/SDKs und Dependency-Lockfile (SDK-01/08), synthetische Seeds; getestete lokale Zielbindung; keine gehostete Stagingpflicht | REQ-AUTO-01, REQ-SDK-01 | BLOCKED |
 | DATA-01 | Data | AUTO-02, AUTO-03 | D-kompatibler additiver Modell-/Migrationsentwurf mit lineage; erste Implementierungsmigration erst nach AUTO-04-Gates | REQ-MODEL-01 | BLOCKED |
 | TAX-01 | Data/Product | DATA-01 | Versionierter Taxonomie-/Profilvertrag und multilingualer Referenzsatz; nicht exklusive Mitgliedschaften und direkt suchbare Konzepte | REQ-TAX-01, REQ-PROF-01 | BLOCKED |
 | AUTO-04 | Data/Security | AUTO-03 | Gemeinsamer lokaler/CI-DB-Gate: lint nonzero, pgTAP, Negativkontrollen, Frischaufbau, Upgrade und Rückschaltung; Katalogassertions statt nur Schema-Diff | REQ-AUTO-02 | BLOCKED |
-| AUTO-05 | Security/Product | AUTO-02, AUTO-03 | MCP-Fake-Adapter/Contract- und Injection-Gates parallel zu AUTO-04; generierte Schemas/Typen deterministisch prüfen; Promptfoo nur nach ENV-02-Nachweis | REQ-AUTO-03, REQ-INJECT-01 | BLOCKED; Integration benötigt AUTO-04 |
-| AUTH-01 | Security | AUTO-02, AUTO-03 | Kleiner Auth-/Client-POC für bestätigten Identitätsvertrag mit negativen Token-/Scope-Fällen und nachvollziehbarer Client-Matrix | REQ-AUTH-01, REQ-TRANSPORT-01 | BLOCKED |
+| AUTO-05 | Security/Product | AUTO-02, AUTO-03 | MCP-Fake-Adapter/Contract- und Injection-Gates parallel zu AUTO-04; SDK-04: Schemas/Typen und minimierte Ausgaben; Promptfoo nur nach ENV-02-Nachweis | REQ-AUTO-03, REQ-INJECT-01, REQ-SDK-01 | BLOCKED; Integration benötigt AUTO-04 |
+| AUTH-01 | Security | AUTO-02, AUTO-03 | SDK-02/03: MCP issuer/audience/scope, OAuth metadata, getrennte Downstream-Credentials und parallele Kontextisolation im bestätigten Identitätsvertrag; Client-Matrix | REQ-AUTH-01, REQ-TRANSPORT-01, REQ-SDK-01 | BLOCKED |
 | AUTH-02 | Security/Privacy | AUTH-01, DATA-01, AUTO-04, AUTO-05 | DB-Rechte/RLS/Views/Routinen und sämtliche Ausgabewege negativ prüfen; Kontaktfreiheit und stored injection | REQ-AUTH-02, REQ-CONTACT-01, REQ-INJECT-01, REQ-ACCESS-REV-01 | BLOCKED |
 | SEARCH-01 | Data/Security | DATA-01, TAX-01, AUTH-01, AUTO-04, AUTO-05 | Ein durchgängiger Suchfall bis zur tatsächlichen DB-Autorisierung/RPC und MCP-Ausgabe, mit einem negativen Rechtefall | REQ-SEARCH-01 | BLOCKED; Durchstich ist noch kein Release |
 | SEARCH-02 | Product/Data | SEARCH-01 | Alle bestätigten Filter und Randfälle, fachlich unabhängige BS/DE/EN-Sollwerte, zero/relaxation, DB-Ranking, evidence und signed cursor | REQ-FILTER-01–03, REQ-LANG-01, REQ-SEARCH-02, REQ-RANK-01, REQ-PAGE-01, REQ-ADMIN-05 | BLOCKED |
@@ -74,13 +88,13 @@ innerhalb dieser Gruppe. Diese Tabelle ersetzt keinen ausführbaren Test.
 | ADMIN-02 | Product/Data | ADMIN-01, TAX-01, AUTO-04 | Draft-/Versionslesen, Begriffssuche, manuelle Korrekturen, Aliaspflege und quellbelegte Vorschläge; aggregierte Vorschau | REQ-ADMIN-02/03 | BLOCKED |
 | ADMIN-03 | Product/Security | ADMIN-02 | Diff/Validierung/publish confirmation/immutable versions, reactivation/archive/audit und Runtime-Versionstreue | REQ-ADMIN-04/05 | BLOCKED |
 | PRIV-01 | Privacy/Data | GOV-01, AUTO-02 | Rechts-/Datenschutzentscheidung, Retention, purpose/consent und nachweisbare Lösch-/Korrekturpropagation aller vorhandenen Schichten | REQ-PRIV-01, REQ-PRIV-03 | BLOCKED |
-| OPS-01 | Operations/Security | AUTO-03, AUTO-05 | Timeout/cancel/rate/concurrency/backpressure/size-Tests und sichere Fehler; Health-/Readiness-Vertrag | REQ-LIMIT-01, REQ-TRANSPORT-01 | BLOCKED |
+| OPS-01 | Operations/Security | AUTO-03, AUTO-05 | SDK-05/06: versionsgerechter HTTP/SSE-/Proxy-/Body-Test, timeout/cancel/rate/concurrency/backpressure/size und sichere Fehler; Health-/Readiness-Vertrag | REQ-LIMIT-01, REQ-TRANSPORT-01, REQ-SDK-01 | BLOCKED |
 | OPS-02 | Operations/Privacy | AUTO-03, AUTO-05 | PII-freies Logging/Tracing/Audit, Retention und Zugriffsprüfung; versionierte Metrikdefinitionen | REQ-PRIV-02, REQ-TRANSPORT-01 | BLOCKED |
 | OPS-03 | Operations/Data | AUTO-04, GOV-01 | Separat genehmigter echter Restore-Prüfweg mit Integrität und RTO/RPO; Rückschaltung zusätzlich testen; keine abgelehnten Backupartefakte | REQ-RESTORE-01 | BLOCKED; vor Tabellen-/Datenänderungen weiterhin Pflicht |
 | AUTO-06 | Operations/Data | SEARCH-02, TOOL-02, TOOL-03, ADMIN-03, AUTH-02, OPS-01 | Vorab numerische SLO-/Kosten-/Ressourcengrenzen, repräsentative Plan-/Last-/Soakprüfung, explizite Index-Nutzenentscheidung | REQ-PERF-01, REQ-INDEX-01 | BLOCKED |
 | AUTO-07 | Operations | OPS-01, OPS-02, AUTO-06 | Vor Rollout getestete Dashboards/Minimalalarme, Incident-/On-call-/Mitigation-Runbook; kein automatischer DB-Fix | REQ-OPS-01, REQ-ACCESS-REV-01 | BLOCKED; keine Abhängigkeit von Rollout |
-| CLIENT-01 | Product/Security | SEARCH-02, TOOL-02, TOOL-03, AUTH-02, OPS-01 | Alle fünf Zielclients gegen identische Eingabe/Ausgabe/Auth/Cursor/Error/Timeout/PII-/Zugänglichkeitskriterien testen | REQ-CLIENT-01, REQ-CONTACT-01, REQ-PRIV-03 | BLOCKED |
-| REL-01 | Operations/Product/Security | AUTO-06, AUTO-07, CLIENT-01, PRIV-01, OPS-03, ADMIN-03 | Vollständige R1-Matrix, dry-run, upgrade, Rückschaltung, Restore, genaue Diff-/Zielbindung; separate Freigabe, Pilot, Post-Checks und Beobachtungsfenster | REQ-RELEASE-01 | BLOCKED |
+| CLIENT-01 | Product/Security | SEARCH-02, TOOL-02, TOOL-03, AUTH-02, OPS-01 | Alle fünf Zielclients gegen identische Eingabe/Ausgabe/Auth/Cursor/Error/Timeout/PII-/Zugänglichkeitskriterien; SDK-05/08: explizite Protokollmatrix und Upgrade-Kompatibilität | REQ-CLIENT-01, REQ-CONTACT-01, REQ-PRIV-03, REQ-SDK-01 | BLOCKED |
+| REL-01 | Operations/Product/Security | AUTO-06, AUTO-07, CLIENT-01, PRIV-01, OPS-03, ADMIN-03 | Vollständige R1-Matrix, dry-run, upgrade, Rückschaltung, Restore, genaue Diff-/Zielbindung; separate Freigabe, Pilot, Post-Checks und Beobachtungsfenster | REQ-RELEASE-01, REQ-SDK-01 | BLOCKED |
 | MIG-D-01 | Data/Operations | REL-01 | Weitere kleine D-Schnitte: lineage/ID-/Mengengleichheit, RLS/contract/cutover/rollback; Quellarchivierung erst separat | REQ-D-01 | SPÄTER |
 | AUTO-08 | Operations/Data | AUTO-07; 4–8 Wochen repräsentativer Workload | Optionaler pganalyze-Vergleich mit Nutzen/Kosten/Exit-Kriterium; E-02 ist unbeschlossener Ersatzvorschlag | REQ-OPT-02 | OPTIONAL |
 | OPT-01 | Product/Privacy | DEC-01; separate spätere Freigabe | Kontakte, Export, Verlauf, gespeicherte Suchen und Benachrichtigungen jeweils eigenständig spezifizieren und prüfen | REQ-OPT-01 | AUSSERHALB R1 |

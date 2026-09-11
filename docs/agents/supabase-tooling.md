@@ -16,6 +16,9 @@ bez proširenja trenutnog governance ili database opsega.
 | Supabase plugin/MCP | Live razvojni alati za projekt, bazu, advisors, migracije i druge Supabase funkcije. | Dokumentacija je dozvoljena; pristup projektu/bazi je blokiran do zasebnog gatea. |
 | Runtime-Such-MCP | Budući kontrolisani CRM search ugovor. | Nije implementiran; plugin ga ne zamjenjuje. |
 | Profilverwaltungs-MCP | Buduća odvojena administrativna granica iz ADR-0003. | Nije implementiran; plugin nije njegova sigurnosna granica. |
+| Službeni MCP SDK | Biblioteka za protokol i transport vlastitog MCP servisa. | Kandidat je TypeScript v2; paketna generacija i klijentska podrška prolaze AUTO-02/03. |
+| `@supabase/server` | Biblioteka za auth kontekst i Supabase client u našoj aplikaciji. | Uslovni adapter iz SDK plana; nije Supabase developer plugin niti dokaz DB prava. |
+| `@supabase/middleware` | Opcionalna kompozicija obrade zahtjeva. | Alpha; nije osnovni release zahtjev niti zamjena MCP SDK-a. |
 
 <!-- markdownlint-enable MD013 -->
 
@@ -38,6 +41,13 @@ ili razdvojene identitete. Jedna aktivna distribucija je funkcionalno dovoljna.
    tenant, role i RLS ostaju `DURCH DISCOVERY ZU PRÜFEN` do odobrenog audita.
 
 ## Live-MCP gate
+
+Za izbor, promjenu verzije ili povezivanje runtime SDK-a prvo pročitati
+[SDK integracijski plan](../planning/sdk-integration-plan.md). Razlikovati
+MCP audience od downstream DB identiteta; wrapper nije odobrenje token
+passthrougha. Runtime koristi samo kontrolisani RPC adapter, bez admin klijenta.
+Pristup produkciji preko vlastitog budućeg servisa ima release gate; istraživanje
+SDK-a ne mijenja zabranu razvojnog Plugin pristupa ispod.
 
 Javni `search_docs` može se koristiti bez pristupa projektu. Svi pozivi koji
 čitaju ili mijenjaju Supabase account, projekt, shemu, logove ili podatke čekaju
@@ -108,9 +118,10 @@ Pri ažuriranju:
    [README-a](../../README.md#provjera-dokumentacije);
 8. otvoriti novi Codex task kako bi se osvježio katalog skillsa.
 
-U repozitoriju trenutno nema `skills-lock.json`; zato se porijeklo i svaka
-buduća promjena moraju dokazati pregledom sadržaja i diffa, a ne pretpostaviti
-iz naziva verzije u frontmatteru.
+Repozitorij sadrži `skills-lock.json`. On prati skill instalacije; nije
+aplikacijski SDK dependency lockfile niti dokaz instalacije MCP/Supabase
+paketa. Porijeklo vendoriziranih skillsa provjeriti zajedno sa sadržajem i
+diffom; verzija u frontmatteru sama nije dovoljna.
 
 ## Aktuelni vendor signali
 
