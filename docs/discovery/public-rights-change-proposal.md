@@ -85,5 +85,10 @@ prava. Q10.2i nije odobrenje za njihovu primjenu.
 
 Jedan novi read-only poziv potvrđuje nepromijenjen inventar: 33 role i osam
 ciljeva bez obje potrebne ovlasti. Rola nije kreirana i nema mutacije.
-Korisnik potvrđuje da je ovlašteni put moguć, ali još nije imenovao drugi
-pristup. Potreban je naziv/lokalna referenca tog pristupa, bez lozinke u chatu.
+Korisnik potvrđuje da smatra ovlašteni put mogućim; tehnički dokaz drugog
+podržanog puta ne postoji. Raniji zahtjev da korisnik napravi ili imenuje novog
+administratora bio je pogrešan sljedeći korak: novi nalog ne dobiva automatski
+nedostajuće ovlasti. Prvo treba provjeriti podržan koncept pristupa.
+[Pojašnjenje uloga](access-plan-consolidated.md#klarstellung-welche-benutzer-sind-erforderlich)
+razdvaja postojeći pristup, naručenog budućeg čitaoca i nepotrebno traženog
+novog administratora.

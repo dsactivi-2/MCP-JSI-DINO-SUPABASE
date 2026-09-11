@@ -70,7 +70,10 @@ Q10.2i je zatim omogućio [konkretan plan prava](discovery/public-rights-change-
 25 sintetičkih provjera. Sadašnji pristup nema ovlast za osam LO funkcija;
 produkcijski paket ostaje tehnički NO-GO. Q10.2j daje korisničku dozvolu za
 opisanu promjenu, ali naknadna read-only provjera potvrđuje nepromijenjene
-ovlasti. Potreban je konkretan ovlašteni pristup koji korisnik navodi kao moguć.
+ovlasti. Korisnik trenutno ne treba praviti novog administratora. Poseban
+pristup za čitanje ostaje naručen po Q10.2b; prepreka je sadašnji nacrt njegovih
+sigurnosnih granica. Slijedi provjera podržanog koncepta pristupa, prema
+[pojašnjenju](discovery/access-plan-consolidated.md#klarstellung-welche-benutzer-sind-erforderlich).
 Detalji su u
 [provjeri plana](reviews/2026-09-11-rights-plan-verification.md). [Registar verzija](discovery/role-version-register.md)
 razlikuje
