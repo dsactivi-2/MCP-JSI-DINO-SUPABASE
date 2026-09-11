@@ -1138,7 +1138,9 @@ vlasnika:
 19. Da li se tekstualno/semantičko poklapanje smije koristiti za svaki tenant i
     svrhu?
 20. Koji su maksimalni dopušteni trošak po upitu i mjesečni operativni budžet?
-21. Q4.5 je OFFEN; izvorni tekst pitanja nije poznat i ne smije se izmišljati.
+21. Q4.5 je ukinuta kao prazan broj; izvorni tekst nije rekonstruisan i ne
+    smije se izmišljati. Nova numerisana pitanja samo za stvarnu preostalu
+    kontakt- ili privatnost-odluku.
 22. Izvorna lista Q8.4 preporuka, detaljni operatori i opća potvrda svake nove
     ili izmijenjene pretrage ostaju OFFEN; vidi ADR-0002 i audit.
 23. Da li su SEM-UC-01, SEM-UC-02 i DQ-UC-01 dozvoljeni i koji mjerljivi problem

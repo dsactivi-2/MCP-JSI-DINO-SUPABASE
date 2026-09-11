@@ -136,7 +136,8 @@ question and normalized answer immediately in the same file.
 Do not infer a decision from a request for explanation, a recommendation, or an
 unanswered question. Keep unresolved items marked `OFFEN` and partial decisions
 marked `TEILWEISE BESTÄTIGT`. Q8.5 is entirely `OFFEN`; Q8.4 remains accepted
-in principle. Reconstructed filter details and confirmation before every new
+in principle. Q4.5 is retired as an empty number, not answered as a domain
+question. Reconstructed filter details and confirmation before every new
 or changed search are `VORLÄUFIGER VORSCHLAG` until evidenced. Label unverified
 physical facts `ARBEITSANNAHME` or `DURCH DISCOVERY ZU PRÜFEN`.
 When the user confirms shared understanding and

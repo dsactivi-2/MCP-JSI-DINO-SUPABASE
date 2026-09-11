@@ -70,10 +70,12 @@ Q10.2i je zatim omogućio [konkretan plan prava](discovery/public-rights-change-
 25 sintetičkih provjera. Sadašnji pristup nema ovlast za osam LO funkcija;
 produkcijski paket ostaje tehnički NO-GO. Q10.2j daje korisničku dozvolu za
 opisanu promjenu, ali naknadna read-only provjera potvrđuje nepromijenjene
-ovlasti. Korisnik trenutno ne treba praviti novog administratora. Poseban
-pristup za čitanje ostaje naručen po Q10.2b; prepreka je sadašnji nacrt njegovih
-sigurnosnih granica. Slijedi provjera podržanog koncepta pristupa, prema
-[pojašnjenju](discovery/access-plan-consolidated.md#klarstellung-welche-benutzer-sind-erforderlich).
+ovlasti. Korisnik trenutno ne treba praviti novog administratora. Q10.2k
+potvrđuje: discovery rola se ipak postavlja bez osam LO PUBLIC opoziva; kasnije
+učvršćivanje tih osam ciljeva je zaseban put. PostgreSQL PUBLIC EXECUTE na tim
+funkcijama ostaje naslijeđeno residualno pravo, ne dokaz da ih nova rola ne
+smije izvršiti. Rola još nije kreirana; B1/B2/B3 nisu odobreni. Vidi
+[pojašnjenje korisnika](discovery/access-plan-consolidated.md#klarstellung-welche-benutzer-sind-erforderlich).
 Detalji su u
 [provjeri plana](reviews/2026-09-11-rights-plan-verification.md). [Registar verzija](discovery/role-version-register.md)
 razlikuje
@@ -174,9 +176,10 @@ Berufssuchprofila. Neekskluzivnost, direktna pretraga zanimanja i neaktivnost
 nenavedenih filtera ostaju potvrđeni. Detaljna filtersemantika i obavezna
 potvrda
 svake nove ili izmijenjene pretrage su VORLÄUFIGER VORSCHLAG zbog nedostajuće
-izvorne liste preporuka. Q8.5 je u cijelosti OFFEN. Q4.5 ostaje OFFEN bez
-rekonstruisanja nepoznatog pitanja. Release 1 ne vraća kontakte ni kroz jedan
-alat; kontaktna funkcija i CONTACT-02 pripadaju kasnijoj, zasebno odobrenoj
+izvorne liste preporuka. Q8.5 je u cijelosti OFFEN. Q4.5 je ukinuta kao prazan
+broj, bez rekonstruisanja nepoznatog pitanja. Release 1 ne vraća kontakte ni
+kroz jedan alat; kontaktna funkcija i CONTACT-02 pripadaju kasnijoj, zasebno
+odobrenoj
 fazi. Mogućnosti za
 izradu i administraciju tih profila obrađene su u
 [Q8.4.2 istraživanju](research/berufssuchprofile-q8-4-2.md); odluka o odvojenom

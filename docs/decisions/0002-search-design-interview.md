@@ -254,12 +254,18 @@ funktionsfähig bestätigt.
 
 ## Offene Fragen
 
-### Q4.5 – Vom Nutzer als offen markiert
+### Q4.5 – Leere Nummer stillgelegt
 
-**Status:** `OFFEN`
+**Status:** `BESTÄTIGT`
 
-Die genaue Frage und ihre Entscheidungsoptionen sind noch nicht dokumentiert.
-Bis zur Präzisierung wird keine Antwort abgeleitet.
+Die genaue ursprüngliche Frage und ihre Entscheidungsoptionen sind nicht
+überliefert. Es wurde kein Fachtext erfunden.
+
+**Antwort:** `BESTÄTIGT` – Option B. Die leere Nummer Q4.5 wird stillgelegt.
+Sie ist kein Interview- oder Release-1-Blocker. Eine neue nummerierte Frage
+wird nur eröffnet, wenn eine echte verbleibende Kontakt- oder
+Datenschutzentscheidung vorliegt. Die unbekannte ursprüngliche Fachfrage gilt
+nicht als beantwortet.
 
 ### Q8 – Noch offene Unterfragen
 
@@ -453,6 +459,27 @@ Datenbankberechtigung ist damit noch nicht technisch nachgewiesen.
 Die vorhandenen Identitäts-, Rechte- und Transaktionsprüfungen bleiben bestehen.
 Keine Erweiterung auf andere Objekte, Datenänderungen oder unbenannte Zugänge.
 
+**Q10.2k – Zugangskonzept trotz fehlender LO-ACL-Rechte:** `BESTÄTIGT`
+
+**Frage:** Soll die beauftragte Rolle trotzdem angelegt werden, ohne die acht
+PUBLIC-REVOKEs der Large-Object-Hilfsfunktionen?
+
+**Antwort:** `BESTÄTIGT` – Option A. Die acht PUBLIC-REVOKEs entfallen für
+diesen Schritt. Q10.2b bleibt: die dedizierte Discovery-Rolle wird angelegt.
+Ein zusätzlicher Administratorbenutzer ist nicht der nächste Schritt und ändert
+diese ACL nicht. Eine spätere Härtung genau dieser acht Ziele ist ein eigener,
+separat freizugebender Arbeitspfad.
+
+PostgreSQL kennt kein per-Rolle-`DENY`. Solange PUBLIC EXECUTE auf diesen acht
+Funktionen bleibt, erbt auch die neue Rolle dieses Privileg. Die frühere
+Formulierung, Gate B1 könne fehlendes EXECUTE beweisen, ist deshalb nicht
+haltbar; das Rest-Risiko bleibt eine eigene Folgefrage. Q10.2k hebt Q10.2j nicht
+auf und verwandelt den Rechteplan nicht stillschweigend in ein reduziertes
+Ausführungspaket für TEMP oder die zwei Definer-Funktionen.
+
+Keine Freigabe für B1/B2/B3, Funktionsausführung, Kandidatenabfragen,
+pauschale PUBLIC-REVOKEs oder die konkrete Mutationsausführung.
+
 **Q10.3 – Kurzfristig Option A, schrittweise zu Option D:** `BESTÄTIGT` – Die
 importierten CRM-Tabellen bleiben in der kurzfristigen Phase unverändert. Für
 Release 1 werden nur die benötigten kontrollierten Strukturen, Beziehungen und
@@ -493,9 +520,10 @@ Die TypeScript-Variante passt direkt zu diesen JavaScript-Paketen. Dieser
 Vorteil ist keine endgültige Sprach-, Hosting- oder Authentscheidung.
 
 **OFFEN:** Stack-/Versionsauswahl, Alpha-Akzeptanz, OAuth-/Tokenvertrag,
-DB-Identitätsabbildung und praktische Integrationsnachweise. Q9, Q8.5, Q4.5,
+DB-Identitätsabbildung und praktische Integrationsnachweise. Q9 und Q8.5,
 ADR-0001/0003/0004 sowie bestehende Discovery- und Produktionsfreigaben bleiben
-unverändert. Es wurden weder Installation noch Datenbankzugriff, Deployment
+unverändert. Q4.5 ist als leere Nummer stillgelegt. Es wurden weder Installation
+noch Datenbankzugriff, Deployment
 oder Linear-Writes beauftragt.
 
 Die aktualisierte technische Fassung liegt im
