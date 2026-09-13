@@ -113,10 +113,13 @@ Nicht die drei Hit-Dateien abfragen. Quelle ist
 6. SQL/PHP mit Personenfeldern lesen, ohne Datensatz-Dump (Q4: interne Kontakte im Produkt).
 7. Secret-Netz, Git-Check, Status.
 
+Antworten 2026-09-13 in ADR-0002: 1–2 ja; 3 Ausbildungsberuf (JSON struke/smjer);
+4 R1-Jahre Q8.5.9; 5 nein für Ort/Skills/Profil in R1.
+
 Rohzettel: [crm-php-hits](../discovery/crm-php-hits/). Lesart:
 [crm-app-wiring.md](../discovery/crm-app-wiring.md). Quellenrang: ADR-0002 Q17.
 
-Bewusst nicht im Wizard: Ranking, Auth, Export. Filter-SQL liegt in
+Bewusst nicht im Wizard abfragen. Ranking/Auth/Export: ADR-0002. Filter-SQL liegt in
 [crm-filter-sql-codebefund.md](../discovery/crm-filter-sql-codebefund.md).
 Status-Klicks: [crm-status-codebefund.md](../discovery/crm-status-codebefund.md).
 

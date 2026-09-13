@@ -25,8 +25,9 @@ ein neuer Plan. Eine frühere Architekturprüfung kam zum selben Kern:
 [Plan-Verifikation 2026-09-11](2026-09-11-plan-best-practice-verification.md).
 
 **Jetzt den MCP zu bauen ist nicht optimal.** Der JSON-Filter ist Entwurf.
-Struke/Smjer und „5 Jahre“ sind offen. Der nächste Repo-Schritt bleibt:
-Nutzer liest das Bericht-Audit-Verdict, nicht Tool-Namen, nicht Scaffold.
+Struke/Smjer = Ausbildungsberuf. Jahresfilter R1: Q8.5.9. Der nächste
+Repo-Schritt: Nutzer nennt den Auftrag. JSON bleibt Entwurf. Kein Scaffold
+ohne ausdrückliche Freigabe.
 Quelle: [Projektstand](../project.md).
 
 ## Analog, nicht nachbauen
@@ -85,12 +86,10 @@ occupation, nicht Stadt, nicht Skills: Q22.
 
 ## Nächste Schritte
 
-1. **Jetzt:** Nutzer liest das Bericht-Audit-Verdict. Kein Tool-Namen, kein
-   Scaffold, keine Eval. Prompt:
-   [verify-verifier-report.md](../handoffs/2026-09-13-verify-verifier-report.md).
-2. **Danach nur mit ausdrücklicher Antwort:** Struke/Smjer-Deutung und ob
-   Jahres-Erfahrung jemals R1 wird. Das ist `/grill-with-docs` auf
-   [ADR-0002](../decisions/0002-search-design-interview.md), kein Rateversuch.
+1. **Jetzt:** JSON-Entwurf und ADR-0002 halten. Kein MCP-Scaffold ohne
+   ausdrücklichen Auftrag. Hosting/SDK-Version offen.
+2. Struke/Smjer und R1-Jahre (Q8.5.9) sind bestätigt. Offene Punkte nur noch
+   dort, wo ADR-0002 `OFFEN` sagt.
 3. **Dann Vertrag:** eine Feldbrücke JSON → Postgres-Spalte, versioniertes
    JSON-Schema, eine neue RPC-Signatur. AUTO-02.
 4. **Dann synthetisch:** Option-1-Server gegen erfundene Kandidaten.

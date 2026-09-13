@@ -125,7 +125,7 @@ Englische JSON-Namen. PHP-POST nur zur Spur.
 | `exclude_archived` | Archiv-Cookie | default `true` | `false` nur Archiv (Status 3), ohne andere Filter |
 | `q` | DataTables-Suchbox | Name, Statusname, Gruppe; intern auch E-Mail/Mobil | string, optional |
 | `limit` | — | Seitengröße | 1–50, default 50 |
-| `cursor` | — | nächste Seite | opaque; Ranking OFFEN |
+| `cursor` | — | nächste Seite | opaque; Ordnung `kandidat_id` absteigend |
 
 ### Sprachen
 
@@ -166,12 +166,12 @@ Bearbeitung, Messenger, E-Mail, Mobil, Gruppe, Herkunft, CV-Flags,
 Nalog-Name, Statusname.
 
 Q4: intern ja inklusive Kontakt. Kunde ist nicht Aufrufer dieser
-Pool-Suche. Discovery speichert keine Werte. JMBG ist besonders
-sensibel; ob R1 ihn wirklich ausgibt, bleibt vor Implementierung
-zu bestätigen.
+Pool-Suche. Discovery speichert keine Werte. JMBG darf intern in der
+Trefferliste stehen (`BESTÄTIGT`). Kein Filter. Bleibt besonders sensibel.
 
 Zusätzlich später (nicht in diesem Entwurf fest): stabile ID,
-Match-Beweis, `next_cursor`. Ranking/Tie-Breaker OFFEN.
+Match-Beweis, `next_cursor`. Ranking R1: größte `kandidat_id` zuerst
+(`BESTÄTIGT`). IDs eindeutig, kein zweites Kriterium.
 
 Kunde-Projektion (ohne Kontakt, nur Vorschlag) ist ein anderer
 Aufrufer, nicht R1-Hauptsuche.
@@ -197,15 +197,15 @@ Alte CRM-RPCs nicht wrappen.
 | Archiv plus andere Filter | PHP wirft Formularfilter weg; Entwurf lehnt die Mischung ab |
 | Stille PHP-Joins ohne Gruppe/Status | **BESTÄTIGT** nein; sichtbar lassen, nicht INNER JOIN kopieren |
 | Prijave-Labels | DB, kein Dump |
-| Ranking / Cursor-Spalte | OFFEN |
-| JMBG in der Trefferliste | PHP ja; R1-Ausgabe unbestätigt |
+| Ranking / Cursor-Spalte | größte `kandidat_id` zuerst (`BESTÄTIGT`) |
+| JMBG in der Trefferliste | intern ja, kein Filter (`BESTÄTIGT`) |
 | Bestätigung vor jeder Suche | `BESTÄTIGT`: Filter zeigen, dann eine Suche |
 | Auth / Hosting / SDK | ein Such-MCP, Tokens je Rolle (`BESTÄTIGT`); Hosting/SDK-Version OFFEN |
 | Export | CSV/Excel, Recruiter wählt; max. 500; inkl. JMBG und Kontakt; nicht Kunde |
+| Genannter Job für Jahre | braucht ein Feld; `struke` ist Ausbildungsberuf |
 
 ## Nächster Schritt
 
-Bericht-Audit Punkte 1–3 bestätigt. Archiv-Satz bleibt: PHP-Zählfehler
-nicht nachbauen. Struke/Smjer = Ausbildungsberuf. Jahresfilter R1: Q8.5.9.
-Ohne Gruppe/Bearbeitung sichtbar. JSON bleibt Entwurf, kein Vertrag.
-Nicht Tool-Namen, keine Produktion, kein MCP-Bau, kein Wizard 01/04.
+JSON bleibt Entwurf, kein Vertrag. Bericht-Audit und Recruiter-Regeln
+stehen in ADR-0002. Hosting/SDK-Version offen. Cloudflare nur möglich,
+nicht gewählt. Kein MCP-Scaffold, bis der Nutzer das ausdrücklich startet.

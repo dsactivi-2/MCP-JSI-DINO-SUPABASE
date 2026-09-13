@@ -3,6 +3,8 @@
 
 Datum: 2026-09-13
 
+**Historischer Pflichtablauf. Ausgeführt 2026-09-13. Live: ADR-0002.**
+
 Zweck: PASS-Bericht unabhängig prüfen. Pflicht: die zwei Chat-Punkte
 und alles, was der Vorbericht nicht sauber bewiesen hat. Nur echte
 Fehler in Docs korrigieren. Kein Weiterbau.

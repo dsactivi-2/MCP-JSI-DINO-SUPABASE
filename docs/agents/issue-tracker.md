@@ -63,6 +63,10 @@ Lokal 2026-09-13 križevi **1A 2A 3A**. Linear-komentar i status Done
 2026-09-13. JSON-Filter je nacrt, ne ugovor. Paket:
 [ACT-103 Vertragspaket](../discovery/act-103-vertragspaket.md).
 
+ACT-100 ostaje In Progress (JSON nije ugovor). Linear-opis ACT-100 još
+sadrži stare rečenice (Jahre nicht in R1, INNER JOIN offen); repo je
+noviji. Opis se ne dira bez extra Linear-Write.
+
 Pristup servisu slijedi globalno MCP-routing pravilo i
 [tool routing](tool-routing.md). Ova konfiguracija određuje projekt; sama ne
 odobrava vanjske upise. Granice rada su u

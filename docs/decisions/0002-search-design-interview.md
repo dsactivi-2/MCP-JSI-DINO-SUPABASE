@@ -358,10 +358,12 @@ Live-Stand in Q8.5: 8.5.1 und 8.5.3–8 `BESTÄTIGT`; 8.5.2 `IGNORIERT`;
 8.5.9 `BESTÄTIGT`: R1-Jahresfilter aus von–bis, Job + Jobgruppe.
 Überlappung und Enddatum ohne Ende sind beantwortet.
 
-Noch offen unter Q8, nicht für R1:
+Noch offen unter Q8:
 
 - Exakte von/bis-Spaltennamen in `idk_kandidat_radno_iskustvo`.
 - Welche physische Jobgruppe (Berufssuchprofil-Tabelle) die Ähnlichkeit liefert.
+- Welches JSON-Feld der „genannte Job“ für `min_relevant_experience_years`
+  ist (`struke` ist Ausbildungsberuf, nicht die Lebenslauf-Zeile).
 
 ### Weitere offene Entscheidungen
 
@@ -371,11 +373,16 @@ Noch offen unter Q8, nicht für R1:
 - Suchverlauf, gespeicherte Suchen, Audit-Protokoll und Ergebnis-Snapshots.
 - Zugriffsrechte auf Suchverläufe.
 - Darstellung in MCP-Clients und einer möglichen eigenen Oberfläche.
-- Exportumfang, Formate, Felder, Limits und Schutzmaßnahmen; die
-  Nutzeraussage zu privilegierter Sicht und Export liegt als Q12 vor und ist
-  nicht bestätigt.
+- Schutzmaßnahmen für den Recruiter-Export (Datei verlässt den Chat).
+  Umfang Q15.6: Blättern und CSV/Excel, max. 500, inkl. JMBG/Kontakt;
+  ganzer Bestand ohne Filter nicht bestätigt.
 - Zulässige Cache-Dauer und erforderliche Datenaktualität.
-- Authentifizierung, Tenant-Modell, Hosting, Ranking und numerische SLOs.
+  Nutzer 2026-09-13: kein Redis/Iris in R1. Treffer-Cache speichert keine
+  Bewerberakten. Jobnamen-Katalog später im Worker-RAM, nach RPC, nur wenn
+  gemessen langsam. Nicht jetzt einführen.
+- Tenant-Modell, Hosting (Cloudflare möglich, nicht gewählt), SDK-Version
+  und numerische SLOs. Ein Such-MCP mit Tokens je Rolle ist bestätigt (Q11).
+  Ranking R1 ist bestätigt: `kandidat_id` absteigend.
 
 ### Q10 – Datenbank-Zielzustand und Übergang
 

@@ -140,6 +140,5 @@ Kein 1:1-Wrap dieser Sender.
 ## Nächster Schritt
 
 Wizard-03-Alltag ist bestätigt (R1 = Hauptsuche). JSON-Filter-Entwurf
-geprüft. Unabhängiger PASS liegt vor, Bericht-Audit offen. Nächster Schritt:
-[verify-verifier-report.md](../handoffs/2026-09-13-verify-verifier-report.md).
-Nicht Tool-Namen. Nicht MCP-Bau, nicht Wizard 01/04.
+geprüft. Bericht-Audit 2026-09-13 ausgeführt. JSON bleibt Entwurf.
+Nicht MCP-Bau, nicht Wizard 01/04, bis der Nutzer das startet.

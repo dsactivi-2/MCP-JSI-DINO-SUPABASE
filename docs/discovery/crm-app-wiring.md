@@ -103,14 +103,14 @@ Nicht wrappen: `crm_api.search_candidates` (im PHP dieser App nicht gefunden; Si
 
 ## 6. Lücken
 
-- GELESEN: Filter-SQL `lista_kandidata` in [crm-filter-sql-codebefund.md](crm-filter-sql-codebefund.md). JSON-Entwurf geprüft, Bericht-Audit offen. OFFEN bleibt die fachliche Deutung Struke/Smjer (Wizard 03) und „5 Jahre“ nicht in R1.
+- GELESEN: Filter-SQL `lista_kandidata` in [crm-filter-sql-codebefund.md](crm-filter-sql-codebefund.md). JSON-Entwurf geprüft, Bericht-Audit ausgeführt. Struke/Smjer = Ausbildungsberuf. Jahresfilter R1: Q8.5.9.
 - OFFEN: ob Recruiter zusätzlich Nalog-Profile (`idk_nalog_profil`) als Suche nutzen.
 - DURCH DISCOVERY ZU PRÜFEN: Mapping `idk_struke` ↔ `occupation` / `job_occupation_map`.
 - ARBEITSANNAHME: list_ajax ist die interne Recruiter-Hauptsuche, weil das Menü „Kandidati“ dorthin zeigt.
 
 ## 7. Nicht entschieden (bewusst leer)
 
-MCP-Tools, Ranking, Auth. Filter-SQL ist gelesen.
-JSON-Filter-Entwurf geprüft (nicht Vertrag):
+Filter-SQL ist gelesen. JSON-Filter-Entwurf geprüft (nicht Vertrag):
 [crm-json-filter-draft.md](crm-json-filter-draft.md).
-Nächster Schritt: Bericht-Audit, nicht Tool-Namen.
+Ranking R1: `kandidat_id` absteigend. Ein Such-MCP, Tokens je Rolle.
+Hosting/SDK-Version offen. Kein Scaffold, bis der Nutzer es startet.

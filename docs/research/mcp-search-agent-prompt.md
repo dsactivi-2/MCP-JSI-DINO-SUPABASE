@@ -1,6 +1,8 @@
 <!-- markdownlint-disable MD013 -->
 # Agent-Prompt: CRM-Kandidatensuche, Tabellen und Fehlerquellen
 
+**Historischer Prompt.** Live-Stand: ADR-0002, nicht dieser Text.
+
 Datum: 2026-09-12
 
 Status: Prompt zum Kopieren an Recherche- oder Design-Agenten. Kein Dump,

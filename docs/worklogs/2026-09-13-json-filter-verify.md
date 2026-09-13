@@ -10,5 +10,5 @@ Bericht-Audit 2026-09-13: dieser PASS ist nicht haltbar. Testdatei-Satz
 zu Cookie archive_status getrennt. Worklog Audit:
 [2026-09-13-json-filter-audit.md](2026-09-13-json-filter-audit.md).
 
-Nächster Schritt: Nutzer liest das Verdict. Kein Tool-Namen, kein Eval,
+Nächster Schritt: Nutzer nennt den Auftrag. Kein MCP-Scaffold, kein Eval,
 kein MCP.

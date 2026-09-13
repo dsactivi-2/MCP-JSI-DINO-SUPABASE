@@ -26,8 +26,9 @@ Requirements: [implementation brief](docs/SUPABASE_CRM_MCP_IMPLEMENTATION_BRIEF.
 Governance, PHP search wiring, and an R1 JSON filter draft that is not a
 contract. No application scaffold. Discovery role `dino_crm_discovery_ro_v1`
 exists; Gate B1/B2/B3 V3 as that role are PASS (ADR-0002 Q10.2p–q). Plugin
-Gate P remains NO-GO. Next: the user names the task. Do not start an MCP
-scaffold or a tool-name hunt.
+Gate P remains NO-GO. R1 search rules live in ADR-0002 (tokens, ranking,
+export, confirmation). Hosting/SDK version remains open. Next: the user
+names the task. Do not start an MCP scaffold until explicitly asked.
 
 Details live in [docs/project.md](docs/project.md). Local checks:
 `scripts/check-local.sh`. They prove no SQL execution, production RLS,

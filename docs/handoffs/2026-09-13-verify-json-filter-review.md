@@ -3,6 +3,8 @@
 
 Datum: 2026-09-13
 
+**Historischer Verifikationsprompt. Live-Stand: ADR-0002, nicht dieses Dokument.**
+
 Zweck: Unabhängige Prüfung der Behauptung, der JSON-Filter-Entwurf sei
 gegen PHP `lista_kandidata` und Heft geprüft. Kein Weiterbau.
 

@@ -92,12 +92,14 @@ einschaltbar. Kein 1:1-Wrap der alten Sender.
 ## Wo wir stehen
 
 PHP-Suche, Filter-SQL, Status/Klick/Cron und Nachrichten C 4–9 sind gelesen.
-JSON-Filter R1 ist Entwurf, geprüft gegen PHP und Heft. Lücken bleiben:
-Struke/Smjer-Deutung, „5 Jahre“ ist kein R1-Feld.
+JSON-Filter R1 ist Entwurf, geprüft gegen PHP und Heft. Struke/Smjer =
+Ausbildungsberuf. Jahresfilter R1: Q8.5.9 von–bis. Ranking: größte
+`kandidat_id` zuerst. Ein Such-MCP, Tokens je Rolle. Export: CSV/Excel,
+max. 500, inkl. Kontakt/JMBG. Hosting/SDK-Version offen.
 
-**Kein MCP-Server gebaut.** Bericht-Audit 2026-09-13: Vorbericht-PASS
-nicht haltbar. Archiv-Satz in der Testdatei getrennt. Nächster Schritt:
-Nutzer liest das Verdict. Kein Tool-Namen, kein Scaffold.
+**Kein MCP-Server gebaut.** Bericht-Audit 2026-09-13 ausgeführt. JSON bleibt
+Entwurf. Nächster Schritt: Nutzer nennt den Auftrag. Kein Scaffold, bis
+ausdrücklich gestartet.
 
 ```mermaid
 flowchart LR

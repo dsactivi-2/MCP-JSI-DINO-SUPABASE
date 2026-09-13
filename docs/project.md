@@ -1,7 +1,8 @@
 # Pregled projekta: Supabase CRM MCP
 
 Status: dokumentacijska osnova + PHP-Verdrahtung;
-JSON-Filter Entwurf; Bericht-Audit 2026-09-13 abgeschlossen
+JSON-Filter Entwurf; Bericht-Audit 2026-09-13 abgeschlossen;
+R1-Regeln in ADR-0002; Hosting/SDK offen
 
 Ažurirano: 2026-09-13
 
@@ -38,7 +39,7 @@ ažuriranjem briefa ili novim ADR-om.
 Dokumentacijska osnova, PHP-Verdrahtung i JSON-Filter Entwurf. Bericht-Audit
 2026-09-13 je izvršen; JSON ostaje nacrt, ne ugovor. Nema app-scaffolda niti
 runtime MCP-a. ACT-103 2026-09-13: **1A 2A 3A**, Linear Done.
-JSON ostaje nacrt.
+JSON ostaje nacrt (AUTO-02). Worker-RAM kasnije; Redis/Iris nisu R1.
 [act-103-vertragspaket.md](discovery/act-103-vertragspaket.md).
 
 Rola `dino_crm_discovery_ro_v1` postoji. Gate B1/B2/B3 V3 kao ta rola su PASS
@@ -219,7 +220,9 @@ JSON-Filter Entwurf:
 Provjeren 2026-09-13 (PHP + Heft). Struke/Smjer = Ausbildungsberuf.
 Jahresfilter R1: Q8.5.9. INNER JOIN: sichtbar ohne Gruppe/Bearbeitung.
 Bericht-Audit: Punkte 1–3 bestätigt. Archiv-Satz bleibt.
-Nije korak za imena alata i nije MCP-bau.
+Ranking `kandidat_id` desc. Export CSV/Excel max. 500. Ein Such-MCP + Tokens.
+Hosting/SDK-Version offen. Cloudflare möglich, nicht gewählt.
+Nije MCP-scaffold dok korisnik to izričito ne zatraži.
 
 Wizard 01 je 2026-09-13 ponovo skenirao **bez** limita 200 linija (RPC 21,
 tabele 1732, UI 2487). `*.sql` i `Info/` isključeni zbog dumpa. Ne vraćati

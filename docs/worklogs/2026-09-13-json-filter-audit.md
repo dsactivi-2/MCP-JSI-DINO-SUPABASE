@@ -9,8 +9,8 @@ Ablauf: [verify-verifier-report.md](../handoffs/2026-09-13-verify-verifier-repor
 
 Vorbericht-PASS nicht haltbar. Archiv in `lista_kandidata`: Cookie nur
 Status 3; Klassen an Liste-SQL und Zähl-SQL; `search[value]` nur Liste-SQL.
-Testdatei-Satz dazu getrennt. INNER JOIN, Struke/Smjer, „5 Jahre“ bleiben
-OFFEN. Kein years-Feld. JSON-Namen `struke` / `smjer` unverändert.
+Testdatei-Satz dazu getrennt. Später bestätigt: Struke/Smjer = Ausbildungsberuf;
+Jahresfilter Q8.5.9; INNER JOIN nicht kopieren. JSON-Namen `struke` / `smjer`.
 
 HEAD `e288d3d`. Testdatei-HEAD-Hash
 `ae21cb9ed82cb6306cababe738fa67d1134ae9f2b29bbf65c21c999819c522ad`.
@@ -24,7 +24,7 @@ Nutzer 2026-09-13, Punkt 3: **Ja.** JSON bleibt Entwurf, kein Vertrag.
 Kein Runtime, kein SQL-Apply aus diesem Entwurf.
 Punkt 2 (Archiv-Satz) **Ja:** Satz bleibt. R1 kopiert den Zählfehler nicht.
 Punkt 4 aufgeteilt: Struke/Smjer = Ausbildungsberuf **Ja**;
-„5 Jahre“ in R1 **Nein**; INNER JOIN **Nein** (sichtbar lassen).
+„5 Jahre“ in R1 **Nein** (Stand dieses Audits); INNER JOIN **Nein**
+(sichtbar lassen). Später Q8.5.9: Jahre doch in R1, von–bis + Jobgruppe.
 
-Nächster Schritt: Nutzer nennt den nächsten Auftrag. Kein Tool-Namen,
-kein Eval, kein MCP. Kein Commit.
+Nächster Schritt: Nutzer nennt den Auftrag. Kein MCP-Scaffold ohne Freigabe.

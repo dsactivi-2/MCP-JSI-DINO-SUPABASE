@@ -19,7 +19,7 @@ Profilversionen oder Datenbankverträge.
 | Vier-Augen-Pflicht / alleinige Freigabe unzulässig | Durch ADR-0003 überholt: keine verpflichtende zweite Person; getrennte Bearbeitung und Veröffentlichung bleiben. |
 | Verwaltungs-MCP optional | Durch ADR-0003 überholt: als getrennte spätere Komponente nach Discovery und Modellfreigabe geplant. |
 | Pflicht-/Wunschrollen je Mitglied | Vertagt / OFFEN; weder Aufnahme noch Ausschluss aus Release 1 ist aus den ursprünglichen Empfehlungen nachgewiesen. |
-| Bestätigung vor jeder Suche | VORLÄUFIGER VORSCHLAG; nur Zustimmung vor Filterlockerung gemäß Q7 ist ausdrücklich belegt. |
+| Bestätigung vor jeder Suche | ADR-0002 BESTÄTIGT 2026-09-13 (Filter zeigen, dann eine Suche). Q7 bleibt für Lockerung. |
 | Erfahrungsrelevanz und Zeitberechnung | Gesamte Q8.5 OFFEN; nachfolgende Regeln sind nur Vorschläge. |
 | BIBB/KldB/ESCO/O*NET-Auswahl und Normalisierungsdetails | VORLÄUFIGER VORSCHLAG; die Recherche ist keine Freigabe dieser Details. |
 

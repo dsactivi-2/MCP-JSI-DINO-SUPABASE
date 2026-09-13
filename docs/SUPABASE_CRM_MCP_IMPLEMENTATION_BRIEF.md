@@ -1200,7 +1200,7 @@ Ovo je sažetak odluka briefa. Dugoročne arhitekturne odluke održavaju se u
 | D-009 | Na odluci | Fizički search view/RPC model nakon audita stvarne sheme i planova. |
 | D-010 | Na odluci | Auth model, tenant mapping i kontakt/export role za svaki MCP klijent. |
 | D-011 | Na odluci | Numerički SLO-i nakon reprezentativnog benchmarka. |
-| D-012 | Na odluci | Ranking formula, taksonomski vlasnik i postupak odobravanja sinonima. |
+| D-012 | Teils | Ranking R1: kandidat_id desc (ADR-0002). Taxonomie/Synonyme weiter OFFEN. |
 | D-013 | VORLÄUFIGER VORSCHLAG | Kategorije s `AND`, tipizirani operatori i opća potvrda pregleda: nedostaje izvorna preporuka za dokaz pojedinačnih detalja. Q7 saglasnost za ublažavanje ostaje potvrđena. |
 | D-014 | Prihvaćeno | Berufssuchprofile su verzionirane, neekskluzivne veze prema kontrolisanim konceptima Ausbildung, Erfahrungsberuf i Tätigkeit; članovi ostaju direktno i kroz druga profile pretraživi. |
 | D-015 | VORLÄUFIGER VORSCHLAG za normalizaciju | Vorabnormalizacija uz original i kontrolisane ID-ove nije pojedinačno dokazana. Prihvaćena granica ADR-0003 ostaje: automatika samo predlaže, nema automatske objave. Postojeći ID-ovi su DURCH DISCOVERY ZU PRÜFEN. |

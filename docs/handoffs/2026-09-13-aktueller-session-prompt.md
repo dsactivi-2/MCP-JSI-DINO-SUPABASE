@@ -3,43 +3,31 @@
 
 Datum: 2026-09-13
 
-**Stand dieser Datei:** historisch, 2026-09-13 nach Bericht-Audit. Nicht der
-Live-Status. Live: [crm-work-inventory.md](../discovery/crm-work-inventory.md)
-und [docs/project.md](../project.md).
-
+Live: [docs/project.md](../project.md),
+[crm-work-inventory.md](../discovery/crm-work-inventory.md),
+[ADR-0002](../decisions/0002-search-design-interview.md).
 Handoff: [2026-09-13-session-handoff.md](2026-09-13-session-handoff.md).
-Audit-Worklog: [2026-09-13-json-filter-audit.md](../worklogs/2026-09-13-json-filter-audit.md).
-Landkarte: [crm-work-inventory.md](../discovery/crm-work-inventory.md).
+Einheitlich (OS-Temp): `/private/tmp/dino-crm-unified-handoff-2026-09-13.md`.
 
 Block ungekürzt als erste Nachricht einfügen.
 
 ~~~text
 Du setzt die Arbeit am Supabase CRM MCP fort. Antworte auf Deutsch, einfache Worte. Code, Pfade, SQL-Namen, JSON-Namen, PHP-Namen nicht übersetzen.
 
-Du baust kein MCP. Du startest keine Tool-Namen und keine Eval. Du schließt keine OPEN-Lücken. Du übernimmst den alten PASS nicht.
+Lies zuerst docs/project.md, docs/discovery/crm-work-inventory.md, docs/decisions/0002-search-design-interview.md, docs/discovery/crm-json-filter-draft.md, docs/handoffs/2026-09-13-session-handoff.md. Nichts von vorn scannen.
 
-Bericht-Audit 2026-09-13 ist ausgeführt. Vorbericht-PASS ist nicht haltbar. In der Testdatei steht der getrennte Archiv-Satz: Klassen an Liste-SQL und Zähl-SQL; search[value] nur an Liste-SQL. R1 übernimmt den PHP-Zählfehler nicht (Q21). Struke/Smjer = Ausbildungsberuf. „5 Jahre“ ist kein R1-Feld. INNER JOIN nicht kopieren: ohne Gruppe/Bearbeitung sichtbar. JSON bleibt Entwurf.
+JSON-Filter bleibt ENTWURF, kein Vertrag. Du baust kein MCP, bis der Nutzer das ausdrücklich startet.
 
-Lies zuerst, in dieser Reihenfolge, dann warte auf den Nutzer:
+Schon bestätigt in ADR-0002, nicht neu aufrollen: Bericht-Audit (alter PASS zählt nicht; Archiv-Zählfehler nicht nachbauen); Struke/Smjer = Ausbildungsberuf (JSON-Namen struke/smjer); Jahresfilter R1 Q8.5.9 von-bis Job+Jobgruppe; INNER JOIN nicht kopieren; JMBG intern ja, kein Filter; Ranking größte kandidat_id zuerst; Filter zeigen dann eine Suche; ein Such-MCP Tokens je Rolle; Export Blättern plus CSV/Excel max. 500 inkl. JMBG/Kontakt, nicht Kunde.
 
-1. /Users/activi/Documents/ChatGPT/Dino problem baza crm/docs/handoffs/2026-09-13-session-handoff.md
-2. docs/worklogs/2026-09-13-json-filter-audit.md
-3. docs/discovery/crm-json-filter-draft.md
-4. docs/discovery/crm-work-inventory.md
-5. docs/project.md
+ACT-103 Done (1A 2A 3A). ACT-100 In Progress; Linear-Text dort ist alt, nicht ohne Auftrag schreiben. Offen: JSON-Vertrag AUTO-02; JSON-Feld für den genannten Job bei Jahren; Hosting/SDK-Version (Cloudflare möglich, nicht gewählt), Tenant, SLOs. Worker-RAM später; kein Redis/Iris in R1.
 
 Arbeitsverzeichnis: /Users/activi/Documents/ChatGPT/Dino problem baza crm
 Branch: codex/supabase-crm-auth-discovery
-HEAD: e288d3daee9a040bd216aa780414096c5e83ac2c (auf origin)
-Dirty Tree: nicht committen, nicht stashen, nicht resetten, nicht branchen, nicht pushen, ausser der Nutzer sagt es ausdrücklich.
+HEAD: 777fbd4, origin gleich. Dirty Tree (33 Dateien): nicht committen, nicht stashen, nicht resetten, außer der Nutzer sagt es.
+check-local.sh zuletzt Exit 0, 753 Links.
 
-Phase: nach Bericht-Audit. JSON-Filter bleibt ENTWURF, kein Vertrag. Kein MCP-Server, kein App-Scaffold, kein Produktions-Apply, kein Wizard 01/02/03/04 Apply.
-
-Was du jetzt tust:
-Nichts weiter bauen. Erst Nutzer liest das Verdict. Danach nur, was der Nutzer ausdrücklich verlangt.
-
-NAECHSTER SCHRITT:
-Nicht Tool-Namen. Nicht Eval. Nicht MCP. Erst Nutzer liest dieses Verdict.
+PHP nur /Users/activi/Downloads/crm-master-3/src/crm. Dump nicht lesen.
 
 Ende.
 ~~~

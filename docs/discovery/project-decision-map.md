@@ -89,7 +89,7 @@ Runtime-Such-MCP integriert werden.
 | F-13 | Die Supabase-Datenbank entstand aus einem Dump des inzwischen stillgelegten CRM; das CRM erhält keine neuen Änderungen. | Nutzerantworten zu Q10.1 und Q10.1a. | Keine dauerhafte Synchronisierung zum ehemaligen CRM geplant; andere Schreiber bleiben Discovery-Gegenstand. |
 | F-14 | Lokaler SQL-Dump, OrbStack-Container und ZIP-Backup existieren; ihr lokaler Preflight wurde abgelehnt. | Nutzerantworten zu Q10.1c und Q10.1d. | Alle drei bleiben unverifiziert und sind kein Restore-Nachweis. |
 | F-15 | Die aktuelle Supabase-Datenbank ist die vorläufige Arbeitsbasis für Discovery und Planung. | Q10.1e. | Vollständigkeit und Eignung bleiben unbestätigt. |
-| F-PHP | PHP-Hauptsuche, Filter-SQL, B7-Klicks und C 4–9 sind als Codebefund dokumentiert. Wizard-03-Alltag bestätigt (R1 = Hauptsuche). JSON-Filter ist Entwurf; Vorbericht-PASS nicht haltbar; Archiv-Satz getrennt. | [Inventar](crm-work-inventory.md) | Nächster Schritt: Nutzer liest Verdict, nicht Tool-Namen, nicht MCP-Bau. |
+| F-PHP | PHP-Hauptsuche, Filter-SQL, B7/C 4–9 Codebefund. JSON-Entwurf. Ranking/Export/Tokens/Bestätigung in ADR-0002. | [Inventar](crm-work-inventory.md) | Nutzer nennt Auftrag; Hosting/SDK offen; kein Scaffold ohne Freigabe. |
 
 <!-- markdownlint-enable MD013 -->
 
@@ -162,7 +162,7 @@ Runtime-Such-MCP integriert werden.
 | O-02 | Q8.5 vollständig: Gesamt- oder relevante Erfahrung, Relevanzregeln, Überlappungen und Lücken. | Discovery-Befunde, dann Nutzerentscheidung. | Erfahrungsfiltervertrag. |
 | O-03 | Authentifizierung, Tenant-Modell und RLS-Abbildung. | Discovery-Befunde und Nutzerentscheidung. | Runtime-Sicherheitsvertrag. |
 | O-04 | Altersfilter: rechtliche Grundlage, Zweck und Darstellung. | Privacy/Legal-Entscheidung. | Release-Vertrag für Alter. |
-| O-05 | Ranking, SLO, Hosting, Retention, Export, Verlauf, Cache und UI. | Discovery, Benchmark oder Nutzerentscheidung je Thema. | Spätere Implementierungsphasen. |
+| O-05 | SLO, Hosting, Retention, Verlauf, Cache und UI. Ranking R1 und Export-Grundform in ADR-0002. | Discovery, Benchmark oder Nutzerentscheidung je Thema. | Spätere Implementierungsphasen. |
 | O-06 | SEM-UC-01/02 und DQ-UC-01 fachlich freigeben sowie entscheiden, ob semantische Suche ein expliziter Modus sein darf. | Discovery-Befunde und Nutzerentscheidung; danach Evaluations-Gate. | Semantic Contract, Backend-Prototyp und ADR. |
 | O-07 | Restore-Prüfweg, RTO/RPO, Zeitfenster, genaue A-Strukturen und Reihenfolge der D-Migrationsschnitte. | Discovery, Modellfreigabe und separate Betriebsentscheidungen. | Produktionsfreigaben für A und D. |
 

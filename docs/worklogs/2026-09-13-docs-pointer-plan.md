@@ -3,9 +3,11 @@
 
 Datum: 2026-09-13
 
-Status: **ausgeführt**. `scripts/check-local.sh` PASS. Kein Commit ohne
-Extra-Auftrag. Kein Ordner-Move, keine Frozen-Dateien, kein MCP, kein
-Linear-Write.
+Status: **ausgeführt** (historisch). Live: ADR-0002 Q8.5.9; ACT-103 Done
+(1A 2A 3A). Der Live-Stand unten in dieser Datei ist der Stand *vor*
+Q8.5.9 und nicht mehr die Wahrheit.
+
+`scripts/check-local.sh` PASS zum Zeitpunkt der Welle. Kein Ordner-Move.
 
 Chef-Skill: `update-md-files` (Project). Dazu: `writing-for-agents`,
 `agents-md-builder`, `agents-md-toolkit`, `context-engineering`.

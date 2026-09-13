@@ -25,7 +25,9 @@ Nutzer 2026-09-13 Punkt 1 **Ja:** Vorbericht-PASS zählt nicht.
 Punkt 3 **Ja:** JSON bleibt Entwurf, kein Vertrag.
 Punkt 2 **Ja:** Archiv-Satz bleibt (Zählfehler nicht kopieren).
 Bestätigung vor jeder Suche: `BESTÄTIGT` (Filter zeigen, dann suchen).
-Kein Tool-Namen. Kein Wizard 01/02/04. Kein MCP-Bau.
+Ranking: größte `kandidat_id` zuerst. Export: CSV/Excel max. 500 inkl. JMBG/Kontakt.
+Ein Such-MCP, Tokens je Rolle. Hosting/SDK-Version offen.
+Kein Wizard 01/02/04. Kein MCP-Bau, bis der Nutzer das startet.
 
 ## 2. Verbindliche Quellen (nicht ins Doku-Git kopieren)
 
@@ -87,7 +89,7 @@ Datei: [crm-filter-sql-codebefund.md](crm-filter-sql-codebefund.md).
 - Deutsch/Englisch: Hörfeld `kj_slusanje`, Stufe oder höher.
 - Struke über Schul-Smjer.
 - Tabellen-Suchbox findet auch Name, E-Mail, Mobil (interne Sicht, Q4).
-- SELECT enthält Kontakt/JMBG; Werte nicht in Git.
+- SELECT enthält Kontakt/JMBG; intern sichtbar, kein Filter; Werte nicht in Git.
 
 ### 4.3 Status, Klick, Cron (B / B7 / Q19)
 
@@ -162,9 +164,10 @@ ohne Werte. Alte „R1 ohne Kontakt“-Zeilen sind `ERSETZT`.
 | [crm-php-hits/](crm-php-hits/) | Wizard-01-Rohlisten |
 | [crm-php-hits/status/](crm-php-hits/status/) | Wizard-04-Rohlisten |
 | [2026-09-13-scan-to-mcp.md](../handoffs/2026-09-13-scan-to-mcp.md) | Session-Übergabe |
-| [2026-09-13-verify-verifier-report.md](../handoffs/2026-09-13-verify-verifier-report.md) | Ablauf Bericht-Audit; Vorbericht-PASS nicht haltbar |
-| [2026-09-13-session-handoff.md](../handoffs/2026-09-13-session-handoff.md) | Session-Übergabe nach Bericht-Audit |
-| [2026-09-13-next-agent-prompt.md](../handoffs/2026-09-13-next-agent-prompt.md) | Zeigt auf das Verdict, nicht auf Tool-Namen |
+| [2026-09-13-verify-verifier-report.md](../handoffs/2026-09-13-verify-verifier-report.md) | Historischer Audit-Ablauf, 2026-09-13 ausgeführt |
+| [2026-09-13-session-handoff.md](../handoffs/2026-09-13-session-handoff.md) | Aktueller Session-Handoff |
+| [2026-09-13-aktueller-session-prompt.md](../handoffs/2026-09-13-aktueller-session-prompt.md) | Paste-Prompt nächste Session |
+| [2026-09-13-next-agent-prompt.md](../handoffs/2026-09-13-next-agent-prompt.md) | Zeigt auf Handoff und ADR-0002 |
 | [crm-wiring-wizards.md](../runbooks/crm-wiring-wizards.md) | Welcher Wizard wann |
 | Worklogs 2026-09-12/13 | Rescan, B7, C 4–9 |
 
@@ -214,5 +217,10 @@ Lokal, nicht Git: `/private/tmp/dino-crm-wiring.env`,
 | step1 Website-Dump | Script-Lücke | Handoff |
 | Zwei SQL in `databaseDump` | Init-Risiko | Handoff |
 | 11–16 zweiter MCP | merken, nicht tief | Q20 |
+| JSON-Vertrag | AUTO-02; Entwurf bleibt Entwurf | crm-json-filter-draft.md |
+| Genannter Job im JSON | fehlt; `struke` ist Ausbildungsberuf | ADR-0002 Q8.5.9 |
+| Von/bis + Jobgruppe | Discovery | ADR-0002 Q8 |
+| Worker-RAM / Redis | RAM später nach RPC; Redis/Iris nicht R1 | ADR-0002 Cache |
 
-Linear: ACT-100, Projekt Dino problem baza CRM, Team Activi.
+Linear: ACT-100 In Progress. ACT-101–109 Done, darunter ACT-103
+(1A 2A 3A). Projekt Dino problem baza CRM, Team Activi.

@@ -11,8 +11,8 @@ Erfahrungsberufe und Tätigkeitsarten. Ihre Pflege verändert die fachliche
 Suchlogik für alle späteren Suchen. Der öffentliche Runtime-Such-MCP soll
 hingegen ausschließlich validierte Filter ausführen und keine Taxonomie- oder
 Profiländerungen erlauben. Eine allgemeine Bestätigung vor jeder neuen oder
-geänderten Suche ist gemäß der Nutzerkorrektur vom 2026-09-11 nur ein
-`VORLÄUFIGER VORSCHLAG`; Q7 verlangt weiterhin Zustimmung zu Lockerungen.
+geänderten Suche ist in ADR-0002 seit 2026-09-13 `BESTÄTIGT` (Filter zeigen,
+dann eine Suche). Q7 verlangt weiterhin Zustimmung zu Lockerungen.
 
 Grundlage dieser Entscheidung sind Q8.4 und Q8.4.2 aus
 [ADR-0002](0002-search-design-interview.md) sowie die

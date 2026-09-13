@@ -68,11 +68,12 @@ Zusätzlich aus ADR-0002 Q18 / Bericht-Audit 2026-09-13:
 | Archiv plus andere Filter | PHP wirft Formularfilter weg; Entwurf lehnt die Mischung ab |
 | Stille PHP-Joins ohne Gruppe/Status | **BESTÄTIGT** nein; sichtbar lassen, nicht INNER JOIN kopieren |
 | Prijave-Labels | DB, kein Dump |
-| Ranking / Cursor-Spalte | OFFEN |
-| JMBG in der Trefferliste | PHP ja; R1-Ausgabe unbestätigt |
+| Ranking / Cursor-Spalte | größte `kandidat_id` zuerst (`BESTÄTIGT`) |
+| JMBG in der Trefferliste | intern ja, kein Filter (`BESTÄTIGT`) |
 | Bestätigung vor jeder Suche | `BESTÄTIGT`: Filter zeigen, dann eine Suche |
 | Auth / Hosting / SDK | ein Such-MCP, Tokens je Rolle (`BESTÄTIGT`); Hosting/SDK-Version OFFEN |
 | Export | CSV/Excel, Recruiter wählt; max. 500; inkl. JMBG und Kontakt; nicht Kunde |
+| Genannter Job für Jahre | braucht ein Feld; `struke` ist Ausbildungsberuf |
 
 - JSON-Filter R1: **ENTWURF**, geprüft, kein Vertrag.
 - Q15.6 Export: siehe ADR-0002. Nicht eine der drei ACT-103-Fragen unten.
@@ -81,8 +82,7 @@ Zusätzlich aus ADR-0002 Q18 / Bericht-Audit 2026-09-13:
 
 ## Quellenkonflikt
 
-- JSON-Entwurf: Ranking/Cursor OFFEN. ADR-0002 Q18: Ranking R1 bestätigt, kandidat_id absteigend.
-- JSON-Entwurf: JMBG-Ausgabe unbestätigt. ADR-0002 Q18: JMBG intern bestätigt ja, kein Filter.
+Keine. Quellen sind auf den geprueften Markern gleich.
 
 Neueste ausdrückliche Antwort in ADR-0002 gewinnt. Der JSON-Entwurf wird
 dadurch nicht still zum Vertrag.

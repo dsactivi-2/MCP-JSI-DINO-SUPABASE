@@ -47,9 +47,8 @@ Novi Codex task treba učitati skillove. Ova sesija ih još ne vidi.
 3. Primijeniti donju CRM matricu umjesto generic primjera iz skilla.
 4. Scaffold raditi samo u sintetičkom/neprodukcijskom okruženju, npr.
    [Option 1 Setup](../runbooks/option-1-mcp-sdk-rpc-setup.md).
-5. Ne mijenjati trenutni discovery korak: sljedeći agent ostaje
-   [Bericht-Audit](../handoffs/2026-09-13-verify-verifier-report.md), ne
-   imena alata i ne produkcijski MCP.
+5. Scaffold samo na izričit zahtjev. Bericht-Audit 2026-09-13 je izvršen.
+   JSON ostaje nacrt. Nema produkcijskog MCP-a.
 
 Skillovi daju obrasce. Oni ne dokazuju shemu, ne biraju stack i ne
 mijenjaju ADR-ove.

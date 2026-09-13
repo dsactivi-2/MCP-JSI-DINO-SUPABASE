@@ -53,7 +53,10 @@ treba omogućiti ljudsku procjenu prikladnosti kandidata.
 | Status prijave | `kandidat_status_prijave`; labele u DB, ne u PHP. |
 | Messenger-status | `kandidat_status_messenger` (SMS čeka / ulogovan / odbio / profil nedovršen). |
 | DIPL-status | Zasebna skala 0–7 u filteru, nije ista kao obrada. |
-| JSON-Filter | Mali dozvoljeni obrazac iz teksta; Postgres traži (ADR-0001). |
+| JSON-Filter | Mali dozvoljeni obrazac iz teksta; Postgres traži (ADR-0001). ENTWURF, nije ugovor. |
+| Ranking R1 | Najveći `kandidat_id` prvi. |
+| Export R1 | Recruiter: CSV ili Excel, max. 500, uklj. JMBG i kontakt. Nije Kunde. |
+| Runtime-Such-MCP | Jedan search-MCP, token po ulozi. Hosting/SDK-verzija OFFEN. |
 
 <!-- markdownlint-enable MD013 -->
 

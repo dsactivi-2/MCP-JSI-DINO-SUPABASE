@@ -56,8 +56,8 @@ Produktregeln, die schon stehen:
 - Q17: Heft und alte UI/PHP sind gleichberechtigt.
 - Q21: Funktionen aus dem PHP erfassen und modern umsetzen, nicht 1:1 kopieren.
 - Q22: Jetzt nur altes CRM scannen. occupation und andere PG-Zusatzfelder sind jetzt kein Scan-Auftrag.
-- Q8.5 ist TEILWEISE BESTÄTIGT (8.5.1 und 8.5.3–8). „5 Jahre“ ist kein R1-Feld.
-- Export Q15.6 bleibt OFFEN.
+- Q8.5 ist TEILWEISE BESTÄTIGT (8.5.1, 8.5.3–8, 8.5.9 Jahresfilter in R1).
+- Export Q15.6: Blättern und CSV/Excel max. 500, inkl. JMBG/Kontakt.
 
 Bereits gelaufen:
 - Großen Dump nach crm-master-3/databaseDump kopiert; 2024_10_28.sql liegt noch daneben.
@@ -120,7 +120,7 @@ beide ausführen. Die Website-Datei wurde nicht gelöscht.
 | Kunde nach Vertrag (Vorschlagsfreigabe) | vorgeschlagene Kandidaten ohne Kontakt |
 | Kunde nach Zusage (Einstellungsfreigabe = CONTACT-02) | Kontakte nur dieses Kandidaten |
 
-Plugin an Produktion/Klon verboten. Export Q15.6 OFFEN.
+Plugin an Produktion/Klon verboten. Export Q15.6 teilweise bestätigt.
 
 ### Q17–Q22
 
@@ -168,12 +168,12 @@ Freigabe. Siehe runtime-search-mcp-end-to-end.md.
 | --- | --- |
 | Filter-SQL serversidedata.php | gelesen, siehe crm-filter-sql-codebefund.md |
 | Manuelle Statuswege do.php / ajax.php | B7 gelesen, siehe crm-status-codebefund.md; Rest-Cases offen |
-| Wizard 03 Alltag | bestätigt; Rest: Struke/Smjer, 5-Jahre-Filter |
+| Wizard 03 Alltag | bestätigt; Struke/Smjer = Ausbildungsberuf; Jahre Q8.5.9 |
 | Q8.5 | TEILWEISE |
 | idk_kandidati vs idk_nd_* | DURCH DISCOVERY |
 | JSON-Filter R1 | Entwurf crm-json-filter-draft.md |
 | JSON/MCP/RPC, Auth, Hosting | nicht gewählt |
-| Export | Q15.6 OFFEN |
+| Export | Q15.6 CSV/Excel max. 500 |
 | step1 Website-Dump | Script-Lücke |
 | Zwei SQL in databaseDump | Init-Risiko |
 | C 4–9 Nachricht je Wechsel | gelesen, crm-notify-codebefund.md; Produkt default aus |
