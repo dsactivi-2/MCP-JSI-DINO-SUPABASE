@@ -78,6 +78,7 @@ def main() -> None:
             "Status: **ENTWURF**",
             "kein abgenommener Vertrag",
             "ohne Gruppe/Bearbeitung bleiben sie sichtbar",
+            "MCP nur Postgres",
             "R1 übernimmt den PHP-Zählfehler nicht",
         ),
     )

@@ -55,11 +55,11 @@ performance, or restore.
 - The runtime LLM must never generate or execute arbitrary SQL.
 - PostgreSQL remains authoritative for filtering, ranking, authorization, and
   pagination.
-- In the new search, candidates without a matching group or Bearbeitung
-  row stay visible. The old recruiter list (`lista_kandidata`) still hides
-  those people via PHP `INNER JOIN` on `idk_kandidati_grupe` /
-  `idk_kandidat_status`. Leave that live list unchanged until the user
-  asks to change PHP.
+- Runtime search talks only to Supabase/Postgres, never to PHP
+  `lista_kandidata`. Candidates without a matching group (`kg_id`) or
+  Bearbeitung (`status_id`) row stay visible. Do not copy the PHP
+  `INNER JOIN` on `idk_kandidati_grupe` / `idk_kandidat_status`. A set
+  group or status filter still applies. Leave the Jobstep list unchanged.
 - Never send the full candidate database or bulk candidate records to an LLM.
 - Search responses are capped at 50 candidates per page.
 - Internal Vermittler roles (Sachbearbeiter, Teamleiter, Inhaber, Entwickler)
@@ -157,7 +157,9 @@ export narrows discovery but does not authorize or replace Gate B.
 
 Record the search-design interview in
 [ADR-0002](docs/decisions/0002-search-design-interview.md). Read it before the
-next question. After every explicit user answer, update that file immediately.
+next question. After every explicit user answer, update that file immediately,
+before the next question. A round is not done while the answer exists only in
+chat.
 Do not infer a decision from an explanation, a recommendation, or an unanswered
 question. Keep unresolved items `OFFEN` and partial decisions
 `TEILWEISE BESTÄTIGT`. Label unverified physical facts `ARBEITSANNAHME` or

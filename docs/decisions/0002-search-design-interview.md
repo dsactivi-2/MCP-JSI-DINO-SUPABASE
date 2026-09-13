@@ -975,10 +975,16 @@ Datensatz-Dump.
 
 Noch `OFFEN` in Wizard 03: Secret-Check (Betriebsfrage).
 
-INNER JOIN Gruppe/Status in R1: `BESTÄTIGT` nein, 2026-09-13. Kandidaten
-ohne Gruppen- oder Bearbeitungszeile bleiben sichtbar. PHP-INNER-JOIN
-nicht übernehmen. Die alte Suche behält `INNER JOIN` in `lista_kandidata`
-(Liste und Zählung); das ist PHP-Ist, kein R1-Soll. Andere Filter gelten weiter.
+INNER JOIN Gruppe/Status in R1: `BESTÄTIGT` nein, 2026-09-13.
+Nutzer: Für den MCP zählt nur Supabase/Postgres. Die alte PHP-Suche in
+Jobstep bleibt. Der Runtime-Such-MCP spricht nicht mit `lista_kandidata`
+und hat keinen Zugriff auf das PHP-CRM. Der JOIN dort ist nur die Lektion:
+nicht nachbauen. In R1 auf Postgres kein `INNER JOIN` auf
+`idk_kandidati_grupe` / `idk_kandidat_status`, der Leute ohne passende
+`kg_id` oder `status_id` verschwinden lässt. Die bleiben in der
+MCP-Suche sichtbar. Ein gesetzter Gruppen- oder Status-Filter gilt trotzdem.
+PHP umbauen oder „so sucht Jobstep heute“ als Live-Beweis für R1 braucht
+es dafür nicht.
 
 **Update 2026-09-13 JSON-Filter:** Entwurf nur der alten Filter:
 [crm-json-filter-draft.md](../discovery/crm-json-filter-draft.md).
@@ -996,7 +1002,8 @@ Bericht-Audit 2026-09-13: Vorbericht-PASS nicht haltbar. Archiv-Satz in
 Nutzer 2026-09-13 Punkt 1 **Ja:** Vorbericht-PASS zählt nicht.
 Punkt 3 **Ja:** JSON bleibt Entwurf, kein Vertrag.
 Punkt 2 (Archiv-Satz) **Ja:** PHP-Zählfehler kennen, in R1 nicht kopieren.
-INNER JOIN: Nutzer **Nein**, Leute ohne Gruppe/Bearbeitung bleiben sichtbar.
+INNER JOIN: Nutzer **Nein**. MCP nur Postgres; PHP-JOIN nicht nachbauen;
+ohne kg_id/status_id sichtbar; gesetzter Filter gilt.
 JMBG in der internen Trefferliste: `BESTÄTIGT` ja. Kein Filter, nicht
 wichtig für Auswahl. Bleibt besonders sensibel. Discovery ohne Werte.
 Ranking R1: `BESTÄTIGT` 2026-09-13. Sortierung nach `kandidat_id`

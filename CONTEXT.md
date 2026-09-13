@@ -33,7 +33,7 @@ treba omogućiti ljudsku procjenu prikladnosti kandidata.
 | Relevante Berufserfahrung | Samo poslovi koji odgovaraju traženom zanimanju: ista/slična riječ, srodan naziv ili ista Berufsgruppe. Nepovezan posao (npr. Verkäufer uz pretragu Elektriker) se ne sabire. Liste prvo; KI samo prijedlog (Q8.5.3–8). R1-filter `min_relevant_experience_years` zbraja von–bis te liste, ne Aktenzahlen (Q8.5.9). Preklapanja se ne sabiraju; tekući posao do danas. |
 | Aktiver Filter | Korisnik ga je izričito naveo ili potvrdio u pregledu; nenavedena kategorija je neaktivna i ne ograničava rezultat. |
 | Profilverwaltungs-MCP | Interna upravljačka granica za nacrte, provjeru i verzionirano objavljivanje Berufssuchprofila; odvojena je od read-only Runtime-Such-MCP-a. |
-| Runtime-Such-MCP | Kontrolisana read-only granica za pretragu, pojedinačni profil i dozvoljene filteropcije; korisnikov identitet i dozvoljeni opseg vrijede za svaki poziv. |
+| Runtime-Such-MCP | Jedan read-only search-MCP, token po ulozi; pretraga, pojedinačni profil i dozvoljene filteropcije. Hosting/SDK-verzija OFFEN. |
 | Autentificirani akter | Provjereni pozivalac; sama prijava ne daje pravo na svaki kandidat, profil ili administrativnu radnju. |
 | Kanonski model | Dogovoreni domenski pojmovi na koje se mapira stvarna shema. |
 | Taksonomija | Verzija odobrenih pojmova, identifikatora i višejezičnih sinonima. |
@@ -44,7 +44,9 @@ treba omogućiti ljudsku procjenu prikladnosti kandidata.
 | Ähnlichkeitssuche | Eksplicitni extra-modus „sličan ovom kandidatu“, nije default. Nije R1 must-have; isporuka nakon evaluacijskog gatea. |
 | Discovery | Odobreni read-only postupak utvrđivanja sheme i kvaliteta podataka. |
 | Heft (ADR-0002) | Ciljevi i izričite odluke design intervjua; nije whitelist. |
-| Stara Filter-UI | Kako recruiter danas traži u PHP-CRM (`kandidati.php` Filter). |
+| Stara Recruiter-lista | Današnja PHP-pretraga u Jobstep. `lista_kandidata` baca kandidate bez `kg_id` ili `status_id`. MCP to ne zove. JOIN je lekcija, ne R1-dokaz. |
+| Nova pretraga (R1) | Runtime-Such-MCP samo na Supabase/Postgres. Bez INNER JOIN koji gubi ljude bez grupe/obrade. Postavljen filter grupe/statusa i dalje vrijedi. Još nije izgrađena. |
+| Stara Filter-UI | Filter-forma u PHP-CRM (`kandidati.php`). Dio stare Recruiter-liste. |
 | Codebefund | Inventar iz koda, bez tvrdnje da je to već MCP-ugovor. |
 | Quellenrang | Q17: Heft i stara UI su ravnopravni; novo iz koda ne ispada. |
 | Statuswechsel-Nachricht | Mail/Messenger/Erinnerung an Status; im Produkt default aus (Q20). |
@@ -56,7 +58,6 @@ treba omogućiti ljudsku procjenu prikladnosti kandidata.
 | JSON-Filter | Mali dozvoljeni obrazac iz teksta; Postgres traži (ADR-0001). ENTWURF, nije ugovor. |
 | Ranking R1 | Jedina sort-kolona: `crm.idk_kandidati.kandidat_id` (`int4`, PK, sequenca `crm.idk_kandidati_kandidat_id_seq`), najveći prvi. Ne JMBG, ne `users.id`. |
 | Export R1 | Recruiter: CSV ili Excel, max. 500, uklj. JMBG i kontakt. Nije Kunde. |
-| Runtime-Such-MCP | Jedan search-MCP, token po ulozi. Hosting/SDK-verzija OFFEN. |
 
 <!-- markdownlint-enable MD013 -->
 

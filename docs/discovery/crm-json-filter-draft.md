@@ -31,7 +31,7 @@ PHP-Nuancen, die der Entwurf **nicht** 1:1 kopiert (Q21), aber kennt:
 | `filter_smjer` gesetzt | Schule- **und** Struke-Bedingung fallen weg |
 | Cookie `archive_status` | SQL nur Status 3; Formularfilter fallen weg. Klassen danach an Liste-SQL und Zähl-SQL; Suchbox `search[value]` nur an Liste-SQL, nicht an Zähl-SQL. R1 übernimmt den PHP-Zählfehler nicht (Q21). Mischung nur-Archiv + andere Filter: ablehnen (`VORLÄUFIGER VORSCHLAG`) |
 | `filter_boravak` als Rohstring `LIKE` | später parametrisiert; Semantik bleibt „gewählte Werte“ |
-| `INNER JOIN` Gruppe und Status | PHP-Ist: immer Join auf `idk_kandidati_grupe` / `idk_kandidat_status`, auch ohne Filter; fehlende Zeile = weg. R1 **nicht**: ohne Gruppe/Bearbeitung bleiben sie sichtbar (`BESTÄTIGT` 2026-09-13). Andere Filter gelten weiter. |
+| `INNER JOIN` Gruppe und Status | PHP-Lektion in Jobstep, MCP ruft das nicht. R1 auf Postgres: kein INNER JOIN, der Leute ohne `kg_id`/`status_id` verschwinden lässt. ohne Gruppe/Bearbeitung bleiben sie sichtbar. Gesetzter Filter gilt (`BESTÄTIGT` 2026-09-13). |
 
 Heft Q8: UND zwischen Kategorien ist dort `VORLÄUFIGER VORSCHLAG`. PHP
 ist AND (`BELEGT`). R1 folgt der alten Maske (Q18 Alltag). Sprachen
@@ -197,7 +197,7 @@ Alte CRM-RPCs nicht wrappen.
 | Wie „mindestens X Jahre“ zählen | **R1** Q8.5.9: von–bis, Job + Jobgruppe; Q8.5.3–8 |
 | Messenger / Task-Force im JSON | nicht in der Maske; Q19 fein **OFFEN** |
 | Archiv plus andere Filter | PHP wirft Formularfilter weg; Entwurf lehnt die Mischung ab |
-| Stille PHP-Joins ohne Gruppe/Status | **BESTÄTIGT** nein; sichtbar lassen, nicht INNER JOIN kopieren |
+| Stille PHP-Joins ohne Gruppe/Status | **BESTÄTIGT** nein. MCP nur Postgres; nicht nachbauen; ohne kg_id/status_id sichtbar; gesetzter Filter gilt |
 | Prijave-Labels | DB, kein Dump |
 | Ranking / Cursor-Spalte | nur `idk_kandidati.kandidat_id`, größte zuerst (`BESTÄTIGT`); nicht JMBG, nicht `users.id` |
 | JMBG in der Trefferliste | intern ja, kein Filter (`BESTÄTIGT`) |

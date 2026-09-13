@@ -29,9 +29,11 @@ und `INNER JOIN idk_kandidat_status` auf `kandidat_status = status_id`.
 Ohne passende Nachschlagezeile (`kg_id` / `status_id`) fällt der Kandidat
 in der **alten** Suche raus. Das ist PHP-Ist, nicht der R1-Vertrag.
 
-R1 kopiert dieses INNER JOIN **nicht**. Kandidaten ohne Gruppen- oder
-Bearbeitungszeile bleiben sichtbar (ADR-0002 Q18, 2026-09-13). Ein gesetzter
-Gruppen- oder Status-Filter gilt weiter.
+R1 auf Postgres kopiert dieses INNER JOIN **nicht**. Der MCP spricht
+nicht mit `lista_kandidata`. Kandidaten ohne `kg_id` oder `status_id`
+bleiben in der MCP-Suche sichtbar (ADR-0002 Q18, 2026-09-13). Ein gesetzter
+Gruppen- oder Status-Filter gilt weiter. PHP bleibt. Jobstep-heute ist kein
+Live-Beweis für R1.
 
 ## Filterlogik (PHP, nicht modernisiert)
 

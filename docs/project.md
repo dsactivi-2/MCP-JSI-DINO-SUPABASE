@@ -214,15 +214,16 @@ Q17: Heft i stara UI su ravnopravni. Wizard-03-Alltag je potvrđen
 (R1 = stara Hauptsuche). Struke/Smjer = Ausbildungsberuf.
 Jahresfilter R1: von–bis passender Jobs (Q8.5.9). Elektriker zählt
 elektricar und Elektroinstallateur, nicht Verkäufer.
-PHP-Ist: `lista_kandidata` uvijek `INNER JOIN` grupu i status obrade;
-bez `kg_id`/`status_id` stara pretraga ih baca.
-R1-Soll: taj JOIN se ne kopira; bez grupe/obrade ostaju vidljivi.
+PHP-Ist u Jobstep: `lista_kandidata` uvijek `INNER JOIN` grupu i
+status obrade; bez `kg_id`/`status_id` stara lista ih baca. MCP to ne
+zove. Lekcija: ne kopirati. R1 na Postgres: bez tog INNER JOIN; bez
+grupe/obrade ostaju vidljivi. Postavljen filter i dalje vrijedi.
 C 4–9 je pročitan:
 [crm-notify-codebefund.md](discovery/crm-notify-codebefund.md).
 JSON-Filter Entwurf:
 [crm-json-filter-draft.md](discovery/crm-json-filter-draft.md).
 Provjeren 2026-09-13 (PHP + Heft). Struke/Smjer = Ausbildungsberuf.
-Jahresfilter R1: Q8.5.9. INNER JOIN: PHP-Ist da, R1 ne kopira, sichtbar ohne Gruppe/Bearbeitung.
+Jahresfilter R1: Q8.5.9. INNER JOIN: PHP-Lektion, MCP nur Postgres, nicht nachbauen.
 Bericht-Audit: Punkte 1–3 bestätigt. Archiv-Satz bleibt.
 Ranking nur `idk_kandidati.kandidat_id` desc. Export CSV/Excel max. 500.
 Ein Such-MCP + Tokens.

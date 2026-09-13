@@ -54,8 +54,8 @@ Zusätzlich aus ADR-0002 Q18 / Bericht-Audit 2026-09-13:
 - JSON bleibt Entwurf, kein Vertrag. Punkt 3 **Ja**.
 - Vorbericht-PASS zählt nicht. Punkt 1 **Ja**.
 - Struke/Smjer = Ausbildungsberuf; JSON-Namen bleiben struke / smjer.
-- Jahresfilter R1 Q8.5.9: von–bis passender Jobs. Elektriker zählt elektricar und Elektroinstallateur, nicht Verkäufer. Alte UI bleibt ja/nein.
-- Ranking R1: nur idk_kandidati.kandidat_id, größte zuerst.
+- Jahresfilter R1 Q8.5.9: von–bis, Job + Jobgruppe. Alte UI bleibt ja/nein.
+- Ranking R1: größte kandidat_id zuerst.
 - JMBG intern in der Trefferliste ja, kein Filter, Discovery ohne Werte.
 
 ## Bleibt Entwurf oder OFFEN — nicht hier schließen
@@ -66,7 +66,7 @@ Zusätzlich aus ADR-0002 Q18 / Bericht-Audit 2026-09-13:
 | Wie „mindestens X Jahre“ zählen | **R1** Q8.5.9: von–bis, Job + Jobgruppe; Q8.5.3–8 |
 | Messenger / Task-Force im JSON | nicht in der Maske; Q19 fein **OFFEN** |
 | Archiv plus andere Filter | PHP wirft Formularfilter weg; Entwurf lehnt die Mischung ab |
-| Stille PHP-Joins ohne Gruppe/Status | **BESTÄTIGT** nein; sichtbar lassen, nicht INNER JOIN kopieren |
+| Stille PHP-Joins ohne Gruppe/Status | **BESTÄTIGT** nein. MCP nur Postgres; nicht nachbauen; ohne kg_id/status_id sichtbar; gesetzter Filter gilt |
 | Prijave-Labels | DB, kein Dump |
 | Ranking / Cursor-Spalte | nur `idk_kandidati.kandidat_id`, größte zuerst (`BESTÄTIGT`); nicht JMBG, nicht `users.id` |
 | JMBG in der Trefferliste | intern ja, kein Filter (`BESTÄTIGT`) |

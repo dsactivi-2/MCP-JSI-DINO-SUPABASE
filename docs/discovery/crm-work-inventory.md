@@ -21,7 +21,8 @@ JSON-Filter-Entwurf ist 2026-09-13 gegen PHP und Heft geprüft.
 Struke/Smjer = Ausbildungsberuf: bestätigt. Jahresfilter R1: von–bis im
 genannten Job + Jobgruppe (Q8.5.9).
 INNER JOIN: nicht übernehmen, ohne Gruppe/Bearbeitung sichtbar.
-PHP-Ist in `lista_kandidata` immer (Gruppe + Status obrade); R1 kopiert das nicht.
+MCP nur Postgres; PHP-JOIN nicht nachbauen. Ohne kg_id/status_id sichtbar.
+Gesetzter Filter gilt. PHP bleibt.
 Nutzer 2026-09-13 Punkt 1 **Ja:** Vorbericht-PASS zählt nicht.
 Punkt 3 **Ja:** JSON bleibt Entwurf, kein Vertrag.
 Punkt 2 **Ja:** Archiv-Satz bleibt (Zählfehler nicht kopieren).
