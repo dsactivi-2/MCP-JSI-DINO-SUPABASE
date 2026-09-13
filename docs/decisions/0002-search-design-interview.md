@@ -341,13 +341,15 @@ nicht als beantwortet.
 
 ### Q8 – Noch offene Unterfragen
 
-**Status:** `OFFEN`
+**Status:** `TEILWEISE BESTÄTIGT`
 
-- Q8.5.3 erledigt: nur fachlich passende Jobs.
-- Wann gilt eine Beschäftigungszeit als relevant: über den Beruf, die Tätigkeit
-  oder eine kontrollierte Kombination aus beiden?
-- Wie werden überlappende Beschäftigungszeiten bei der Berechnung relevanter
-  Erfahrungsmonate behandelt?
+Live-Stand in Q8.5: 8.5.1 und 8.5.3–8 `BESTÄTIGT`; 8.5.2 `IGNORIERT`;
+Jahre sind kein R1-Filter. Überlappung und Enddatum ohne Ende sind beantwortet.
+
+Noch offen unter Q8, nicht für R1:
+
+- Ob eine spätere Jahres-Filterformel Beruf und Tätigkeit kombinieren muss,
+  sobald Jahre überhaupt ein Filter werden.
 
 ### Weitere offene Entscheidungen
 
@@ -939,6 +941,10 @@ Nutzer 2026-09-13 Punkt 1 **Ja:** Vorbericht-PASS zählt nicht.
 Punkt 3 **Ja:** JSON bleibt Entwurf, kein Vertrag.
 Punkt 2 (Archiv-Satz) **Ja:** PHP-Zählfehler kennen, in R1 nicht kopieren.
 INNER JOIN: Nutzer **Nein**, Leute ohne Gruppe/Bearbeitung bleiben sichtbar.
+JMBG in der internen Trefferliste: `BESTÄTIGT` ja. Kein Filter, nicht
+wichtig für Auswahl. Bleibt besonders sensibel. Discovery ohne Werte.
+Ranking R1: `BESTÄTIGT` 2026-09-13. Sortierung nach `kandidat_id`
+absteigend, größte Nummer zuerst (neueste). Ein Kriterium, kein Tie-Breaker.
 
 Index: [crm-work-inventory.md](../discovery/crm-work-inventory.md).
 C 4–9: [crm-notify-codebefund.md](../discovery/crm-notify-codebefund.md).

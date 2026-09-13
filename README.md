@@ -7,72 +7,26 @@ procjena (DURCH DISCOVERY ZU PRÜFEN), ne potvrđen broj zapisa.
 
 ## Početak
 
-Pročitati [stanje projekta](docs/project.md), zatim
-[domenski kontekst](CONTEXT.md) i
-[implementacijski brief](docs/SUPABASE_CRM_MCP_IMPLEMENTATION_BRIEF.md).
+Prvo [stanje projekta](docs/project.md). Pojmove u [CONTEXT.md](CONTEXT.md).
+Zahtjeve u [briefu](docs/SUPABASE_CRM_MCP_IMPLEMENTATION_BRIEF.md) samo kad
+treba ugovor ili kriterij prihvata, ne na početku svake sesije.
 
 ## Mapa dokumentacije
 
-<!-- markdownlint-disable MD013 -->
-
 | Dokument | Namjena |
 | --- | --- |
-| [AGENTS.md](AGENTS.md) | Pravila rada u repozitoriju. |
-| [CONTEXT.md](CONTEXT.md) | Poslovni kontekst i domenski rječnik. |
-| [docs/project.md](docs/project.md) | Trenutna faza, nedostaci i sljedeći cilj. |
-| [Briefing-Intro](docs/planning/briefing-intro.md) | Kratki njemački uvod: Import, veličina banke, ciljni MCP, trenutni korak. |
-| [Implementacijski brief](docs/SUPABASE_CRM_MCP_IMPLEMENTATION_BRIEF.md) | Zahtjevi, faze i kriteriji prihvata. |
-| [ADR-0001](docs/decisions/0001-controlled-query-boundary.md) | Prihvaćena arhitekturna granica; ADR-ovi žive u [docs/decisions/](docs/decisions/). |
-| [ADR-0002](docs/decisions/0002-search-design-interview.md) | Entwurf s pitanjima, odgovorima i otvorenim odlukama aktivnog design intervjua. |
-| [ADR-0003](docs/decisions/0003-separated-profile-administration-mcp.md) | Prihvaćena granica i obaveze odvojenog Profilverwaltungs-MCP-a. |
-| [ADR-0004](docs/decisions/0004-automated-database-development.md) | Prihvaćena automatizacija SQL razvoja, testiranja, optimizacije i release gateova. |
-| [Runbook automatizacije baze](docs/runbooks/database-development-automation.md) | Redoslijed lokalnih, CI, performance i produkcijskih provjera nakon scaffolda. |
-| [Plan automatizacijskih ticketa](docs/planning/release-1-automation-tickets.md) | Blockers-first nacrt ticketa prije zasebne Linear freigabe. |
-| [SDK integracijski plan](docs/planning/sdk-integration-plan.md) | Ažurirani prijedlog MCP/Supabase sklopa, token granice i SDK-01–08 gateovi; nije implementacija. |
-| [SDK primarna provjera](docs/research/mcp-supabase-sdk-integration.md) | Verzijske korekcije, auth/transport rizici i optimizacije iz službenih izvora. |
-| [Provjera SDK dokumentacije](docs/reviews/2026-09-11-sdk-documentation-verification.md) | Lokalna verifikacija dopune i granice preostalog integracijskog dokaza. |
-| [Q8.4.2 istraživanje](docs/research/berufssuchprofile-q8-4-2.md) | Primarne reference i evaluacija kontrolisanih Berufssuchprofila. |
-| [Audit i matrica korekcija](docs/reviews/decision-reconstruction-corrections.md) | Odobrene dokumentacijske korekcije, evidencija i otvorene odluke; izvorni audit ostaje historijski nalaz. |
-| [Discovery runbook](docs/runbooks/schema-discovery.md) | Preduslovi i postupak odobrenog read-only audita. |
-| [Runbook CRM-Suchverdrahtung](docs/runbooks/crm-source-wiring-capture.md) | Quellcode zuerst: Maske → RPC, Output-Vorlage, OrbStack nur als Fallback. |
-| [Plan CRM-Verdrahtung Schritt für Schritt](docs/runbooks/crm-wiring-human-plan.md) | Download-Anleitung: wo, welcher Befehl, was in die Vorlage. |
-| [Wizards CRM-Verdrahtung](docs/runbooks/crm-wiring-wizards.md) | Welcher Wizard wann; 01 scannen, dann Codex oder 02, danach 03. |
-| [Vorlage CRM-Verdrahtung](docs/discovery/crm-app-wiring.template.md) | Leeres Output-Dokument zum Ausfüllen außerhalb Git. |
-| [Inventar CRM-Scan](docs/discovery/crm-work-inventory.md) | Landkarte: gemappte Daten, Dateien, Lücken, nächster Schritt. |
-| [Codebefund PHP-Filter](docs/discovery/crm-app-wiring.md) | Lesart der alten `kandidati.php`-Filter-UI nach Wizard 01. |
-| [Codebefund Filter-SQL](docs/discovery/crm-filter-sql-codebefund.md) | Wie `lista_kandidata` wirklich filtert. |
-| [PHP-Suchzettel](docs/discovery/crm-php-hits/) | Wizard-01/04-`rg`-Output; nicht abschreiben. |
-| [Codebefund Status/Klick/Cron](docs/discovery/crm-status-codebefund.md) | B7-Klicks, Ebenen, Cron. |
-| [Codebefund C 4–9 Nachrichten](docs/discovery/crm-notify-codebefund.md) | Kanal und Auslöser je Statuswechsel; Produkt default aus. |
-| [JSON-Filter Entwurf R1](docs/discovery/crm-json-filter-draft.md) | Entwurf geprüft, kein Vertrag. Struke/Smjer = Ausbildungsberuf; 5 Jahre nicht in R1. Offen: INNER JOIN, Archiv-Satz. |
-| [Bericht-Audit Prompt](docs/handoffs/2026-09-13-verify-verifier-report.md) | Ablauf 2026-09-13 ausgeführt; Vorbericht-PASS nicht haltbar. |
-| [Aktueller Session-Prompt](docs/handoffs/2026-09-13-aktueller-session-prompt.md) | Nutzer liest Verdict. Nicht Tool-Namen, nicht MCP. |
-| [Handoff Scan-to-MCP](docs/handoffs/2026-09-13-scan-to-mcp.md) | Historische Session-Übergabe (Dump/Q4/step1-2). |
-| [Statička CRM schema analiza](docs/discovery/crm-schema-static-analysis.md) | Redigirani inventar lokalnog Schema Visualizer izvoza bez bazne konekcije. |
-| [Statička `crm_auth` analiza](docs/discovery/crm-auth-schema-static-analysis.md) | Redigirani pregled lokalnog auth/role/scope schema izvoza. |
-| [Plan statičke schema analize](docs/discovery/schema-analysis-tasklist.md) | Siguran tok i checklist za lokalni Schema Visualizer export bez bazne konekcije. |
-| [Supabase-Plugin Gate P](docs/discovery/supabase-plugin-read-only-gate-draft.md) | Neizvršivi NO-GO nacrt za eventualni projektno ograničen read-only Plugin pristup. |
-| [Supabase tooling](docs/agents/supabase-tooling.md) | Obavezno usmjeravanje za instalirane Supabase skills i blokirani Live-MCP pristup. |
-| [MCP server-dev tooling](docs/agents/mcp-server-dev-tooling.md) | Službeni MCP design-skills; remote HTTP i JSON-filter granica, bez produkcijskog spoja. |
-| [Tool routing](docs/agents/tool-routing.md) | Instalirani Linear, Serena, Git, plugin-i, wizards i skills; dostupnost nije odobrenje. |
-| [Istraživanje Supabase alata](docs/research/supabase-werkzeuge-fuer-crm-mcp.md) | Procjena plugina, MCP-a, skillsa, CLI-ja i kasnijih razvojnih alata. |
-| [Brief za MCP/TypeScript auto-wire istraživanje](docs/research/mcp-autowire-research-brief.md) | Agent-prompt: obim baze, filteri u više nivoa i klase gotovih alata. |
-| [Nalaz MCP/TypeScript auto-wire](docs/research/mcp-autowire-candidates.md) | Primarni izvori: nijedan auto-MCP nije siguran runtime; codegen i SDK v2 jesu. |
-| [Usporedba tri ispravna puta](docs/research/mcp-autowire-top3-vergleich.md) | RPC, `gen types`+`.rpc()` i pgtyped: autonomija uz ADR-0001. |
-| [Agent-Prompt Suche/Tabellen/Fehler](docs/research/mcp-search-agent-prompt.md) | Copy-paste: Tabellen, Suchlesarten, Ausbildung/Beruf/Freitext. |
-| [Runbook Option 1 Setup](docs/runbooks/option-1-mcp-sdk-rpc-setup.md) | Lokales Eval: MCP SDK v2, Zod, synthetische Postgres-RPC. |
-| [Optimalni SQL i automatizacijski put](docs/research/optimaler-sql-und-automatisierungsweg.md) | Primarne reference, rangiranje alata i prihvaćeni native-first cilj. |
-| [Gate semantičke pretrage](docs/research/semantic-search-evaluation-gate.md) | Kriteriji, faze i stop-uslovi za poređenje FTS-a, `pgvector`-a i Vector Bucketa. |
-| [Objašnjenje Supabase skillsa](docs/research/supabase-agent-skills-einfach-erklaert.md) | Sadržaj, granice i postupak ažuriranja projektnih kopija skillsa. |
-| [Pristupni plan](docs/discovery/access-plan-consolidated.md) | Bootstrap, restore uslov, verzije gateova i naredna freigabe. |
-| [Registar verzija pristupa](docs/discovery/role-version-register.md) | Status rola V1-V3, Gate-B1-V3 i odobrenja Q10.2g-Q10.2m. |
-| [Plan PUBLIC prava](docs/discovery/public-rights-change-proposal.md) | Ciljni ACL rez Q10.2l A i residualnih osam LO privilegija. |
-| [Karta odluka](docs/discovery/project-decision-map.md) | Fakti, odluke, prijedlozi, annahme, gateovi i kritični put. |
-| [Gate B preflight](docs/discovery/security-read-only-discovery-preflight-b.md) | Aktivni read-only discovery gate i njegove granice. |
-| [docs/reviews/](docs/reviews/) i [docs/worklogs/](docs/worklogs/) | Datirani dokazi; historijski nalazi se ne prepravljaju. |
-| [Issue tracker](docs/agents/issue-tracker.md), [triage oznake](docs/agents/triage-labels.md), [domenska pravila](docs/agents/domain.md) | Linear ACT-100 mapa, triage i domenski unos. |
-
-<!-- markdownlint-enable MD013 -->
+| [AGENTS.md](AGENTS.md) | Pravila rada agenata. |
+| [CONTEXT.md](CONTEXT.md) | Domenski rječnik. |
+| [docs/project.md](docs/project.md) | Faza, blocker, sljedeći korak. |
+| [Implementacijski brief](docs/SUPABASE_CRM_MCP_IMPLEMENTATION_BRIEF.md) | Zahtjevi, faze, prihvat. |
+| [docs/decisions/](docs/decisions/) | ADR-ovi, uključujući aktivni intervju ADR-0002. |
+| [Inventar CRM-Scan](docs/discovery/crm-work-inventory.md) | PHP-scan landkarte. |
+| [docs/agents/](docs/agents/) | Linear, tooling, routing. |
+| [docs/runbooks/](docs/runbooks/) | Discovery, wiring, automatizacija. |
+| [docs/discovery/](docs/discovery/) | Codebefund, gate, filter-nacrt. |
+| [docs/research/](docs/research/), [reviews](docs/reviews/), [worklogs](docs/worklogs/), [handoffs](docs/handoffs/) | Dokaz; historijski se ne prepisuje. |
+| [Plan statičke schema analize](docs/discovery/schema-analysis-tasklist.md) | Lokalni schema izvoz bez bazne konekcije. |
+| [Supabase-Plugin Gate P](docs/discovery/supabase-plugin-read-only-gate-draft.md) | NO-GO nacrt; plugin nije odobren. |
 
 ## Konsolidovani plan
 

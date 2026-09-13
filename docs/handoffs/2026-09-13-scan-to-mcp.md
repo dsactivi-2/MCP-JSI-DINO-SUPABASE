@@ -35,7 +35,7 @@ Du setzt die Arbeit am Supabase CRM MCP fort. Lies in dieser Reihenfolge und arb
 2. docs/handoffs/2026-09-13-scan-to-mcp.md
 3. docs/project.md
 4. CONTEXT.md
-5. docs/decisions/0002-search-design-interview.md — mindestens Q4 (ERSETZT), Q8.5 (OFFEN), Q15, Q17, Q18, Q19, Q20, Q21, Q22
+5. docs/decisions/0002-search-design-interview.md — mindestens Q4 (ERSETZT), Q8.5 (TEILWEISE), Q15, Q17, Q18, Q19, Q20, Q21, Q22
 6. docs/discovery/crm-app-wiring.md, crm-filter-sql-codebefund.md, crm-status-codebefund.md
 7. docs/runbooks/crm-wiring-wizards.md
 
@@ -56,7 +56,7 @@ Produktregeln, die schon stehen:
 - Q17: Heft und alte UI/PHP sind gleichberechtigt.
 - Q21: Funktionen aus dem PHP erfassen und modern umsetzen, nicht 1:1 kopieren.
 - Q22: Jetzt nur altes CRM scannen. occupation und andere PG-Zusatzfelder sind jetzt kein Scan-Auftrag.
-- Q8.5 bleibt vollständig OFFEN (was „5 Jahre Erfahrung“ zählt).
+- Q8.5 ist TEILWEISE BESTÄTIGT (8.5.1 und 8.5.3–8). „5 Jahre“ ist kein R1-Feld.
 - Export Q15.6 bleibt OFFEN.
 
 Bereits gelaufen:
@@ -133,7 +133,7 @@ Plugin an Produktion/Klon verboten. Export Q15.6 OFFEN.
 | Q21 | Funktionen erfassen, modern umsetzen, nicht 1:1 |
 | Q22 | Jetzt nur altes CRM; occupation jetzt kein Scan |
 
-Q8.5 bleibt vollständig OFFEN. Q8.4 bleibt bestätigt.
+Q8.5 ist TEILWEISE BESTÄTIGT (ADR-0002). Q8.4 bleibt bestätigt.
 
 ## 5. Was konkret gelaufen ist
 
@@ -169,7 +169,7 @@ Freigabe. Siehe runtime-search-mcp-end-to-end.md.
 | Filter-SQL serversidedata.php | gelesen, siehe crm-filter-sql-codebefund.md |
 | Manuelle Statuswege do.php / ajax.php | B7 gelesen, siehe crm-status-codebefund.md; Rest-Cases offen |
 | Wizard 03 Alltag | bestätigt; Rest: Struke/Smjer, 5-Jahre-Filter |
-| Q8.5 | OFFEN |
+| Q8.5 | TEILWEISE |
 | idk_kandidati vs idk_nd_* | DURCH DISCOVERY |
 | JSON-Filter R1 | Entwurf crm-json-filter-draft.md |
 | JSON/MCP/RPC, Auth, Hosting | nicht gewählt |

@@ -68,7 +68,8 @@ cijeli pool i sva polja uključujući kontakte. Kunde nikad ne vidi cijeli pool:
 Vorschlagsfreigabe bez kontakata,
 Einstellungsfreigabe (CONTACT-02) s kontaktima tek nakon zasuge.
 Predložene filterdetalje i nepotpuni JSON nacrt ne treba tumačiti kao konačan
-ugovor; Q8.5 je u cijelosti OFFEN.
+ugovor; Q8.5 je TEILWEISE BESTÄTIGT u ADR-0002: 8.5.1 i 8.5.3–8 stoje;
+8.5.2 ignorisan; godine nisu R1 filter.
 
 Prihvaćeni razvojni put iz
 [ADR-0004](decisions/0004-automated-database-development.md) automatizira SQL
@@ -341,7 +342,7 @@ pretpostavljanja kako se danas zovu fizičke tabele:
 | --- | --- |
 | Identitet | Stabilan, nepredvidiv candidate ID; bez emaila ili telefona kao ključa. |
 | Dob | Čuvati datum rođenja ako je zakonito; dob računati na referentni datum, ne pohranjivati kao zastarjeli broj. |
-| Iskustvo | VORLÄUFIGER VORSCHLAG: sačuvati originalni tekst i unaprijed normalizirati intervale. Q8.5 je u cijelosti OFFEN: ukupno ili relevantno iskustvo, preklapanja i praznine nisu odlučeni. |
+| Iskustvo | Q8.5 je TEILWEISE BESTÄTIGT u ADR-0002: relevantni poslovi, bez sabiranja preklapanja, tekući posao do danas. Godine nisu R1 filter. Vorabnormalizacija intervala ostaje VORLÄUFIGER VORSCHLAG. |
 | Ausbildungsberufe | DURCH DISCOVERY ZU PRÜFEN: postoje li kontrolisani CRM ID-ovi. Njihova upotreba, ako su prikladni, je VORLÄUFIGER VORSCHLAG; ne izvoditi vrijednosti bez odobrenog pravila. |
 | Zanimanja iz iskustva | Kanonski ID i odobreni nazivi/sinonimi na B/H/S, DE i EN, odvojeni od originalnog teksta. |
 | Tätigkeitsarten | Kontrolisani ID-ovi za stvarno obavljane vrste poslova, odvojeni od formalnog zanimanja i obrazovanja. |
@@ -1116,9 +1117,9 @@ vlasnika:
    podaci?
 5. Koji izvor je autoritativan kada se CRM polja i CV ne slažu?
 6. Koliko su podaci svježi, kako se ažuriraju i šta znači "dostupan sada"?
-7. Q8.5 je potpuno OFFEN: ukupno ili relevantno iskustvo, definicija
-   relevantnosti, kombinacija zanimanja i djelatnosti, preklapanja i nepotpuni
-   intervali.
+7. Q8.5 je TEILWEISE BESTÄTIGT u ADR-0002 (8.5.1, 8.5.3–8). Godine nisu R1
+   filter. Preostalo: da li kasnija godišnja formula kombinuje Beruf i
+   Tätigkeit, te Vorabnormalizacija intervala.
 8. Koliki su stvarni concurrency, obrazac upita, throughput i numerički cilj
    latencije?
 9. Koji pravni osnov, svrhe obrade, retention i pravila brisanja/izvoza vrijede?

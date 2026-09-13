@@ -3,6 +3,10 @@
 
 Datum: 2026-09-13
 
+**Stand dieser Datei:** historisch, 2026-09-13 nach Bericht-Audit. Nicht der
+Live-Status. Live: [crm-work-inventory.md](../discovery/crm-work-inventory.md)
+und [docs/project.md](../project.md).
+
 Handoff: [2026-09-13-session-handoff.md](2026-09-13-session-handoff.md).
 Audit-Worklog: [2026-09-13-json-filter-audit.md](../worklogs/2026-09-13-json-filter-audit.md).
 Landkarte: [crm-work-inventory.md](../discovery/crm-work-inventory.md).
@@ -14,7 +18,7 @@ Du setzt die Arbeit am Supabase CRM MCP fort. Antworte auf Deutsch, einfache Wor
 
 Du baust kein MCP. Du startest keine Tool-Namen und keine Eval. Du schließt keine OPEN-Lücken. Du übernimmst den alten PASS nicht.
 
-Bericht-Audit 2026-09-13 ist ausgeführt. Vorbericht-PASS ist nicht haltbar. In der Testdatei steht der getrennte Archiv-Satz: Klassen an Liste-SQL und Zähl-SQL; search[value] nur an Liste-SQL. R1 übernimmt den PHP-Zählfehler nicht (Q21). INNER JOIN, Struke/Smjer und „5 Jahre“ bleiben OFFEN.
+Bericht-Audit 2026-09-13 ist ausgeführt. Vorbericht-PASS ist nicht haltbar. In der Testdatei steht der getrennte Archiv-Satz: Klassen an Liste-SQL und Zähl-SQL; search[value] nur an Liste-SQL. R1 übernimmt den PHP-Zählfehler nicht (Q21). Struke/Smjer = Ausbildungsberuf. „5 Jahre“ ist kein R1-Feld. INNER JOIN nicht kopieren: ohne Gruppe/Bearbeitung sichtbar. JSON bleibt Entwurf.
 
 Lies zuerst, in dieser Reihenfolge, dann warte auf den Nutzer:
 

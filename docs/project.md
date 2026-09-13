@@ -18,128 +18,35 @@ MCP-kompatibilne klijente.
 
 ## Autoritativni dokumenti
 
-- [README.md](../README.md) daje ulaznu mapu i dokumentacijske provjere.
-- [CONTEXT.md](../CONTEXT.md) sadrži poslovni kontekst i domenski rječnik.
-- [Implementacijski brief](SUPABASE_CRM_MCP_IMPLEMENTATION_BRIEF.md) sadrži
-  zahtjeve, faze, test-matricu i otvorena pitanja.
-- [Briefing-Intro](planning/briefing-intro.md) je kratki njemački uvod u
-  Sachlage: Import, veličina banke, ciljni MCP i trenutni korak.
-- [docs/decisions/](decisions/) je jedini direktorij dugoročnih arhitekturnih
-  odluka; [ADR-0001](decisions/0001-controlled-query-boundary.md) definira
-  prihvaćenu granicu pretrage, a
-  [ADR-0002](decisions/0002-search-design-interview.md) čuva status pitanja i
-  odgovora aktivnog design intervjua. Prihvaćeni
-  [ADR-0003](decisions/0003-separated-profile-administration-mcp.md) zahtijeva
-  odvojeni MCP za upravljanje Berufssuchprofilima. Prihvaćeni
-  [ADR-0004](decisions/0004-automated-database-development.md) definira
-  native-first automatizaciju razvoja, testiranja i optimizacije baze.
-- [Discovery runbook](runbooks/schema-discovery.md) određuje preduslove i
-  postupak read-only audita.
-- [Runbook automatizacije baze](runbooks/database-development-automation.md)
-  određuje razvojne, CI, performance i release gateove nakon discoveryja.
-- [Runbook CRM-Suchverdrahtung](runbooks/crm-source-wiring-capture.md)
-  vodi mapiranje maske na RPC iz CRM izvornog koda; OrbStack samo kao fallback.
-- [Plan CRM-Verdrahtung](runbooks/crm-wiring-human-plan.md) je ljudska
-  download-uputa: svaki korak, mjesto, naredba i unos u predložak.
-- [Wizards CRM-Verdrahtung](runbooks/crm-wiring-wizards.md) određuje koji
-  wizard kada: 01 sken, zatim Codex ili 02, pa 03 abnahme.
-- [Predložak CRM-Verdrahtung](discovery/crm-app-wiring.template.md) je prazan
-  obrazac.
-- [Inventar CRM-Scan 2026-09-13](discovery/crm-work-inventory.md)
-  Landkarte: was gemappt ist, wo es liegt, was offen ist.
-- [Handoff Scan-to-MCP 2026-09-13](handoffs/2026-09-13-scan-to-mcp.md)
-  Historische Session-Übergabe. Nächster Schritt darin veraltet: Entwurf ist geprüft.
-- [Aktueller Session-Prompt](handoffs/2026-09-13-aktueller-session-prompt.md)
-  Nutzer liest Verdict. Nicht Tool-Namen, nicht MCP.
-- [Bericht-Audit Prompt](handoffs/2026-09-13-verify-verifier-report.md)
-  Ablauf 2026-09-13 ausgeführt; Vorbericht-PASS nicht haltbar.
-- [Codebefund PHP-Filter](discovery/crm-app-wiring.md) je lesart
-  `kandidati.php` nakon Wizard 01; Q17 izjednačuje Heft i staru UI.
-- [Codebefund Filter-SQL](discovery/crm-filter-sql-codebefund.md) kako
-  `lista_kandidata` stvarno filtrira.
-- [Codebefund Status/Klick/Cron](discovery/crm-status-codebefund.md) B7
-  i Automatik.
-- [Codebefund C 4–9 Nachrichten](discovery/crm-notify-codebefund.md)
-  Kanal und Auslöser je Wechsel; Produkt default aus.
-- [PHP-Suchzettel](discovery/crm-php-hits/) su sirovi rg-ispisi Wizard 01/04.
-- [Plan automatizacijskih ticketa](planning/release-1-automation-tickets.md)
-  daje blockers-first redoslijed prije zasebne Linear freigabe.
-- [SDK integracijski plan](planning/sdk-integration-plan.md) razrađuje MCP,
-  Supabase adapter, token granice i provjere; dokumentovani prijedlog nije
-  instalacija niti potvrđen stack.
-- [Plan statičke schema analize](discovery/schema-analysis-tasklist.md) vodi
-  preflight i obradu korisnički dostavljenog izvoza bez bazne konekcije.
-- [Supabase tooling](agents/supabase-tooling.md) razdvaja projektne skills,
-  razvojni Supabase plugin/MCP i strogo kontrolisani Gate-B put.
-- [MCP server-dev tooling](agents/mcp-server-dev-tooling.md) veže službene
-  `build-mcp-server` skillove na ADR-0001 i SDK plan; nije scaffold niti
-  produkcijski spoj.
-- [Tool routing](agents/tool-routing.md) veže Linear, Serena, Git, plugin-e,
-  wizards i skills na granice projekta.
-- [Issue tracker](agents/issue-tracker.md) čuva Linear identitet i live mapu
-  ACT-100–109.
-- [Supabase-Plugin Gate P](discovery/supabase-plugin-read-only-gate-draft.md)
-  dokumentuje neizvršivi `DRAFT / NO-GO` za mogući alternativni read-only put.
-<!-- markdownlint-disable-next-line MD013 -->
-- [Evaluacijski gate semantičke pretrage](research/semantic-search-evaluation-gate.md)
-  određuje kako se nakon discoveryja porede nevectorski baseline, `pgvector` i
-  Vector Buckets bez prethodnog izbora tehnologije.
-- [Brief za MCP/TypeScript auto-wire istraživanje](research/mcp-autowire-research-brief.md)
-  opisuje bazu, filtere u više nivoa i prompt za pretragu gotovih alata; nije
-  nalaz niti stack odluka.
-- [Nalaz MCP/TypeScript auto-wire](research/mcp-autowire-candidates.md)
-  ocjenjuje gotove MCP/ORM/search alate; nijedan nije siguran runtime Search-MCP.
-- [Usporedba tri ispravna puta](research/mcp-autowire-top3-vergleich.md)
-  poredi RPC, `gen types`+`.rpc()` i pgtyped bez auto-SQL MCP-a.
-- [Verifikacija jezika-do-RPC 2026-09-13](research/2026-09-13-nl-to-rpc-wiring-verification.md)
-  potvrđuje JSON-Filter + RPC; ne mijenja naredni korak (Audit-Verdict).
-- [Agent-Prompt Suche/Tabellen/Fehler](research/mcp-search-agent-prompt.md)
-  copy-paste opis tabela, suchlesarten i grešaka Ausbildung/Beruf/Freitext.
-- [Runbook Option 1 Setup](runbooks/option-1-mcp-sdk-rpc-setup.md)
-  lokalni eval MCP SDK v2 + Zod + sinteticki Postgres RPC; nije produkcija.
-- [End-to-end Runtime-Such-MCP](runbooks/runtime-search-mcp-end-to-end.md)
-  povezuje katalog, Jobstep-maske, ugovor, sinteticki MCP i produkcijski
-  pilot; nije freigabe niti stack odluka.
-- [AGENTS.md](../AGENTS.md) definira pravila rada agenata u repozitoriju.
+- [README.md](../README.md) — ulazna mapa i dokumentacijske provjere.
+- [CONTEXT.md](../CONTEXT.md) — domenski rječnik.
+- [Implementacijski brief](SUPABASE_CRM_MCP_IMPLEMENTATION_BRIEF.md) —
+  zahtjevi, faze i kriteriji prihvata.
+- [docs/decisions/](decisions/) — jedini ADR direktorij; ADR-0002 čuva
+  aktivni design intervju.
+- [Inventar CRM-Scan](discovery/crm-work-inventory.md) — PHP-scan landkarte.
+- [docs/runbooks/](runbooks/) — discovery, wiring, automatizacija.
+- [docs/agents/](agents/) — Linear, tooling, routing.
+- [docs/discovery/](discovery/) — codebefund, gate, filter-nacrt.
+- [AGENTS.md](../AGENTS.md) — pravila rada agenata.
 
 Ako se dokumenti ne slažu, rad se zaustavlja dok se konflikt ne razriješi
 ažuriranjem briefa ili novim ADR-om.
 
 ## Trenutno stanje
 
-Raniji [ograničeni Q10.2g audit](reviews/2026-09-11-public-definer-audit.md)
-nalazi dvije SECURITY-DEFINER rutine sa PUBLIC EXECUTE, bez PUBLIC schema
-USAGE; u tom ranijem pozivu definicije nisu pročitane. Sintetički kontraprimjeri
-pokazuju da schema USAGE i promjenjivi read-only default ne dokazuju potpunu
-zabranu trajnih upisa. Predložena V3 iznimka je povučena. U tom trenutku
-rola još nije bila kreirana. Korisnik je dodatni uski read-only scope
-izričito odobrio u Q10.2h;
-Q10.2h je sada izvršen. Dvije definicije ostaju NOT_PROVEN_READ_ONLY, a osam
-pregledanih LO helper funkcija ima PUBLIC EXECUTE. Detalji i 23 sintetičke
-provjere su u [izvještaju](reviews/2026-09-11-public-paths-audit.md).
-Q10.2i je zatim omogućio [konkretan plan prava](discovery/public-rights-change-proposal.md):
-33 postojeće role, 351 predloženi grant i 11 PUBLIC opoziva. Novi ciklus ima
-25 sintetičkih provjera. Sadašnji pristup nema ovlast za osam LO funkcija;
-produkcijski paket ostaje tehnički NO-GO. Q10.2j daje korisničku dozvolu za
-opisanu promjenu, ali naknadna read-only provjera potvrđuje nepromijenjene
-ovlasti. Korisnik trenutno ne treba praviti novog administratora. Q10.2k
-potvrđuje: discovery rola se ipak postavlja bez osam LO PUBLIC opoziva; kasnije
-učvršćivanje tih osam ciljeva je zaseban put. PostgreSQL PUBLIC EXECUTE na tim
-funkcijama ostaje naslijeđeno residualno pravo, ne dokaz da ih nova rola ne
-smije izvršiti. Q10.2l potvrđuje: prije kreiranja role prvo se PUBLIC skida
-s `TEMPORARY` i dvije Definer funkcije, uz Direktgrants postojećim rolama.
-Q10.2m daje Apply-Freigabe za baš ovaj ACL rez. Q10.2c1 prihvaća restore u novo
-projekt kao restore-dokaz; in-place produkcijski restore nije zasebno tražen.
-Q10.2n je izvršen: Dry-run pa apply za TEMP i dvije Definer funkcije.
-PUBLIC TEMP i ta dva EXECUTE više nisu na PUBLIC. Osam LO-EXECUTE ostaje.
-Rola `dino_crm_discovery_ro_v1` je kreirana, login radi. Gate B1/B2/B3 V3
-kao ta rola su PASS. Sirovi B2/B3 izlaz je izvan Git-a.
-Vidi
-[pojašnjenje korisnika](discovery/access-plan-consolidated.md#klarstellung-welche-benutzer-sind-erforderlich).
-Detalji su u
-[provjeri plana](reviews/2026-09-11-rights-plan-verification.md). [Registar verzija](discovery/role-version-register.md)
-razlikuje
-povučeni pokušaj role V3 od još planiranog Gate-B1-V3 paketa.
+Dokumentacijska osnova, PHP-Verdrahtung i JSON-Filter Entwurf. Bericht-Audit
+2026-09-13 je izvršen; JSON ostaje nacrt, ne ugovor. Nema app-scaffolda niti
+runtime MCP-a. Sljedeći korak imenuje korisnik; u Linearu je ACT-103 otvoren.
+
+Rola `dino_crm_discovery_ro_v1` postoji. Gate B1/B2/B3 V3 kao ta rola su PASS
+(ADR-0002 Q10.2p–q). Sirovi B2/B3 izlaz je izvan Git-a. Nisu čitani
+kandidatski redovi. Plugin Gate P ostaje NO-GO. Osam LO PUBLIC EXECUTE ostaje
+residualno. Q10.2 chronika je u
+[pristupnom planu](discovery/access-plan-consolidated.md) i
+[provjeri plana](reviews/2026-09-11-rights-plan-verification.md).
+[Registar verzija](discovery/role-version-register.md) ima naslovni datum
+2026-09-11 i nije osvježen nakon Q10.2p–q.
 
 Repozitorij sadrži dokumentacijsku osnovu, prihvaćene ADR-ove, discovery
 runbook,
@@ -245,7 +152,8 @@ Berufssuchprofila. Neekskluzivnost, direktna pretraga zanimanja i neaktivnost
 nenavedenih filtera ostaju potvrđeni. Detaljna filtersemantika i obavezna
 potvrda
 svake nove ili izmijenjene pretrage su VORLÄUFIGER VORSCHLAG zbog nedostajuće
-izvorne liste preporuka. Q8.5 je u cijelosti OFFEN. Q4.5 je ukinuta kao prazan
+izvorne liste preporuka. Q8.5 je `TEILWEISE BESTÄTIGT` u ADR-0002: 8.5.1 i
+8.5.3–8 stoje; 8.5.2 ignorisan; godine nisu R1 filter. Q4.5 je ukinuta kao prazan
 broj, bez rekonstruisanja nepoznatog pitanja. Interni alati vraćaju i
 kontakte. CONTACT-02 je Einstellungsfreigabe
 kontakata Kupcu nakon zasuge, ne kasnija interna faza. Mogućnosti za
@@ -361,9 +269,8 @@ sigurnost indirektnih poziva ostaje otvorena. Posljednji V2 sintetički ciklus
 ima 25 provjera, uključujući kontraprimjere, Q10.2h audit i Q10.2i plan prava.
 Nije bilo produkcijske mutacije ili čitanja kandidata. Opći schema audit i
 dalje nije izvršen.
-Gate B1 V3 kao discovery rola je izvršen i PASS. B2/B3
-launcher, streammarker i coverage gateovi još nisu implementirani; B2 ostaje
-blokiran do pregledanog B1 PASS i vlastite freigabe.
+Gate B1/B2/B3 V3 kao discovery rola su PASS (ADR-0002 Q10.2p–q).
+Sirovi izlaz je izvan Git-a. Nisu čitani kandidatski redovi.
 Raniji read-only lokalni preflight je potvrdio da target attest,
 connection-service i
 credential datoteka postoje kao regularne, symlink-free datoteke vlasnika
@@ -404,3 +311,5 @@ R1 plan uključuje zajednički ugovor, odvojene nezavisne pripreme, rani
 vertikalni search test, isti lokalni/CI gate, Frischaufbau i upgrade,
 Rückschaltung i restore te monitoring prije rollouta. Formalno skraćenje
 intervjua i pganalyze čekanja ostaje ENTWURF; postojeći ADR-gateovi važe.
+
+Odobreni Doku-Pointer-Plan i izvršenje: [worklog 2026-09-13](worklogs/2026-09-13-docs-pointer-plan.md).
