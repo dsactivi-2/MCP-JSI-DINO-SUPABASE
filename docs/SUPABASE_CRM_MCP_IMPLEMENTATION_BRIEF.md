@@ -167,7 +167,7 @@ flowchart LR
     P --> V[MCP validator<br/>JSON Schema + allowliste + auth]
     V -->|nejasno ili nevažeće| Q[Pitanje za pojašnjenje<br/>ili sigurna greška]
     Q --> U
-    V -->|važeće| S[Predložena potvrda pregleda<br/>VORLÄUFIGER VORSCHLAG]
+    V -->|važeće| S[Potvrda pregleda filtera<br/>BESTÄTIGT: filteri pa jedna pretraga]
     S --> R[Kontrolisana<br/>search_candidates RPC]
     R --> D[(Supabase PostgreSQL)]
     D --> F[Filter, sort, rank<br/>keyset pagination, RLS]
@@ -1202,8 +1202,8 @@ Ovo je sažetak odluka briefa. Dugoročne arhitekturne odluke održavaju se u
 | D-009 | Na odluci | Fizički search view/RPC model nakon audita stvarne sheme i planova. |
 | D-010 | Na odluci | Auth model, tenant mapping i kontakt/export role za svaki MCP klijent. |
 | D-011 | Na odluci | Numerički SLO-i nakon reprezentativnog benchmarka. |
-| D-012 | Teils | Ranking R1: kandidat_id desc (ADR-0002). Taxonomie/Synonyme weiter OFFEN. |
-| D-013 | VORLÄUFIGER VORSCHLAG | Kategorije s `AND`, tipizirani operatori i opća potvrda pregleda: nedostaje izvorna preporuka za dokaz pojedinačnih detalja. Q7 saglasnost za ublažavanje ostaje potvrđena. |
+| D-012 | Teils | Ranking R1: samo idk_kandidati.kandidat_id desc (ADR-0002). Taxonomie/Synonyme weiter OFFEN. |
+| D-013 | Teils | Opća potvrda pregleda je BESTÄTIGT (filteri pa jedna pretraga). AND/operatori ostaju VORLÄUFIGER VORSCHLAG (nema izvorne preporučne liste). Q7 prije ublažavanja ostaje. |
 | D-014 | Prihvaćeno | Berufssuchprofile su verzionirane, neekskluzivne veze prema kontrolisanim konceptima Ausbildung, Erfahrungsberuf i Tätigkeit; članovi ostaju direktno i kroz druga profile pretraživi. |
 | D-015 | VORLÄUFIGER VORSCHLAG za normalizaciju | Vorabnormalizacija uz original i kontrolisane ID-ove nije pojedinačno dokazana. Prihvaćena granica ADR-0003 ostaje: automatika samo predlaže, nema automatske objave. Postojeći ID-ovi su DURCH DISCOVERY ZU PRÜFEN. |
 | D-016 | Prihvaćeno | Nenavedena filterkategorija ostaje neaktivna; zanimanje traženo kroz iskustvo samo po sebi ne zahtijeva odgovarajući Ausbildungsberuf. |

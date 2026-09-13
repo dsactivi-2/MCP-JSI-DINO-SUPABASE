@@ -910,7 +910,7 @@ Das Heft ist kein Deckel und keine Whitelist. Was der Code neu zeigt
 (zum Beispiel Struke, Schule, Smjer, Gruppe, DIPL-Status, Führerscheinklasse),
 wird nicht verworfen, nur weil eine frühere Interviewfrage es nicht kannte.
 Umgekehrt gelten bestätigte Heft-Ziele (drei Berufsschichten als Fachmodell,
-Q8.5 offen, Q4 interne Kontakte) nicht als tot, nur weil die alte Filter-UI
+Q8.5.3–9 bestätigt, Q4 interne Kontakte) nicht als tot, nur weil die alte Filter-UI
 sie anders oder gar nicht abbildet. Neue Codefakten erzeugen neue Fragen;
 sie überschreiben eine ausdrückliche Antwort nur, wenn der Nutzer das
 ausdrücklich sagt. Die neueste ausdrückliche Entscheidung bleibt vorrangig.

@@ -566,10 +566,10 @@ Lies die Arbeitsdatei und beantworte schriftlich unten in Abschnitt 4 oder 6:
 1. Welche Maske ist die Recruiter-Hauptsuche?
 2. Kann diese Maske Ausbildungsberuf, Erfahrungsberuf und Tätigkeitsart
    **getrennt** setzen — oder nicht?
-3. Welches Feld zählt „5 Jahre Erfahrung“ — Akte, Lebenslauf-Liste, beide,
-   oder `OFFEN`?
+3. Alte Maske: nur ja/nein. R1: von–bis passender Jobs (Q8.5.9
+   `BESTÄTIGT`, Lebenslauf-Liste, nicht Aktenzahlen). Nicht neu aufrollen.
 
-Wenn Frage 3 `OFFEN` ist: richtig so. Nicht erfinden. Das bleibt Q8.5.
+Frage 3 ist nicht mehr `OFFEN`.
 
 `Status:` in der Arbeitsdatei setzen:
 

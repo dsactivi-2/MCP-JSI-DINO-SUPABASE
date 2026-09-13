@@ -298,7 +298,8 @@ Mensch liest das Dokument gegen drei Fragen:
 
 1. Welche Maske ist die Recruiter-Hauptsuche?
 2. Welche drei Berufsschichten kann diese Maske unterscheiden — oder nicht?
-3. Welches Erfahrungsfeld zählt 5 Jahre — oder steht Q8.5 weiter `OFFEN`?
+3. Alte Maske zählt keine Jahre, nur ja/nein. R1 zählt von–bis passender
+Jobs (Q8.5.9 `BESTÄTIGT`). Nicht neu aufrollen.
 
 Erst nach dieser Abnahme darf der JSON-Filter entworfen werden. Das ist
 eine **andere** Arbeit ([ADR-0001](../decisions/0001-controlled-query-boundary.md),

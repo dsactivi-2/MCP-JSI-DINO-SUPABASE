@@ -54,8 +54,8 @@ Zusätzlich aus ADR-0002 Q18 / Bericht-Audit 2026-09-13:
 - JSON bleibt Entwurf, kein Vertrag. Punkt 3 **Ja**.
 - Vorbericht-PASS zählt nicht. Punkt 1 **Ja**.
 - Struke/Smjer = Ausbildungsberuf; JSON-Namen bleiben struke / smjer.
-- Jahresfilter R1 Q8.5.9: von–bis, Job + Jobgruppe. Alte UI bleibt ja/nein.
-- Ranking R1: größte kandidat_id zuerst.
+- Jahresfilter R1 Q8.5.9: von–bis passender Jobs. Elektriker zählt elektricar und Elektroinstallateur, nicht Verkäufer. Alte UI bleibt ja/nein.
+- Ranking R1: nur idk_kandidati.kandidat_id, größte zuerst.
 - JMBG intern in der Trefferliste ja, kein Filter, Discovery ohne Werte.
 
 ## Bleibt Entwurf oder OFFEN — nicht hier schließen
