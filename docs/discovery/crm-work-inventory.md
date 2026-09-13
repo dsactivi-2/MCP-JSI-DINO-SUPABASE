@@ -153,7 +153,7 @@ ohne Werte. Alte „R1 ohne Kontakt“-Zeilen sind `ERSETZT`.
 | [crm-status-codebefund.md](crm-status-codebefund.md) | Status, Klick, Cron |
 | [crm-notify-codebefund.md](crm-notify-codebefund.md) | C 4–9 Kanal + Auslöser |
 | [crm-json-filter-draft.md](crm-json-filter-draft.md) | R1 JSON-Filter Entwurf |
-| [act-103-vertragspaket.md](act-103-vertragspaket.md) | ACT-103 Pack, kein Vertrag; drei Fragen zum Ankreuzen |
+| [act-103-vertragspaket.md](act-103-vertragspaket.md) | ACT-103 Pack; Kreuze 1A 2A 3A; Linear Done 2026-09-13 |
 | [php-filter-catalog-name-map.md](php-filter-catalog-name-map.md) | PHP/JSON-Filter zu B2-Namen, ohne Werte |
 | [2026-09-13-json-filter-draft.md](../worklogs/2026-09-13-json-filter-draft.md) | Worklog JSON-Entwurf |
 | [2026-09-13-json-filter-verify.md](../worklogs/2026-09-13-json-filter-verify.md) | Worklog erster PASS, nicht Schluss |

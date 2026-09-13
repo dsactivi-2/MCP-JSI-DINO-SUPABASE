@@ -46,6 +46,10 @@ required = (
     "Darf ACT-103 Done werden, solange JSON ENTWURF ist?",
     "JSON-Filter R1: **ENTWURF**",
     "Quellenkonflikt",
+    "| 1A |",
+    "| 2A |",
+    "| 3A |",
+    "Linear-Kommentar gesetzt; Issue-Status Done.",
 )
 for marker in required:
     if marker not in text:

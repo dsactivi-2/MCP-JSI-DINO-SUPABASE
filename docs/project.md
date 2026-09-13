@@ -37,8 +37,8 @@ ažuriranjem briefa ili novim ADR-om.
 
 Dokumentacijska osnova, PHP-Verdrahtung i JSON-Filter Entwurf. Bericht-Audit
 2026-09-13 je izvršen; JSON ostaje nacrt, ne ugovor. Nema app-scaffolda niti
-runtime MCP-a. Sljedeći korak imenuje korisnik; u Linearu je ACT-103 otvoren.
-Dokazni paket za ACT-103, bez ugovora:
+runtime MCP-a. ACT-103 2026-09-13: **1A 2A 3A**, Linear Done.
+JSON ostaje nacrt.
 [act-103-vertragspaket.md](discovery/act-103-vertragspaket.md).
 
 Rola `dino_crm_discovery_ro_v1` postoji. Gate B1/B2/B3 V3 kao ta rola su PASS

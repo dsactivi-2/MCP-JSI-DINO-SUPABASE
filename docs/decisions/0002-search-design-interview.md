@@ -971,6 +971,11 @@ wichtig für Auswahl. Bleibt besonders sensibel. Discovery ohne Werte.
 Ranking R1: `BESTÄTIGT` 2026-09-13. Sortierung nach `kandidat_id`
 absteigend, größte Nummer zuerst (neueste). Ein Kriterium, kein Tie-Breaker.
 
+**ACT-103 Kreuze:** `BESTÄTIGT` – 2026-09-13. Nutzer: **1A 2A 3A**.
+Pflichtartefakt = Inventar + Codebefunde + JSON-Entwurf. INNER JOIN und
+Archiv-Satz für ACT-103 geschlossen. Done darf bei JSON-Entwurf (Vertrag
+später AUTO-02). Linear-Kommentar 2026-09-13; Status Done.
+
 Index: [crm-work-inventory.md](../discovery/crm-work-inventory.md).
 C 4–9: [crm-notify-codebefund.md](../discovery/crm-notify-codebefund.md).
 

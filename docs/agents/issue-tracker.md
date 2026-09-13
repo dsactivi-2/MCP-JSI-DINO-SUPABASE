@@ -49,7 +49,7 @@ korisnik izričito naloži ažuriranje postojećih.
 | [ACT-100](https://linear.app/activi/issue/ACT-100/lokalen-crm-scan-in-den-runtime-suchvertrag-ubersetzen) | wayfinder:map, roditelj | In Progress nakon synca |
 | [ACT-101](https://linear.app/activi/issue/ACT-101/erlaubten-scan-umfang-festlegen) | opseg skena | Done: nema kandidatskih redova |
 | [ACT-102](https://linear.app/activi/issue/ACT-102/verdrahtungsbegriff-festlegen) | pojam Verdrahtung | Done: Q20/Q21 slojevi |
-| [ACT-103](https://linear.app/activi/issue/ACT-103/pflichtartefakt-des-scans-festlegen) | obavezni artefakt | otvoren: INNER JOIN i Archiv-Satz |
+| [ACT-103](https://linear.app/activi/issue/ACT-103/pflichtartefakt-des-scans-festlegen) | obavezni artefakt | Done 2026-09-13: 1A 2A 3A |
 | [ACT-104](https://linear.app/activi/issue/ACT-104/lokale-scan-quelle-festlegen) | izvor skena | Done: Q22 stari PHP-CRM |
 | [ACT-105](https://linear.app/activi/issue/ACT-105/metadaten-dokumentationstools-fur-mysql-8-und-postgres-17-bewerten) | MySQL/PG alati | Done: van Q22 opsega |
 | [ACT-106](https://linear.app/activi/issue/ACT-106/jobstep-php-suchpfade-ohne-personenwerte-extrahieren) | PHP metoda | Done: wizards 01–04 |
@@ -59,9 +59,8 @@ korisnik izričito naloži ažuriranje postojećih.
 
 <!-- markdownlint-enable MD013 -->
 
-Otvoreno u mapi ostaje ACT-103 uz INNER JOIN Gruppe/Status i Bericht-Audit
-Punkt 2. JSON-Filter je nacrt, ne ugovor.
-Lokalni dokazni paket za križanje, bez zatvaranja issuea:
+Lokal 2026-09-13 križevi **1A 2A 3A**. Linear-komentar i status Done
+2026-09-13. JSON-Filter je nacrt, ne ugovor. Paket:
 [ACT-103 Vertragspaket](../discovery/act-103-vertragspaket.md).
 
 Pristup servisu slijedi globalno MCP-routing pravilo i
