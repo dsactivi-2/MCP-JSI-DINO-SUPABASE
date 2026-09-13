@@ -21,6 +21,7 @@ JSON-Filter-Entwurf ist 2026-09-13 gegen PHP und Heft geprüft.
 Struke/Smjer = Ausbildungsberuf: bestätigt. Jahresfilter R1: von–bis im
 genannten Job + Jobgruppe (Q8.5.9).
 INNER JOIN: nicht übernehmen, ohne Gruppe/Bearbeitung sichtbar.
+PHP-Ist in `lista_kandidata` immer (Gruppe + Status obrade); R1 kopiert das nicht.
 Nutzer 2026-09-13 Punkt 1 **Ja:** Vorbericht-PASS zählt nicht.
 Punkt 3 **Ja:** JSON bleibt Entwurf, kein Vertrag.
 Punkt 2 **Ja:** Archiv-Satz bleibt (Zählfehler nicht kopieren).
@@ -41,7 +42,7 @@ Kein Wizard 01/02/04. Kein MCP-Bau, bis der Nutzer das startet.
 | Doku-Repo | dieses Git | ADRs, Lesarten, Scripts |
 
 Env aus Wizard 01: `/private/tmp/dino-crm-wiring.env`
-(`CRM_PATH=.../src/crm`, RPC 21 / Tabellen 1732 / UI 2487).
+(`CRM_PATH=.../src/crm`, RPC 21 / Tabellen-Fundstellen 1732 / UI 2487).
 
 ## 3. Entscheidungen, die nicht neu aufgerollt werden
 
@@ -55,7 +56,7 @@ Architektur: [ADR-0001](../decisions/0001-controlled-query-boundary.md).
 | Q8.5 | `TEILWEISE` | 8.5.3–8 und 8.5.9: R1-Jahre aus von–bis, Job + Jobgruppe |
 | Q15.6 | `TEILWEISE` | Blättern und Datei; CSV+Excel; max. 500; JMBG+Kontakt; nicht ganzer Bestand |
 | Q17 | `BESTÄTIGT` | Heft und alte UI/PHP gleichberechtigt; Heft ist keine Whitelist |
-| Q18 | `TEILWEISE` | Codebefund + Alltag; Struke/Smjer = Ausbildungsberuf; R1-Jahre Q8.5.9; INNER JOIN nicht kopieren |
+| Q18 | `TEILWEISE` | Codebefund + Alltag; Struke/Smjer = Ausbildungsberuf; R1-Jahre Q8.5.9; PHP-INNER-JOIN ist Ist, R1 nicht kopieren |
 | Q19 | `TEILWEISE` | Status-Ebenen und Automatik als Codebefund |
 | Q20 | `TEILWEISE` | Jetzt: Filter, alle Status, Auslöser, A, B7, C 4–9 Codebefund. Produkt default aus. 10 und 11–16 später |
 | Q21 | `BESTÄTIGT` | Funktionen erfassen, modern umsetzen, nicht 1:1 PHP-SQL |
@@ -135,7 +136,8 @@ Unabhängiger PASS 2026-09-13 nicht haltbar; Archiv-Satz korrigiert.
 ### 4.5 Postgres-Katalog (Gate B2 V3, nicht PHP)
 
 Datei: [catalog-domain-mapping.md](catalog-domain-mapping.md).
-~199 Relationen in `crm` / `crm_api` / `crm_auth`. occupation und
+199 Tabellen (B2-005) und 398 Relationen (B2-002, inkl. Views/Sequenzen)
+in `crm` / `crm_api` / `crm_auth`. occupation und
 `job_occupation_map` existieren in Postgres; die alte Filter-UI nutzt sie
 nicht (Q22: jetzt kein Scan-Auftrag). Q8.5.9 steht; von/bis-Spalten
 und physische Jobgruppe bleiben Discovery.
@@ -210,7 +212,7 @@ Lokal, nicht Git: `/private/tmp/dino-crm-wiring.env`,
 | C 4–9 Codebefund | gelesen | crm-notify-codebefund.md |
 | Restliche `do.php`-Cases ohne Statuswort | Lücke | Status-Datei |
 | Prijave-Labels | DB, kein Dump | Status-Datei |
-| Wizard 03 Alltag | Struke/Smjer = Ausbildungsberuf; R1-Jahre Q8.5.9; INNER JOIN nicht kopieren | ADR-0002 Q18 |
+| Wizard 03 Alltag | Struke/Smjer = Ausbildungsberuf; R1-Jahre Q8.5.9; PHP-INNER-JOIN Ist, R1 nicht kopieren | ADR-0002 Q18 |
 | Q8.5 | `TEILWEISE`; R1-Jahre aus von–bis, Job + Jobgruppe | ADR-0002 Q8.5.9 |
 | JSON-Filter R1 | Entwurf, kein Vertrag; ohne Gruppe/Bearbeitung sichtbar | crm-json-filter-draft.md |
 | Bericht-Audit JSON-PASS | Punkte 1–3 bestätigt | json-filter-audit.md |

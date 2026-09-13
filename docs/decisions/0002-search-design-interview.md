@@ -910,8 +910,10 @@ weil das Mapping aus dem PHP erstellt wurde, nicht weil 02 gelaufen ist.
 **Rescan 2026-09-13:** Der erste Wizard-01-Lauf schnitt `hits-tables` und
 `hits-ui` bei 200 Zeilen ab. Das war unvollständig (`kandidati.php` fehlte
 in den Zetteln). Der Deckel ist entfernt. Neuer Stand ohne Zeilenlimit,
-ohne `*.sql` und ohne `Info/` (Dump): RPC 21, Tabellen 1732, UI 2487.
-`kandidati.php` kommt in tables (171) und ui (152) vor. Ein 200-Deckel
+ohne `*.sql` und ohne `Info/` (Dump): RPC 21, Tabellen-Fundstellen 1732, UI 2487.
+`kandidati.php` kommt grob in tables (171) und ui (152) vor; das zählt
+auch `public_kandidati.php` mit. Nur `src/crm/kandidati.php`: 58 / 49.
+1732 und 2487 sind Code-Fundstellen, keine Postgres-Tabellen. Ein 200-Deckel
 darf in Wizard 01 nicht wieder eingeführt werden.
 
 Codebefund, `BELEGT DURCH QUELLCODE`; Alltag 2026-09-13 bestätigt (siehe unten):
@@ -955,7 +957,8 @@ Noch `OFFEN` in Wizard 03: Secret-Check (Betriebsfrage).
 
 INNER JOIN Gruppe/Status in R1: `BESTÄTIGT` nein, 2026-09-13. Kandidaten
 ohne Gruppen- oder Bearbeitungszeile bleiben sichtbar. PHP-INNER-JOIN
-nicht übernehmen. Andere Filter gelten weiter.
+nicht übernehmen. Die alte Suche behält `INNER JOIN` in `lista_kandidata`
+(Liste und Zählung); das ist PHP-Ist, kein R1-Soll. Andere Filter gelten weiter.
 
 **Update 2026-09-13 JSON-Filter:** Entwurf nur der alten Filter:
 [crm-json-filter-draft.md](../discovery/crm-json-filter-draft.md).

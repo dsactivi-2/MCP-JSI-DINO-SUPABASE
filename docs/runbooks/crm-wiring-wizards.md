@@ -85,8 +85,10 @@ Entspricht Plan A–E.
    Datei nur nach Rückfrage überschreiben).
 4. Stack grob erkennen, `.env` im CRM nicht öffnen.
 5. Drei Suchläufe (`rg`, sonst `grep`), **ohne** Zeilen-Deckel. `*.sql` und
-   `Info/` ausgeschlossen (Dump). Stand 2026-09-13: RPC 21, Tabellen 1732,
-   UI 2487.
+   `Info/` ausgeschlossen (Dump). Stand 2026-09-13: RPC 21, Tabellen-Fundstellen
+   1732, UI-Fundstellen 2487 (Code-Treffer, keine Postgres-Tabellen).
+   Die Zahl ist `wc -l` der ganzen Datei. Eine Chat-Ausgabe oder Liste mit
+   genau 200 Zeilen ist der alte Fehl-Lauf, kein vollständiges Ergebnis.
 6. Trefferordner öffnen und den nächsten Schritt nennen.
 
 ### 02 — Mapping (optional)

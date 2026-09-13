@@ -31,7 +31,7 @@ PHP-Nuancen, die der Entwurf **nicht** 1:1 kopiert (Q21), aber kennt:
 | `filter_smjer` gesetzt | Schule- **und** Struke-Bedingung fallen weg |
 | Cookie `archive_status` | SQL nur Status 3; Formularfilter fallen weg. Klassen danach an Liste-SQL und Zähl-SQL; Suchbox `search[value]` nur an Liste-SQL, nicht an Zähl-SQL. R1 übernimmt den PHP-Zählfehler nicht (Q21). Mischung nur-Archiv + andere Filter: ablehnen (`VORLÄUFIGER VORSCHLAG`) |
 | `filter_boravak` als Rohstring `LIKE` | später parametrisiert; Semantik bleibt „gewählte Werte“ |
-| `INNER JOIN` Gruppe und Status | PHP lässt sie still weg. R1 **nicht**: ohne Gruppe/Bearbeitung bleiben sie sichtbar (`BESTÄTIGT` 2026-09-13). Andere Filter gelten weiter. |
+| `INNER JOIN` Gruppe und Status | PHP-Ist: immer Join auf `idk_kandidati_grupe` / `idk_kandidat_status`, auch ohne Filter; fehlende Zeile = weg. R1 **nicht**: ohne Gruppe/Bearbeitung bleiben sie sichtbar (`BESTÄTIGT` 2026-09-13). Andere Filter gelten weiter. |
 
 Heft Q8: UND zwischen Kategorien ist dort `VORLÄUFIGER VORSCHLAG`. PHP
 ist AND (`BELEGT`). R1 folgt der alten Maske (Q18 Alltag). Sprachen

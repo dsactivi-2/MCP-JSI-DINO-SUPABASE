@@ -63,7 +63,7 @@ Bereits gelaufen:
 - Großen Dump nach crm-master-3/databaseDump kopiert; 2024_10_28.sql liegt noch daneben.
 - scripts/discovery/step1-source-lock.sh = PASS, prüft aber noch den Website-Dump (Script-Lücke).
 - scripts/discovery/step2-search-wiring.py = PASS; /private/tmp/dino-crm-step2-search-wiring.md. CSS-Klassen (idk_color_green usw.) sind kein Tabellenbeleg.
-- Wizard 01 ohne 200-Zeilen-Deckel: RPC 21, Tabellen 1732, UI 2487. kandidati.php ist in den Zetteln.
+- Wizard 01 ohne 200-Zeilen-Deckel: RPC 21, Tabellen-Fundstellen 1732, UI-Fundstellen 2487. Grobes rg kandidati.php 171/152; davon src/crm/kandidati.php 58/49.
 - Hauptsuche laut Code: kandidati.php?page=list_ajax → serversidedata.php?page=lista_kandidata.
 - Linear-Karte ACT-100.
 

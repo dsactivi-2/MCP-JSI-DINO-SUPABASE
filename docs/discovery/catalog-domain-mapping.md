@@ -6,7 +6,9 @@ Status: erste Zuordnung aus dem Katalog. Keine Datensätze gelesen. Keine
 Foreign Keys erfunden. Schätzungen (`reltuples`) sind keine gezählten Stände.
 
 Quelle: Gate B2 V3, Prüfrolle, Schemata `crm`, `crm_api`, `crm_auth`.
-199 Relationen. Der Visualizer-Export bleibt enger und ersetzt dies nicht.
+199 Tabellen (`relkind r`, Query B2-005) und 398 Relationen (B2-002: 199
+Tabellen + 12 Views + 187 Sequenzen). Der Visualizer-Export bleibt enger
+und ersetzt dies nicht.
 
 Legende: `BELEGT` Katalogname/FK/Schätzung. `ARBEITSANNAHME` fachliche Lesart.
 `DURCH DISCOVERY ZU PRÜFEN` unbewiesen. R1-Ausschluss folgt Q4 und Q15.

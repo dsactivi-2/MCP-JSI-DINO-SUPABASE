@@ -127,18 +127,24 @@ in Git oder Chat.
 
 **Ausführen.**
 
+Die Treffer **vollständig in Dateien** schreiben, dann zählen. Nicht `head`,
+nicht die Chat-Ausgabe als Liste verwenden. Eine Ausgabe mit genau 200 Zeilen
+ist der alte Fehl-Lauf (vollständiger Rescan: RPC 21, Tabellen 1732, UI 2487
+Fundstellen).
+
 ```bash
 CRM="/Users/activi/Downloads/crm-master-3/src/crm"
+OUT=/private/tmp/dino-crm-wiring-work
+mkdir -p "$OUT"
 cd "$CRM"
 
+rg -n -g '!node_modules' -g '!vendor' -g '!.git' -g '!dist' -g '!*.min.js' -g '!*.sql' -g '!Info/**' -i 'search_candidates(_filtered|_by_occupation)?|job_occupation_map|occupation_alias' > "$OUT/hits-rpc.txt"
 
-rg -n -g '!node_modules' -g '!vendor' -g '!.git' -g '!dist' -g '!*.min.js' -g '!*.sql' -g '!Info/**' -i 'search_candidates(_filtered|_by_occupation)?|job_occupation_map|occupation_alias'
+rg -n -g '!node_modules' -g '!vendor' -g '!.git' -g '!*.sql' -g '!Info/**' -i 'idk_kandidati|idk_kandidat_radno_iskustvo|idk_kandidat_edukacija|idk_kandidat_jezici|idk_kandidat_vjestine' > "$OUT/hits-tables.txt"
 
+rg -n -g '!node_modules' -g '!vendor' -g '!.git' -g '!*.sql' -g '!Info/**' -i 'kandidat.*such|candidate.*search|filter.*beruf|ausbildung|erfahrung|jezik|sprache|vjestina|skill' > "$OUT/hits-ui.txt"
 
-rg -n -g '!node_modules' -g '!vendor' -g '!.git' -g '!*.sql' -g '!Info/**' -i 'idk_kandidati|idk_kandidat_radno_iskustvo|idk_kandidat_edukacija|idk_kandidat_jezici|idk_kandidat_vjestine'
-
-
-rg -n -g '!node_modules' -g '!vendor' -g '!.git' -g '!*.sql' -g '!Info/**' -i 'kandidat.*such|candidate.*search|filter.*beruf|ausbildung|erfahrung|jezik|sprache|vjestina|skill'
+wc -l "$OUT"/hits-*.txt
 ```
 
 **Prüfen.**
@@ -146,11 +152,12 @@ rg -n -g '!node_modules' -g '!vendor' -g '!.git' -g '!*.sql' -g '!Info/**' -i 'k
 | Check | PASS | FAIL |
 | --- | --- | --- |
 | Mindestens ein Treffer auf `search_candidates*` **oder** eine Suchmaske | weiter | Muster erweitern; nicht die DB öffnen |
+| `wc -l` der Datei, nicht der Chat-Ausschnitt; nicht genau 200 bei tables/ui | vollständige Liste | 200-Deckel oder abgeschnittene Chat-Ausgabe |
 | Trefferliste enthält Dateipfad + Symbol, keine Personenwerte | gut | Treffer mit E-Mail/Telefon verwerfen, nur Dateiname behalten |
 | Mehr als eine plausible Such-UI (Schnellsuche, Auftrag, Profil) | alle in die Tabelle | fehlende als `OFFEN` führen, nicht erfinden |
 
 **Output.** Rohliste der Dateipfade, nur lokal, z. B.
-`/private/tmp/dino-crm-search-hits.txt`. Nicht committen.
+`/private/tmp/dino-crm-wiring-work/hits-*.txt`. Nicht committen.
 
 ## Schritt 3 — Masken inventarisieren
 

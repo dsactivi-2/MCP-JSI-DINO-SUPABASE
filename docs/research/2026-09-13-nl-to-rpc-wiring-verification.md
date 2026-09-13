@@ -51,7 +51,7 @@ Der Chat hat diese drei Dinge vermischt. Getrennt halten:
 
 | Schicht | Aufgabe | Nicht tun |
 | --- | --- | --- |
-| **Runtime-Tool** | MCP-`inputSchema` der drei Tools. Das ist das Formular. | Tabellen, SQL, 1732 Relationen in die Tool-Beschreibung |
+| **Runtime-Tool** | MCP-`inputSchema` der drei Tools. Das ist das Formular. | PHP-Fundstellen (1732), SQL oder Gate-B-Katalog in die Tool-Beschreibung |
 | **Runtime-Prompt** | Wie ein Satz auf Felder mappt, wann nachgefragt wird. Vorlage: [mcp-search-agent-prompt.md](mcp-search-agent-prompt.md) | Occupation/Jahre als R1 verkaufen |
 | **Builder-Skill** | Wie *wir* Server und SQL entwerfen. Siehe [mcp-server-dev-tooling.md](../agents/mcp-server-dev-tooling.md) | Denselben Skill dem Recruiter-Agenten geben |
 

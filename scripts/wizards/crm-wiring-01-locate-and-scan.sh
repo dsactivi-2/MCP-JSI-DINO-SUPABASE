@@ -287,6 +287,7 @@ stage "Suchcode scannen"
 say "Schreibt Trefferpfade nach $HITS_DIR. Kein Zeilen-Deckel."
 _scan() {
   local out="$1" pattern="$2"
+  local n
   set +o pipefail
   if command -v rg >/dev/null 2>&1; then
     rg -n -g '!node_modules' -g '!vendor' -g '!.git' -g '!dist' -g '!*.min.js' -g '!.env' -g '!*.sql' -g '!*.sql.gz' -g '!*.map' -g '!tcpdf*' -g '!ckeditor/**' -g '!dompdf/**' -g '!Info/**' -i "$pattern" "$CRM_ABS" 2>/dev/null > "$out" || true
@@ -294,11 +295,15 @@ _scan() {
     grep -R -n -i --exclude-dir=node_modules --exclude-dir=vendor --exclude-dir=.git --exclude-dir=dist --exclude=.env --exclude='*.min.js' --exclude='*.map' "$pattern" "$CRM_ABS" 2>/dev/null > "$out" || true
   fi
   set -o pipefail
-  wc -l < "$out" | tr -d ' '
+  n=$(wc -l < "$out" | tr -d ' ')
+  printf '%s' "$n"
 }
 HIT_RPC=$(_scan "$HITS_DIR/hits-rpc.txt" 'search_candidates(_filtered|_by_occupation)?|job_occupation_map|occupation_alias')
 HIT_TABLES=$(_scan "$HITS_DIR/hits-tables.txt" 'idk_kandidati|idk_kandidat_radno_iskustvo|idk_kandidat_edukacija|idk_kandidat_jezici|idk_kandidat_vjestine')
 HIT_UI=$(_scan "$HITS_DIR/hits-ui.txt" 'kandidat.*such|candidate.*search|filter.*beruf|ausbildung|erfahrung|jezik|sprache|vjestina|skill')
+if [[ "$HIT_TABLES" == "200" || "$HIT_UI" == "200" ]]; then
+  _die "Trefferliste hat genau 200 Zeilen. Das war der alte head -200 Deckel, kein vollstaendiges Ergebnis. Dateien in $HITS_DIR pruefen und Scan ohne Deckel wiederholen."
+fi
 write_env HIT_RPC_COUNT "$HIT_RPC"
 write_env HIT_TABLES_COUNT "$HIT_TABLES"
 write_env HIT_UI_COUNT "$HIT_UI"

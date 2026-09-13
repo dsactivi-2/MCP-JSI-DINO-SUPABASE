@@ -298,6 +298,8 @@ grep -R -n -i --exclude-dir=node_modules --exclude-dir=vendor --exclude-dir=.git
 
 `wc -l` darf `0` für eine der drei Dateien sein. Nicht für alle drei.
 Kein `head -200`: der Deckel hat die Hauptsuche in den Zetteln versteckt.
+Die gültige Zahl ist `wc -l` der ganzen Datei. Eine Chat-Ausgabe, die bei
+200 Zeilen endet, ist unvollständig — nicht 200 Dateien, sondern abgeschnitten.
 
 ### FAIL
 

@@ -36,7 +36,8 @@ Bericht-Audit: Vorbericht-PASS zählt nicht. Archiv-Zählfehler nicht nachbauen.
 Struke/Smjer = Ausbildungsberuf; JSON-Namen `struke` / `smjer`.
 Jahresfilter R1: Q8.5.9 von–bis, Job + Jobgruppe. Overlap nicht addieren.
 Aktueller Job bis heute. Ohne genannten Job ist das Jahresfeld ungültig.
-INNER JOIN nicht kopieren; ohne Gruppe/Bearbeitung sichtbar.
+INNER JOIN: PHP-Ist in `lista_kandidata` (Gruppe + Status obrade).
+R1 nicht kopieren; ohne Gruppe/Bearbeitung sichtbar.
 JMBG intern in der Trefferliste, kein Filter.
 Ranking: größte `kandidat_id` zuerst.
 Erst Filter zeigen, dann eine Suche.

@@ -18,6 +18,21 @@ Q22: altes CRM. A aus Q20: wie die Maske wirklich rechnet.
 
 Das entspricht Q8: ungenannte Filter sind tot. Mehrere Kategorien: UND.
 
+## Immer-Joins (PHP-Ist, kein R1-Soll)
+
+Auch wenn die Filter Gruppe und Status **aus** sind, hängt `lista_kandidata`
+Liste-SQL und Zähl-SQL fest:
+
+`INNER JOIN idk_kandidati_grupe` auf `kandidat_group = kg_id`
+und `INNER JOIN idk_kandidat_status` auf `kandidat_status = status_id`.
+
+Ohne passende Nachschlagezeile (`kg_id` / `status_id`) fällt der Kandidat
+in der **alten** Suche raus. Das ist PHP-Ist, nicht der R1-Vertrag.
+
+R1 kopiert dieses INNER JOIN **nicht**. Kandidaten ohne Gruppen- oder
+Bearbeitungszeile bleiben sichtbar (ADR-0002 Q18, 2026-09-13). Ein gesetzter
+Gruppen- oder Status-Filter gilt weiter.
+
 ## Filterlogik (PHP, nicht modernisiert)
 
 | Filter | Wenn gesetzt | Sonst |

@@ -14,8 +14,10 @@ Feld in älteren Q8-Fragen fehlte.
 
 Suchzettel (nicht abschreiben): [crm-php-hits/](crm-php-hits/).
 
-Rohzettel-Stand 2026-09-13 ohne 200-Deckel: RPC 21, Tabellen 1732, UI 2487.
-`kandidati.php` ist in den Zetteln enthalten. `*.sql`/`Info/` ausgeschlossen.
+Rohzettel-Stand 2026-09-13 ohne 200-Deckel: RPC 21, Tabellen-Fundstellen 1732,
+UI-Fundstellen 2487 (Code-Treffer, keine Postgres-Tabellen). Grobes
+`rg kandidati.php`: 171 / 152; davon `src/crm/kandidati.php` 58 / 49.
+`*.sql`/`Info/` ausgeschlossen.
 
 CRM-Pfad: /Users/activi/Downloads/crm-master-3/src/crm
 

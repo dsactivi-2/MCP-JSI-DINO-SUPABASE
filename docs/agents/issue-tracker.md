@@ -64,8 +64,8 @@ JSON-Filter je nacrt, ne ugovor. Paket:
 [ACT-103 Vertragspaket](../discovery/act-103-vertragspaket.md).
 
 ACT-100 ostaje In Progress, jer JSON nije ugovor (AUTO-02). Linear-opis
-ACT-100 je 2026-09-13 usklađen: Q8.5.9, INNER JOIN ne kopirati, Archiv-Satz
-za ACT-103 zatvoren, Q15.6 djelimično. Komentar
+`ACT-100` je 2026-09-13 usklađen: Q8.5.9, PHP-`INNER JOIN` je Ist, R1 ga ne
+kopira, Archiv-Satz za ACT-103 zatvoren, Q15.6 djelimično. Komentar
 `18d4c8a3-a194-4d8a-a86c-f6d113ec9c42`.
 
 Pristup servisu slijedi globalno MCP-routing pravilo i

@@ -199,8 +199,9 @@ credentiala.
 
 Prema Q9 prvo se razjašnjavaju sigurnosni preduslovi i odobrenje audita,
 zatim slijedi read-only discovery, a tek potom nastavak intervjua. Korisnikova
-navedena brojka od 179 tabela je DURCH DISCOVERY ZU PRÜFEN. Gate B2 V3 vidi 199
-relacija u `crm`/`crm_api`/`crm_auth`. Prva mapa imena na domene:
+navedena brojka od 179 tabela je DURCH DISCOVERY ZU PRÜFEN. Gate B2 V3 u
+`crm`/`crm_api`/`crm_auth`: **199 tabela** (B2-005) i **398 relacija**
+(B2-002: tabele + viewovi + sekvence). Prva mapa imena na domene:
 [katalog-domain mapping](discovery/catalog-domain-mapping.md) (Q16).
 
 Lokalni PHP-CRM (`src/crm`) je Wizard-01-skeniran. Formular
@@ -212,22 +213,25 @@ Status-Klicks B7:
 Landkarte: [crm-work-inventory.md](discovery/crm-work-inventory.md).
 Q17: Heft i stara UI su ravnopravni. Wizard-03-Alltag je potvrđen
 (R1 = stara Hauptsuche). Struke/Smjer = Ausbildungsberuf.
-Jahresfilter R1: von–bis, Job + Jobgruppe (Q8.5.9). INNER JOIN se ne
-kopira: bez grupe/obrade ostaju vidljivi.
+Jahresfilter R1: von–bis, Job + Jobgruppe (Q8.5.9).
+PHP-Ist: `lista_kandidata` uvijek `INNER JOIN` grupu i status obrade;
+bez `kg_id`/`status_id` stara pretraga ih baca.
+R1-Soll: taj JOIN se ne kopira; bez grupe/obrade ostaju vidljivi.
 C 4–9 je pročitan:
 [crm-notify-codebefund.md](discovery/crm-notify-codebefund.md).
 JSON-Filter Entwurf:
 [crm-json-filter-draft.md](discovery/crm-json-filter-draft.md).
 Provjeren 2026-09-13 (PHP + Heft). Struke/Smjer = Ausbildungsberuf.
-Jahresfilter R1: Q8.5.9. INNER JOIN: sichtbar ohne Gruppe/Bearbeitung.
+Jahresfilter R1: Q8.5.9. INNER JOIN: PHP-Ist da, R1 ne kopira, sichtbar ohne Gruppe/Bearbeitung.
 Bericht-Audit: Punkte 1–3 bestätigt. Archiv-Satz bleibt.
 Ranking `kandidat_id` desc. Export CSV/Excel max. 500. Ein Such-MCP + Tokens.
 Hosting/SDK-Version offen. Cloudflare möglich, nicht gewählt.
 Nije MCP-scaffold dok korisnik to izričito ne zatraži.
 
 Wizard 01 je 2026-09-13 ponovo skenirao **bez** limita 200 linija (RPC 21,
-tabele 1732, UI 2487). `*.sql` i `Info/` isključeni zbog dumpa. Ne vraćati
-200-kapač.
+tablični pronalasci 1732, UI 2487 — to su treffer u PHP-kodu, ne Postgres-tabele).
+`*.sql` i `Info/` isključeni zbog dumpa. Ne vraćati 200-kapač.
+Grubi `rg kandidati.php`: 171 / 152; od toga `src/crm/kandidati.php` 58 / 49.
 
 Q20 (2026-09-13): R1-Suche scanniert Filter, alle Status-Ebenen und
 Statuswechsel (Cron und Klicks in `do.php`/`ajax.php`, B7 sehr wichtig).

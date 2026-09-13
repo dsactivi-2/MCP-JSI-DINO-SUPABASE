@@ -14,12 +14,26 @@ Requirements: [implementation brief](docs/SUPABASE_CRM_MCP_IMPLEMENTATION_BRIEF.
 
 ## Response style
 
-- Keep progress updates and final replies brief, using short paragraphs or
-  compact lists. Avoid large text blocks, repetition, and unnecessary detail.
-- Expand only when a shorter reply would omit information needed to understand
-  the result, make a decision, or take the next step. Preserve essential context,
-  verification results, and material limitations.
-- Link to detailed repository documents instead of repeating their contents.
+- After a change, keep status short: what changed, what is still true,
+  and what is not done.
+- When the user asks what something means, why it is so, or says they do
+  not understand: the first sentence is the real world (who appears in
+  which list, or what happens today). Name the old recruiter list versus
+  the new planned search before any file, ticket, or jargon. Details
+  come after that sentence.
+- If the user is still confused, restart from that first sentence. Do
+  not add another fragment.
+- Claims about search behavior use this order: what the old list does
+  today; what the new search should do later; what exists only in Git.
+  A documentation change is not a live-list fix.
+- Link to repository documents for evidence. A link does not replace
+  the real-world sentence.
+- Finish every sentence. A cut-off reply is incomplete; rewrite it.
+- Discovery counts come from `wc -l` of the full file. Truncated chat
+  output, `head`, or a 200-line cap is not the result. Wizard 01 hit
+  lists stay complete (rescan 2026-09-13: RPC 21, tables 1732, UI 2487
+  fundstellen). A 200-line `hits-tables.txt` or `hits-ui.txt` is a
+  failed truncated run.
 
 ## Current phase
 
@@ -40,6 +54,11 @@ performance, or restore.
 - The runtime LLM must never generate or execute arbitrary SQL.
 - PostgreSQL remains authoritative for filtering, ranking, authorization, and
   pagination.
+- In the new search, candidates without a matching group or Bearbeitung
+  row stay visible. The old recruiter list (`lista_kandidata`) still hides
+  those people via PHP `INNER JOIN` on `idk_kandidati_grupe` /
+  `idk_kandidat_status`. Leave that live list unchanged until the user
+  asks to change PHP.
 - Never send the full candidate database or bulk candidate records to an LLM.
 - Search responses are capped at 50 candidates per page.
 - Internal Vermittler roles (Sachbearbeiter, Teamleiter, Inhaber, Entwickler)
@@ -141,9 +160,8 @@ Do not infer a decision from an explanation, a recommendation, or an unanswered
 question. Keep unresolved items `OFFEN` and partial decisions
 `TEILWEISE BESTÄTIGT`. Label unverified physical facts `ARBEITSANNAHME` or
 `DURCH DISCOVERY ZU PRÜFEN`. Live question status lives in ADR-0002, not here.
-Wizard 01 CRM hit lists must not use a 200-line cap. When the interview
-frontier is empty and the user confirms shared understanding, follow ADR-0002's
-completion procedure.
+When the interview frontier is empty and the user confirms shared
+understanding, follow ADR-0002's completion procedure.
 
 ## Repository conventions
 

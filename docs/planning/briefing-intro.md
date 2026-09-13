@@ -26,7 +26,7 @@ Developer-Plugin/MCP darf sich nicht mit diesem Projekt verbinden.
 | Projektschätzung | ca. 200.000 Kandidatenakten | Arbeitszahl, DURCH DISCOVERY ZU PRÜFEN |
 | Katalog Gate B2 V3 | `crm.idk_kandidati` ≈ 122.000 Reltuples | Planner-Schätzung, keine gezählte Standzahl |
 | Dump-Angabe | ca. 1,53 GiB, 179 Tabellen | Quelle für den Import, kein Restore-Beweis |
-| Postgres-Katalog | ca. 199 Relationen in `crm` / `crm_api` / `crm_auth` | Metadata, keine Datensätze gelesen |
+| Postgres-Katalog | 199 Tabellen / 398 Relationen in `crm` / `crm_api` / `crm_auth` | Gate B2 V3; Metadata, keine Datensätze gelesen |
 
 Die 200.000 bleiben die kommunizierte Größenordnung. Die 122.000 sind die
 bisherige Katalogschätzung der Kernakte. Beide Zahlen sind keine auditierte

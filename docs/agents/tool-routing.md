@@ -21,7 +21,7 @@ vrijedi samo ovaj repozitorij.
 | `mcp-server-dev` | plugin skills `build-mcp-server` / `build-mcp-app` / `build-mcpb` | Samo dizajn. Vidi [MCP server-dev tooling](mcp-server-dev-tooling.md). |
 | `example-server` | Codex MCP | Protokolni primjer. Nije CRM ni Postgres sloj. |
 | `start-matt-wizard` | `.agents/skills/start-matt-wizard/` | Samo na izričit zahtjev. Ovaj repo je već postavljen. |
-| CRM wizards | `scripts/wizards/` | PHP-Verdrahtung. Wizard 01 bez limita 200 linija. |
+| CRM wizards | `scripts/wizards/` | PHP-Verdrahtung. Wizard 01 bez limita 200 linija; broj je `wc -l` cijele datoteke. |
 | `scripts/check-local.sh` | `scripts/` | Jedini lokalni dokazni ulaz. |
 
 <!-- markdownlint-enable MD013 -->
