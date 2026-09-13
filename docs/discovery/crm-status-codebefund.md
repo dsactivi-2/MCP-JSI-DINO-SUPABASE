@@ -195,4 +195,6 @@ C9 Geburtstag ohne Statuswechsel.
 
 Nicht Wizard 04 wiederholen, nicht Wizard 01.
 Wizard-03-Alltag bestätigt. JSON-Filter-Entwurf geprüft. Nächster Schritt:
-Tool-Namen und synthetische Eval. Kein MCP-Bau.
+Bericht-Audit
+[verify-verifier-report.md](../handoffs/2026-09-13-verify-verifier-report.md).
+Kein Tool-Namen. Kein MCP-Bau.

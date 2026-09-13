@@ -1,13 +1,14 @@
 # Lokaler Arbeitsplan: Release 1 und Automatisierung
 
-Datum: 2026-09-11. Status: konsolidierter lokaler Entwurf, **keine
-Linear-Writes**.
+Datum: 2026-09-11. Status: konsolidierter lokaler Entwurf. AUTO-Pakete
+sind weiterhin **keine** Linear-Writes.
 
 Der [Anforderungsregister](release-1-requirements.md) ist die zentrale Zuordnung
 von Quelle, Pflichtstatus und Abnahme. Frühere AUTO-01–08-Schlüssel bleiben
-lokale Arbeitspakete; Testfälle heißen TEST-AUTO-01–03. Laut Audit war Linear
-am 2026-09-11 leer; das ist keine erneute Live-Prüfung. Keine erfundenen
-Issue-IDs.
+lokale Arbeitspakete; Testfälle heißen TEST-AUTO-01–03. Linear hat seit
+2026-09-12 die getrennte Wayfinder-Karte ACT-100–109; siehe
+[issue tracker](../agents/issue-tracker.md). Das ist nicht dieser AUTO-Plan.
+Keine erfundenen Issue-IDs. AUTO-Schlüssel nicht still in ACT-100 mischen.
 
 ## Ablauf und unabhängige Vorbereitung
 

@@ -19,6 +19,9 @@ Repozitorij ima jedan domenski kontekst. Njegov rječnik je u korijenskom
 5. Za MCP SDK, auth middleware ili Supabase runtime adapter koristiti
    [SDK plan](../planning/sdk-integration-plan.md) i njegovu primarnu provjeru.
    Preporuka, potvrđena odluka i izvršeni integration test imaju odvojene statuse.
+   Za službene MCP design-skills koristiti
+   [MCP server-dev tooling](mcp-server-dev-tooling.md). Za Linear, Serena,
+   Git, plugin-e i wizards koristiti [tool routing](tool-routing.md).
 
 ## Održavanje
 
@@ -31,5 +34,6 @@ Repozitorij ima jedan domenski kontekst. Njegov rječnik je u korijenskom
   dokumentirati novim ADR-om i eksplicitno označiti zamijenjenu odluku.
 - Kontekst, README i konfiguracija vještina upućuju na zahtjeve i odluke;
   ne prepisuju njihov sadržaj.
-- Lokalni planovi ticketa žive pod `docs/planning/`, koriste privremene ključeve
-  i dobijaju stvarne Linear ID-ove tek nakon odobrenog vanjskog upisa.
+- Lokalni `AUTO-01`–`AUTO-08` ostaju privremeni ključevi pod `docs/planning/`.
+  Wayfinder mapa ACT-100–109 već postoji; drugi map za isti cilj se ne kreira.
+  Nova Linear issuea samo uz izričitu freigabe.

@@ -19,8 +19,8 @@ Recruiter-Maske, nicht occupation, nicht Ort, nicht Skills.
 
 | Lücke | Stand | Nicht tun |
 | --- | --- | --- |
-| Struke/Smjer = Ausbildungsberuf? | Wizard 03 **OFFEN**. PHP filtert über Schul-Smjer-Namen in `idk_kandidat_edukacija.ke_naziv_kvalifikacije`. Heft-Ausbildungsberuf bleibt `ARBEITSANNAHME`. | JSON nicht in `ausbildungsberuf` umbenennen; Q8.4 nicht überschreiben |
-| „5 Jahre“ / Jahres-Erfahrung | **nicht in R1**. Alte UI nur ja/nein (`has_work_experience`). Q8.5.3–8 bleiben für später. Wizard-03-Lücke bleibt **OFFEN**. | kein `years`-Feld erfinden; Zettel-2-Aktenzahlen nicht als Filter |
+| Struke/Smjer = Ausbildungsberuf? | Wizard 03 **BESTÄTIGT** 2026-09-13. PHP filtert über Schul-Smjer-Namen in `idk_kandidat_edukacija.ke_naziv_kvalifikacije`. | JSON nicht in `ausbildungsberuf` umbenennen; Q8.4 nicht überschreiben |
+| „5 Jahre“ / Jahres-Erfahrung | **nicht in R1**, Nutzer 2026-09-13 **BESTÄTIGT** nein. Alte UI nur ja/nein (`has_work_experience`). Q8.5.3–8 bleiben für später. | kein `years`-Feld erfinden; Zettel-2-Aktenzahlen nicht als Filter |
 
 PHP-Nuancen, die der Entwurf **nicht** 1:1 kopiert (Q21), aber kennt:
 
@@ -29,9 +29,9 @@ PHP-Nuancen, die der Entwurf **nicht** 1:1 kopiert (Q21), aber kennt:
 | Alter nur wenn `starost_od` **und** `starost_do` gesetzt | nur beide Grenzen oder kein Altersfilter; eine Grenze allein ablehnen |
 | Führerschein / Erfahrung nur Wert `DA` | JSON nur `true` filtert; `false` ablehnen (kein alter „ohne“-Filter) |
 | `filter_smjer` gesetzt | Schule- **und** Struke-Bedingung fallen weg |
-| Cookie `archive_status` | SQL nur Status 3; Formularfilter fallen weg; Klassen und Suchbox hängen PHP danach trotzdem an. Mischung nur-Archiv + andere Filter: ablehnen (`VORLÄUFIGER VORSCHLAG`) |
+| Cookie `archive_status` | SQL nur Status 3; Formularfilter fallen weg. Klassen danach an Liste-SQL und Zähl-SQL; Suchbox `search[value]` nur an Liste-SQL, nicht an Zähl-SQL. R1 übernimmt den PHP-Zählfehler nicht (Q21). Mischung nur-Archiv + andere Filter: ablehnen (`VORLÄUFIGER VORSCHLAG`) |
 | `filter_boravak` als Rohstring `LIKE` | später parametrisiert; Semantik bleibt „gewählte Werte“ |
-| `INNER JOIN` Gruppe und Status | Kandidaten ohne Gruppen-/Statuszeile fehlen in PHP still. Ob R1 das übernimmt: **OFFEN** |
+| `INNER JOIN` Gruppe und Status | PHP lässt sie still weg. R1 **nicht**: ohne Gruppe/Bearbeitung bleiben sie sichtbar (`BESTÄTIGT` 2026-09-13). Andere Filter gelten weiter. |
 
 Heft Q8: UND zwischen Kategorien ist dort `VORLÄUFIGER VORSCHLAG`. PHP
 ist AND (`BELEGT`). R1 folgt der alten Maske (Q18 Alltag). Sprachen
@@ -61,7 +61,7 @@ Nachrichten C 4–9 gehören nicht in diesen Filter (Produkt default aus).
 | Ort / Stadt / Wunschort | Wizard 03: erst alte Filter |
 | Skills | Wizard 03 |
 | Berufssuchprofil / occupation | Wizard 03 + Q22 |
-| Erfahrungsjahre / „5 Jahre“ | **kein R1-Feld**; alte UI nur ja/nein; Wizard-03-Lücke bleibt OFFEN; Q8.5.3–8 gelten erst, wenn Jahre ein Filter werden |
+| Erfahrungsjahre / „5 Jahre“ | **kein R1-Feld** (`BESTÄTIGT`); alte UI nur ja/nein; Q8.5.3–8 gelten erst, wenn Jahre ein Filter werden |
 | Freitext-Volltext wie `search.php` | nicht die Kandidatensuche |
 | Messenger-Status, Task-Force | nicht in dieser Filter-Maske; Scan liegt in der Status-Datei |
 | Partner-/QC-/Nalog-Suche | R1 nur Hauptsuche |
@@ -70,13 +70,14 @@ Nachrichten C 4–9 gehören nicht in diesen Filter (Produkt default aus).
 
 Q8.5.3–8 (nur passende Jobs, Überlappung nicht addieren, aktueller Job
 bis heute, ähnliche Schreibweisen, Listen zuerst) bleiben bestätigt.
-Sie gelten, **wenn** später Jahres-Erfahrung ein Filter wird. Sie setzen
-nicht den R1-Filter und nicht die Wizard-03-Lücke.
+Sie gelten, **wenn** später Jahres-Erfahrung ein Filter wird. In R1 setzen
+sie keinen Jahresfilter.
 
 Struke/Smjer: JSON nutzt die PHP-Namen. PHP-Pfad ist Struke →
 `idk_skole_smjerovi.ss_naziv` → gleiches Smjer-LIKE auf
-`ke_naziv_kvalifikacije`. Ob das bei euch der Ausbildungsberuf ist,
-bleibt **OFFEN**. Nicht aus PHP setzen, nicht occupation mappen.
+`ke_naziv_kvalifikacije`. Das ist bei euch der Ausbildungsberuf
+(`BESTÄTIGT` 2026-09-13). Nicht occupation mappen, Q8.4 nicht
+überschreiben.
 
 ## Regeln
 
@@ -115,7 +116,7 @@ Englische JSON-Namen. PHP-POST nur zur Spur.
 | `source` | `filter_izvor` | Herkunft `kandidat_porijeklo` | ID-Liste; Partner 6 nimmt 7 mit (PHP) |
 | `citizenship` | `filter_drzavljanstvo` | EU / NON-EU | `eu`, `non_eu`; beide gesetzt = kein Filter |
 | `eu_residence` | `filter_boravak` | Boravak EU | Liste; nicht Stadt |
-| `struke` | `filter_struke` | Struke über Schul-Smjer; tot wenn `smjer` gesetzt | ID-Liste; Mapping Ausbildungsberuf **OFFEN** |
+| `struke` | `filter_struke` | Ausbildungsberuf über Schul-Smjer; tot wenn `smjer` gesetzt | ID-Liste; JSON-Name bleibt `struke` |
 | `schools` | `filter_skole` | Schulen | Liste/Text wie PHP LIKE |
 | `smjer` | `filter_smjer` | Smjer; verdrängt Schule **und** Struke | Text/ID wie PHP |
 | `dipl_status` | `filter_dipl_status` | DIPL 0–7; 0 = nicht in DIPL | ID-Liste |
@@ -187,11 +188,11 @@ Alte CRM-RPCs nicht wrappen.
 
 | Thema | Stand |
 | --- | --- |
-| Struke/Smjer = Ausbildungsberuf? | Wizard 03 **OFFEN**; JSON bleibt `struke` / `smjer` |
-| Wie „5 Jahre“ im Filter zählen | Wizard 03 **OFFEN**; **kein** R1-Feld; Q8.5.3–8 unberührt |
+| Struke/Smjer = Ausbildungsberuf? | **BESTÄTIGT**; JSON bleibt `struke` / `smjer` |
+| Wie „5 Jahre“ im Filter zählen | **kein** R1-Feld (`BESTÄTIGT`); Q8.5.3–8 unberührt |
 | Messenger / Task-Force im JSON | nicht in der Maske; Q19 fein **OFFEN** |
 | Archiv plus andere Filter | PHP wirft Formularfilter weg; Entwurf lehnt die Mischung ab |
-| Stille PHP-Joins ohne Gruppe/Status | **OFFEN**, nicht heimlich übernehmen |
+| Stille PHP-Joins ohne Gruppe/Status | **BESTÄTIGT** nein; sichtbar lassen, nicht INNER JOIN kopieren |
 | Prijave-Labels | DB, kein Dump |
 | Ranking / Cursor-Spalte | OFFEN |
 | JMBG in der Trefferliste | PHP ja; R1-Ausgabe unbestätigt |
@@ -200,5 +201,7 @@ Alte CRM-RPCs nicht wrappen.
 
 ## Nächster Schritt
 
-Prüfung ist geschrieben. Danach Tool-Namen und synthetische Eval, nicht
-Produktion, nicht MCP-Bau. Kein Wizard 01/04.
+Bericht-Audit Punkte 1–3 bestätigt. Archiv-Satz bleibt: PHP-Zählfehler
+nicht nachbauen. Struke/Smjer = Ausbildungsberuf. „5 Jahre“ nicht in R1.
+Ohne Gruppe/Bearbeitung sichtbar. JSON bleibt Entwurf, kein Vertrag.
+Nicht Tool-Namen, keine Produktion, kein MCP-Bau, kein Wizard 01/04.

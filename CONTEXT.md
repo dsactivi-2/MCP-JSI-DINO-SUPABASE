@@ -26,6 +26,8 @@ treba omogućiti ljudsku procjenu prikladnosti kandidata.
 | Profil kandidata | Podaci o jednom kandidatu, u opsegu dozvoljenom korisniku. |
 | Filter | Strukturirani kriterij pretrage, npr. zanimanje ili minimalno iskustvo. |
 | Ausbildungsberuf | Formalno zanimanje/obrazovna kvalifikacija kandidata; više takvih zanimanja može odgovarati široj potrebi klijenta. Kontrolisana CRM lista i njeni ID-ovi su ARBEITSANNAHME / DURCH DISCOVERY ZU PRÜFEN. |
+| Struke | Stara Filter-UI i JSON-ime `struke` za Ausbildungsberuf. Nije occupation i ne prepisuje Q8.4. |
+| Smjer | Stara Filter-UI i JSON-ime `smjer` za Ausbildungsberuf. Nije occupation i ne prepisuje Q8.4. |
 | Berufssuchprofil | Imenovana, verzionirana i kontrolisana grupa Ausbildungsberufe, Erfahrungsberufe i Tätigkeitsarten za širu potrebu klijenta; članovi ostaju samostalno pretraživi i mogu pripadati većem broju profila. |
 | Berufserfahrung | Jedno značenje. Ako dva spremišta tvrde da su to godine iskustva, brojevi moraju biti isti; inače Aktenfeld nije ta stavka (Q8.5.1). |
 | Relevante Berufserfahrung | Odgovarajući poslovi: sličan natpis i srodni nazivi. Liste prvo; KI samo prijedlog uz potvrdu (Q8.5.3–8). Preklapanja se ne sabiraju; tekući posao do danas. Zettel 2 se ne koristi. |
@@ -72,6 +74,10 @@ odgovornog vlasnika.
   otvorene odluke aktivnog design intervjua.
 - [Inventar CRM-Scan](docs/discovery/crm-work-inventory.md) indeksira šta je
   iz PHP-a već mapirano i šta je otvoreno.
+- [Tool routing](docs/agents/tool-routing.md) veže instalirane skills, plugin-e
+  i MCP-ove na granice projekta.
+- [Issue tracker](docs/agents/issue-tracker.md) čuva Linear identitet i mapu
+  ACT-100; status issuea ostaje u Linearu.
 - [Discovery runbook](docs/runbooks/schema-discovery.md) određuje postupak
   provjere nepoznatih činjenica.
 - [ADR-0004](docs/decisions/0004-automated-database-development.md) i

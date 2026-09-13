@@ -16,5 +16,7 @@ oznake. Dostupnost u timu Activi potvrđena je 2026-09-10.
 <!-- markdownlint-enable MD013 -->
 
 Vještine koriste desnu oznaku za odgovarajuću kanonsku ulogu i ponovo koriste
-postojeće oznake. Mapiranje ne ograničava druge projektne oznake.
+postojeće oznake. Mapiranje ne ograničava druge projektne oznake. Na ACT-100
+mapi postoje i `wayfinder:*` i `decision` oznake; one ne zamjenjuju pet
+kanonskih uloga.
 Pripadnost issuea i status toka rada određuje [issue tracker](issue-tracker.md).

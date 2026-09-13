@@ -18,9 +18,12 @@ ist bestätigt (R1 = alte Hauptsuche). JSON-Filter ist Entwurf, kein Vertrag.
 MCP-Bau ist **nicht** dran.
 
 JSON-Filter-Entwurf ist 2026-09-13 gegen PHP und Heft geprüft.
-Lücken bleiben: Struke/Smjer-Deutung, „5 Jahre“ nicht in R1.
-Nächster Schritt: Tool-Namen und synthetische Eval.
-Kein Wizard 01/02/04. Kein MCP-Bau.
+Struke/Smjer = Ausbildungsberuf: bestätigt. „5 Jahre“ nicht in R1:
+bestätigt. INNER JOIN: nicht übernehmen, ohne Gruppe/Bearbeitung sichtbar.
+Nutzer 2026-09-13 Punkt 1 **Ja:** Vorbericht-PASS zählt nicht.
+Punkt 3 **Ja:** JSON bleibt Entwurf, kein Vertrag.
+Punkt 2 **Ja:** Archiv-Satz bleibt (Zählfehler nicht kopieren).
+Kein Tool-Namen. Kein Wizard 01/02/04. Kein MCP-Bau.
 
 ## 2. Verbindliche Quellen (nicht ins Doku-Git kopieren)
 
@@ -45,10 +48,10 @@ Architektur: [ADR-0001](../decisions/0001-controlled-query-boundary.md).
 | --- | --- | --- |
 | Q4 | `ERSETZT` 2026-09-12 | Interner Vermittler sieht Pool + Kontakte. Kunde nie den ganzen Pool. Vorschlagsfreigabe ohne Kontakt, Einstellungsfreigabe = CONTACT-02. Plugin nie auf Produktion. Discovery ohne Datensatz-Dump. |
 | Q8.4 | bestätigt im Prinzip | drei Berufsschichten + Berufssuchprofile, auch wenn die alte Maske sie nicht so trennt |
-| Q8.5 | `TEILWEISE` | 8.5.3–8 bestätigt; Wizard-03 „5 Jahre im R1-Filter“ OFFEN, nicht in R1 |
+| Q8.5 | `TEILWEISE` | 8.5.3–8 bestätigt; „5 Jahre“ nicht in R1 (`BESTÄTIGT` nein) |
 | Q15.6 | `OFFEN` | Export |
 | Q17 | `BESTÄTIGT` | Heft und alte UI/PHP gleichberechtigt; Heft ist keine Whitelist |
-| Q18 | `TEILWEISE` | Codebefund + Alltag bestätigt; Struke/Smjer und 5-Jahre-Filter OFFEN |
+| Q18 | `TEILWEISE` | Codebefund + Alltag bestätigt; Struke/Smjer = Ausbildungsberuf; 5 Jahre nicht in R1; INNER JOIN nicht kopieren |
 | Q19 | `TEILWEISE` | Status-Ebenen und Automatik als Codebefund |
 | Q20 | `TEILWEISE` | Jetzt: Filter, alle Status, Auslöser, A, B7, C 4–9 Codebefund. Produkt default aus. 10 und 11–16 später |
 | Q21 | `BESTÄTIGT` | Funktionen erfassen, modern umsetzen, nicht 1:1 PHP-SQL |
@@ -121,8 +124,9 @@ Datei: [crm-json-filter-draft.md](crm-json-filter-draft.md).
 Nur alte Kandidati-Filter. Unbekannte Felder ablehnen. Leer = tot. UND
 zwischen Kategorien. Cap 50. Keine Jahre, kein Ort, keine Skills, kein
 Berufssuchprofil. C 4–9 nicht in diesem Filter.
-2026-09-13 gegen PHP/Heft geprüft. Struke/Smjer-Deutung und „5 Jahre“
-bleiben OFFEN, nicht im R1-JSON.
+2026-09-13 gegen PHP/Heft geprüft. Struke/Smjer = Ausbildungsberuf.
+„5 Jahre“ nicht im R1-JSON.
+Unabhängiger PASS 2026-09-13 nicht haltbar; Archiv-Satz korrigiert.
 
 ### 4.5 Postgres-Katalog (Gate B2 V3, nicht PHP)
 
@@ -148,11 +152,15 @@ ohne Werte. Alte „R1 ohne Kontakt“-Zeilen sind `ERSETZT`.
 | [crm-notify-codebefund.md](crm-notify-codebefund.md) | C 4–9 Kanal + Auslöser |
 | [crm-json-filter-draft.md](crm-json-filter-draft.md) | R1 JSON-Filter Entwurf |
 | [2026-09-13-json-filter-draft.md](../worklogs/2026-09-13-json-filter-draft.md) | Worklog JSON-Entwurf |
+| [2026-09-13-json-filter-verify.md](../worklogs/2026-09-13-json-filter-verify.md) | Worklog erster PASS, nicht Schluss |
+| [2026-09-13-json-filter-audit.md](../worklogs/2026-09-13-json-filter-audit.md) | Worklog Bericht-Audit |
 | [2026-09-13-c49-notify.md](../worklogs/2026-09-13-c49-notify.md) | Worklog C 4–9 |
 | [crm-php-hits/](crm-php-hits/) | Wizard-01-Rohlisten |
 | [crm-php-hits/status/](crm-php-hits/status/) | Wizard-04-Rohlisten |
 | [2026-09-13-scan-to-mcp.md](../handoffs/2026-09-13-scan-to-mcp.md) | Session-Übergabe |
-| [2026-09-13-next-agent-prompt.md](../handoffs/2026-09-13-next-agent-prompt.md) | Prompt nächste Session |
+| [2026-09-13-verify-verifier-report.md](../handoffs/2026-09-13-verify-verifier-report.md) | Ablauf Bericht-Audit; Vorbericht-PASS nicht haltbar |
+| [2026-09-13-session-handoff.md](../handoffs/2026-09-13-session-handoff.md) | Session-Übergabe nach Bericht-Audit |
+| [2026-09-13-next-agent-prompt.md](../handoffs/2026-09-13-next-agent-prompt.md) | Zeigt auf das Verdict, nicht auf Tool-Namen |
 | [crm-wiring-wizards.md](../runbooks/crm-wiring-wizards.md) | Welcher Wizard wann |
 | Worklogs 2026-09-12/13 | Rescan, B7, C 4–9 |
 
@@ -191,9 +199,10 @@ Lokal, nicht Git: `/private/tmp/dino-crm-wiring.env`,
 | C 4–9 Codebefund | gelesen | crm-notify-codebefund.md |
 | Restliche `do.php`-Cases ohne Statuswort | Lücke | Status-Datei |
 | Prijave-Labels | DB, kein Dump | Status-Datei |
-| Wizard 03 Alltag | bestätigt; Rest OFFEN: Struke/Smjer, 5-Jahre-Filter | ADR-0002 Q18 |
-| Q8.5 | `OFFEN` | ADR-0002 |
-| JSON-Filter R1 | Entwurf geprüft, nicht Vertrag; Struke/Smjer und 5 Jahre OFFEN | crm-json-filter-draft.md |
+| Wizard 03 Alltag | bestätigt; Struke/Smjer = Ausbildungsberuf; 5 Jahre nicht in R1; INNER JOIN nicht kopieren | ADR-0002 Q18 |
+| Q8.5 | `TEILWEISE`; Jahre nicht in R1 | ADR-0002 |
+| JSON-Filter R1 | Entwurf, kein Vertrag; ohne Gruppe/Bearbeitung sichtbar | crm-json-filter-draft.md |
+| Bericht-Audit JSON-PASS | Punkte 1–3 bestätigt | json-filter-audit.md |
 | JSON/MCP/RPC, Auth, Hosting | nicht gewählt | Brief, SDK-Plan |
 | Export | Q15.6 | ADR-0002 |
 | step1 Website-Dump | Script-Lücke | Handoff |

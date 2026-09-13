@@ -911,13 +911,18 @@ Datensatz-Dump.
 - Ort, Skills, Berufssuchprofil in R1-Suche: `BESTÄTIGT` nein, erst nur
   die alten Filter (passt zu Q22 als Scan; das ist jetzt auch der
   Produktumfang der ersten Suche).
-- Q8.5 / „5 Jahre“ bleibt `OFFEN`; nicht aus PHP setzen.
+- Q8.5 / „5 Jahre“ in R1: `BESTÄTIGT` nein. Alte UI nur ja/nein.
+  Q8.5.3–8 unberührt, gelten erst wenn Jahre später ein Filter werden.
 - Q8.4 drei Berufsschichten bleibt bestätigt, nicht neu befragt.
+- Struke/Smjer in der alten Maske = Ausbildungsberuf: `BESTÄTIGT`
+  2026-09-13. JSON-Namen bleiben `struke` / `smjer`. Nicht Q8.4
+  überschreiben, nicht occupation mappen.
 
-Noch `OFFEN` in Wizard 03: meint Struke/Smjer bei euch den
-Ausbildungsberuf? (nicht dasselbe wie Q8.4). Secret-Check ist
-Betriebsfrage, kein Domänenvertrag. „5 Jahre“ im R1-Filter bleibt
-`OFFEN` und ist nicht Q8.5.3–8.
+Noch `OFFEN` in Wizard 03: Secret-Check (Betriebsfrage).
+
+INNER JOIN Gruppe/Status in R1: `BESTÄTIGT` nein, 2026-09-13. Kandidaten
+ohne Gruppen- oder Bearbeitungszeile bleiben sichtbar. PHP-INNER-JOIN
+nicht übernehmen. Andere Filter gelten weiter.
 
 **Update 2026-09-13 JSON-Filter:** Entwurf nur der alten Filter:
 [crm-json-filter-draft.md](../discovery/crm-json-filter-draft.md).
@@ -925,9 +930,15 @@ Kein Runtime-MCP. Berufssuchprofil/Ort/Skills/Jahre nicht in R1.
 
 **Update 2026-09-13 JSON-Filter-Prüfung:** Entwurf gegen PHP
 `lista_kandidata` und Heft geprüft. Die Maskenfelder decken sich.
-Bleibt **OFFEN**, keine neue Interview-Antwort: meint Struke/Smjer den
-Ausbildungsberuf; „5 Jahre“ ist kein R1-Feld. Q8.5.3–8 unberührt.
+Struke/Smjer = Ausbildungsberuf: `BESTÄTIGT`. „5 Jahre“ nicht in R1:
+`BESTÄTIGT` nein. Q8.5.3–8 unberührt. JSON-Namen `struke` / `smjer`.
 Kein Vertrag, kein MCP.
+Bericht-Audit 2026-09-13: Vorbericht-PASS nicht haltbar. Archiv-Satz in
+[crm-json-filter-draft.md](../discovery/crm-json-filter-draft.md) getrennt.
+Nutzer 2026-09-13 Punkt 1 **Ja:** Vorbericht-PASS zählt nicht.
+Punkt 3 **Ja:** JSON bleibt Entwurf, kein Vertrag.
+Punkt 2 (Archiv-Satz) **Ja:** PHP-Zählfehler kennen, in R1 nicht kopieren.
+INNER JOIN: Nutzer **Nein**, Leute ohne Gruppe/Bearbeitung bleiben sichtbar.
 
 Index: [crm-work-inventory.md](../discovery/crm-work-inventory.md).
 C 4–9: [crm-notify-codebefund.md](../discovery/crm-notify-codebefund.md).
@@ -1073,6 +1084,10 @@ Quelle ist das PHP-CRM und die Tabellen, die es **wirklich benutzt**.
 Supabase wird danach **anhand dieser Dokumentation** eingerichtet und der
 MCP verdrahtet (Q21: modern umsetzen). Extra-DB-Felder, die der alte Ablauf
 nicht kennt, sind kein jetziger Scan-Auftrag.
+
+Die Linear-Karte ACT-100 (2026-09-12) stellte Quellen- und Scanfragen unter
+Jobstep/OrbStack-Titeln. Q17 und Q20–Q22 sind die ausdrücklichen Antworten.
+Diese Fragen nicht aus den Linear-Titeln neu öffnen.
 
 ## Fortschreibung während des Interviews
 

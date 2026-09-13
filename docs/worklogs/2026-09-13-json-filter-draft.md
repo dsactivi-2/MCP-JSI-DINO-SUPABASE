@@ -12,3 +12,6 @@ Prüfung gegen PHP `lista_kandidata` und Heft: Maskenfelder decken sich.
 Lücken markiert: Struke/Smjer-Deutung OFFEN; „5 Jahre“ kein R1-Feld.
 PHP-Nuancen (beide Altersgrenzen, `true`-only, Smjer verdrängt Struke)
 stehen im Entwurf, ohne 1:1-SQL-Kopie.
+Bericht-Audit 2026-09-13: Vorbericht-PASS nicht haltbar. Archiv-Satz in der
+Testdatei getrennt (Klassen an Liste-SQL und Zähl-SQL; search[value] nur
+Liste-SQL). INNER JOIN bleibt OFFEN.

@@ -20,6 +20,7 @@ Pročitati [stanje projekta](docs/project.md), zatim
 | [AGENTS.md](AGENTS.md) | Pravila rada u repozitoriju. |
 | [CONTEXT.md](CONTEXT.md) | Poslovni kontekst i domenski rječnik. |
 | [docs/project.md](docs/project.md) | Trenutna faza, nedostaci i sljedeći cilj. |
+| [Briefing-Intro](docs/planning/briefing-intro.md) | Kratki njemački uvod: Import, veličina banke, ciljni MCP, trenutni korak. |
 | [Implementacijski brief](docs/SUPABASE_CRM_MCP_IMPLEMENTATION_BRIEF.md) | Zahtjevi, faze i kriteriji prihvata. |
 | [ADR-0001](docs/decisions/0001-controlled-query-boundary.md) | Prihvaćena arhitekturna granica; ADR-ovi žive u [docs/decisions/](docs/decisions/). |
 | [ADR-0002](docs/decisions/0002-search-design-interview.md) | Entwurf s pitanjima, odgovorima i otvorenim odlukama aktivnog design intervjua. |
@@ -43,14 +44,17 @@ Pročitati [stanje projekta](docs/project.md), zatim
 | [PHP-Suchzettel](docs/discovery/crm-php-hits/) | Wizard-01/04-`rg`-Output; nicht abschreiben. |
 | [Codebefund Status/Klick/Cron](docs/discovery/crm-status-codebefund.md) | B7-Klicks, Ebenen, Cron. |
 | [Codebefund C 4–9 Nachrichten](docs/discovery/crm-notify-codebefund.md) | Kanal und Auslöser je Statuswechsel; Produkt default aus. |
-| [JSON-Filter Entwurf R1](docs/discovery/crm-json-filter-draft.md) | Entwurf geprüft, kein Vertrag. Lücken: Struke/Smjer, 5 Jahre nicht in R1. |
-| [Aktueller Session-Prompt](docs/handoffs/2026-09-13-aktueller-session-prompt.md) | Copy-paste für den nächsten Agenten. |
+| [JSON-Filter Entwurf R1](docs/discovery/crm-json-filter-draft.md) | Entwurf geprüft, kein Vertrag. Struke/Smjer = Ausbildungsberuf; 5 Jahre nicht in R1. Offen: INNER JOIN, Archiv-Satz. |
+| [Bericht-Audit Prompt](docs/handoffs/2026-09-13-verify-verifier-report.md) | Ablauf 2026-09-13 ausgeführt; Vorbericht-PASS nicht haltbar. |
+| [Aktueller Session-Prompt](docs/handoffs/2026-09-13-aktueller-session-prompt.md) | Nutzer liest Verdict. Nicht Tool-Namen, nicht MCP. |
 | [Handoff Scan-to-MCP](docs/handoffs/2026-09-13-scan-to-mcp.md) | Historische Session-Übergabe (Dump/Q4/step1-2). |
 | [Statička CRM schema analiza](docs/discovery/crm-schema-static-analysis.md) | Redigirani inventar lokalnog Schema Visualizer izvoza bez bazne konekcije. |
 | [Statička `crm_auth` analiza](docs/discovery/crm-auth-schema-static-analysis.md) | Redigirani pregled lokalnog auth/role/scope schema izvoza. |
 | [Plan statičke schema analize](docs/discovery/schema-analysis-tasklist.md) | Siguran tok i checklist za lokalni Schema Visualizer export bez bazne konekcije. |
 | [Supabase-Plugin Gate P](docs/discovery/supabase-plugin-read-only-gate-draft.md) | Neizvršivi NO-GO nacrt za eventualni projektno ograničen read-only Plugin pristup. |
 | [Supabase tooling](docs/agents/supabase-tooling.md) | Obavezno usmjeravanje za instalirane Supabase skills i blokirani Live-MCP pristup. |
+| [MCP server-dev tooling](docs/agents/mcp-server-dev-tooling.md) | Službeni MCP design-skills; remote HTTP i JSON-filter granica, bez produkcijskog spoja. |
+| [Tool routing](docs/agents/tool-routing.md) | Instalirani Linear, Serena, Git, plugin-i, wizards i skills; dostupnost nije odobrenje. |
 | [Istraživanje Supabase alata](docs/research/supabase-werkzeuge-fuer-crm-mcp.md) | Procjena plugina, MCP-a, skillsa, CLI-ja i kasnijih razvojnih alata. |
 | [Brief za MCP/TypeScript auto-wire istraživanje](docs/research/mcp-autowire-research-brief.md) | Agent-prompt: obim baze, filteri u više nivoa i klase gotovih alata. |
 | [Nalaz MCP/TypeScript auto-wire](docs/research/mcp-autowire-candidates.md) | Primarni izvori: nijedan auto-MCP nije siguran runtime; codegen i SDK v2 jesu. |
@@ -66,7 +70,7 @@ Pročitati [stanje projekta](docs/project.md), zatim
 | [Karta odluka](docs/discovery/project-decision-map.md) | Fakti, odluke, prijedlozi, annahme, gateovi i kritični put. |
 | [Gate B preflight](docs/discovery/security-read-only-discovery-preflight-b.md) | Aktivni read-only discovery gate i njegove granice. |
 | [docs/reviews/](docs/reviews/) i [docs/worklogs/](docs/worklogs/) | Datirani dokazi; historijski nalazi se ne prepravljaju. |
-| [Issue tracker](docs/agents/issue-tracker.md), [triage oznake](docs/agents/triage-labels.md), [domenska pravila](docs/agents/domain.md) | Lokalni Matt Pocock setup. |
+| [Issue tracker](docs/agents/issue-tracker.md), [triage oznake](docs/agents/triage-labels.md), [domenska pravila](docs/agents/domain.md) | Linear ACT-100 mapa, triage i domenski unos. |
 
 <!-- markdownlint-enable MD013 -->
 

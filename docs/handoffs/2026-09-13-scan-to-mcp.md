@@ -154,7 +154,8 @@ Discovery/Verdrahtung. Bevorzugte Maske: crm-app-wiring.md, nicht der step2-Rohb
 
 Filter-SQL `lista_kandidata`, B7-Klicks, C 4–9 und Wizard-03-Alltag sind dokumentiert.
 JSON-Filter-Entwurf: [crm-json-filter-draft.md](../discovery/crm-json-filter-draft.md).
-Nächster Schritt: Entwurf prüfen. Nicht Wizard 01/04 wiederholen.
+Nächster Schritt in diesem Handoff ist historisch. Aktuell:
+[verify-verifier-report.md](2026-09-13-verify-verifier-report.md).
 
 Inventar: [crm-work-inventory.md](../discovery/crm-work-inventory.md).
 

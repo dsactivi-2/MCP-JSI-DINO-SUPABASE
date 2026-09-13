@@ -28,9 +28,12 @@ is indexed in [crm-work-inventory.md](docs/discovery/crm-work-inventory.md);
 C 4–9 is documented in [crm-notify-codebefund.md](docs/discovery/crm-notify-codebefund.md).
 R1 JSON filter draft is
 [crm-json-filter-draft.md](docs/discovery/crm-json-filter-draft.md).
-The draft was reviewed against PHP and Heft on 2026-09-13. Gaps remain:
-Struke/Smjer meaning and “5 Jahre” not in R1. Next step is tool names and
-synthetic eval, not an MCP scaffold.
+The draft was reviewed against PHP and Heft on 2026-09-13.
+Struke/Smjer means Ausbildungsberuf; “5 Jahre” is not an R1 field.
+R1 must not drop candidates that lack group or processing-status rows.
+Bericht-Audit points 1–3 accepted. Archive count mismatch is documented
+and must not be copied into R1. Next: user names the next task, not tool
+names, not an MCP scaffold.
 
 Local documentation and synthetic discovery checks already exist under
 `scripts/` and `tests/`; `scripts/check-local.sh` is their single entry point.
@@ -104,7 +107,10 @@ export narrows discovery but does not authorize or replace Gate B.
   `.agents/skills/supabase-postgres-best-practices/SKILL.md` and only the
   relevant reference files.
 - Skills provide guidance only. They do not prove schema facts, authorize a
-  database connection or override this repository's approvals and ADRs.
+  database connection or override this repository's approvals and ADRs. When the
+  supabase skill names MCP `execute_sql` or `get_advisors` as CLI fallback, that
+  does not authorize those tools here. Bind conflicts in
+  [Supabase tooling](docs/agents/supabase-tooling.md#skill-pravila-u-ovom-projektu).
 - Treat any Supabase plugin/MCP as internal development tooling, not
   as the Runtime-Such-MCP or Profilverwaltungs-MCP. Tool availability is never
   authorization.
@@ -119,6 +125,17 @@ export narrows discovery but does not authorize or replace Gate B.
   development or test project without real personal data and its own approved
   gate.
 
+### MCP server design
+
+- Use the official `mcp-server-dev` skills (`build-mcp-server`,
+  `build-mcp-app`, `build-mcpb`) only as a design/scaffold workflow.
+- Follow [MCP server-dev tooling](docs/agents/mcp-server-dev-tooling.md) before
+  any MCP scaffold. Remote streamable HTTP and a small, one-tool-per-action
+  surface are the bound CRM answers.
+- Do not register a generic Postgres MCP against this project. Do not connect
+  a developer plugin/MCP to production. Do not scaffold the runtime server
+  until the user explicitly starts that work.
+
 ### Runtime SDK integration
 
 - Before selecting or changing MCP SDKs, Supabase runtime clients, auth
@@ -127,10 +144,23 @@ export narrows discovery but does not authorize or replace Gate B.
 - Keep SDK generation, protocol version and runtime adapter aligned. Documented
   recommendations are not installed dependencies or proven authentication.
 
+### Tool routing
+
+Follow [tool routing](docs/agents/tool-routing.md) for installed plugins,
+MCPs, wizards and skills. Availability is never authorization.
+
+### Local Matt wizard
+
+Use `.agents/skills/start-matt-wizard` only when the user explicitly asks to
+start that interactive guide. This repository is already set up; do not treat
+ordinary work as a new-project wizard run.
+
 ### Issue tracker
 
 Use the dedicated Linear project Dino problem baza CRM in team Activi (`ACT`).
-See [issue tracker](docs/agents/issue-tracker.md) for its identity and workflow.
+See [issue tracker](docs/agents/issue-tracker.md) for its identity, the live
+ACT-100 map and workflow. Do not open a second wayfinder map for the same
+destination. `AUTO-01`–`AUTO-08` remain local keys until separately approved.
 
 ### Triage labels
 
@@ -151,18 +181,24 @@ question and normalized answer immediately in the same file.
 
 Do not infer a decision from a request for explanation, a recommendation, or an
 unanswered question. Keep unresolved items marked `OFFEN` and partial decisions
-marked `TEILWEISE BESTÄTIGT`. Q8.5 is entirely `OFFEN`; Q8.4 remains accepted
-in principle. Q4.5 is retired as an empty number, not answered as a domain
-question. Reconstructed filter details and confirmation before every new
-or changed search are `VORLÄUFIGER VORSCHLAG` until evidenced. Label unverified
-physical facts `ARBEITSANNAHME` or `DURCH DISCOVERY ZU PRÜFEN`.
+marked `TEILWEISE BESTÄTIGT`. Q8.5 is `TEILWEISE BESTÄTIGT`: 8.5.1 and 8.5.3–8
+stand; 8.5.2 is ignored; years are not an R1 filter. Q8.4 remains accepted in
+principle. Q4.5 is retired as an empty number, not answered as a domain
+question. Q15.6 remains `OFFEN`. Q18 INNER JOIN group/status and Bericht-Audit
+point 2 (archive sentence) remain `OFFEN`. Reconstructed filter details and
+confirmation before every new or changed search are `VORLÄUFIGER VORSCHLAG`
+until evidenced. Label unverified physical facts `ARBEITSANNAHME` or
+`DURCH DISCOVERY ZU PRÜFEN`.
 Heft (ADR-0002) and the live CRM UI/PHP are equal sources (Q17). New code
 facts are not out of scope only because an older interview question omitted
 them.
 Wizard 01 CRM hit lists must not use a 200-line cap; that hid `kandidati.php`.
 Exclude `*.sql` and `Info/` (dump). Current counts: RPC 21, tables 1732, UI 2487.
 PHP is a catalog of CRM capabilities to modernize (Q21), not a 1:1 SQL clone
-onto Supabase. The runtime LLM still emits only a validated JSON filter (ADR-0001).
+onto Supabase. The current scan is the old frontend plus business logic (Q22).
+Linear map ACT-100 used older Jobstep/OrbStack titles; do not reopen Q17 or
+Q20–Q22 from those issues. The runtime LLM still emits only a validated JSON
+filter (ADR-0001).
 When the user confirms shared understanding and
 the interview frontier is empty, follow ADR-0002's completion procedure to
 reconcile accepted ADRs, `CONTEXT.md`, the implementation brief, project status,

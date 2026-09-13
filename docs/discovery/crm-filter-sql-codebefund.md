@@ -67,3 +67,6 @@ Q21/Q22: dokumentieren, beim MCP neu und sicher bauen. Kein 1:1-Copy.
 
 B7 und C 4–9 sind gelesen. JSON-Filter-Entwurf geprüft:
 [crm-json-filter-draft.md](crm-json-filter-draft.md).
+Nächster Schritt: Bericht-Audit
+[verify-verifier-report.md](../handoffs/2026-09-13-verify-verifier-report.md),
+nicht Tool-Namen.

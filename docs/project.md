@@ -1,6 +1,7 @@
 # Pregled projekta: Supabase CRM MCP
 
-Status: dokumentacijska osnova + PHP-Verdrahtung; JSON-Filter Entwurf geprüft
+Status: dokumentacijska osnova + PHP-Verdrahtung;
+JSON-Filter Entwurf; Bericht-Audit 2026-09-13 abgeschlossen
 
 Ažurirano: 2026-09-13
 
@@ -21,6 +22,8 @@ MCP-kompatibilne klijente.
 - [CONTEXT.md](../CONTEXT.md) sadrži poslovni kontekst i domenski rječnik.
 - [Implementacijski brief](SUPABASE_CRM_MCP_IMPLEMENTATION_BRIEF.md) sadrži
   zahtjeve, faze, test-matricu i otvorena pitanja.
+- [Briefing-Intro](planning/briefing-intro.md) je kratki njemački uvod u
+  Sachlage: Import, veličina banke, ciljni MCP i trenutni korak.
 - [docs/decisions/](decisions/) je jedini direktorij dugoročnih arhitekturnih
   odluka; [ADR-0001](decisions/0001-controlled-query-boundary.md) definira
   prihvaćenu granicu pretrage, a
@@ -47,7 +50,9 @@ MCP-kompatibilne klijente.
 - [Handoff Scan-to-MCP 2026-09-13](handoffs/2026-09-13-scan-to-mcp.md)
   Historische Session-Übergabe. Nächster Schritt darin veraltet: Entwurf ist geprüft.
 - [Aktueller Session-Prompt](handoffs/2026-09-13-aktueller-session-prompt.md)
-  Copy-paste für den nächsten Agenten (Tool-Namen / synthetische Eval).
+  Nutzer liest Verdict. Nicht Tool-Namen, nicht MCP.
+- [Bericht-Audit Prompt](handoffs/2026-09-13-verify-verifier-report.md)
+  Ablauf 2026-09-13 ausgeführt; Vorbericht-PASS nicht haltbar.
 - [Codebefund PHP-Filter](discovery/crm-app-wiring.md) je lesart
   `kandidati.php` nakon Wizard 01; Q17 izjednačuje Heft i staru UI.
 - [Codebefund Filter-SQL](discovery/crm-filter-sql-codebefund.md) kako
@@ -66,6 +71,13 @@ MCP-kompatibilne klijente.
   preflight i obradu korisnički dostavljenog izvoza bez bazne konekcije.
 - [Supabase tooling](agents/supabase-tooling.md) razdvaja projektne skills,
   razvojni Supabase plugin/MCP i strogo kontrolisani Gate-B put.
+- [MCP server-dev tooling](agents/mcp-server-dev-tooling.md) veže službene
+  `build-mcp-server` skillove na ADR-0001 i SDK plan; nije scaffold niti
+  produkcijski spoj.
+- [Tool routing](agents/tool-routing.md) veže Linear, Serena, Git, plugin-e,
+  wizards i skills na granice projekta.
+- [Issue tracker](agents/issue-tracker.md) čuva Linear identitet i live mapu
+  ACT-100–109.
 - [Supabase-Plugin Gate P](discovery/supabase-plugin-read-only-gate-draft.md)
   dokumentuje neizvršivi `DRAFT / NO-GO` za mogući alternativni read-only put.
 <!-- markdownlint-disable-next-line MD013 -->
@@ -79,6 +91,8 @@ MCP-kompatibilne klijente.
   ocjenjuje gotove MCP/ORM/search alate; nijedan nije siguran runtime Search-MCP.
 - [Usporedba tri ispravna puta](research/mcp-autowire-top3-vergleich.md)
   poredi RPC, `gen types`+`.rpc()` i pgtyped bez auto-SQL MCP-a.
+- [Verifikacija jezika-do-RPC 2026-09-13](research/2026-09-13-nl-to-rpc-wiring-verification.md)
+  potvrđuje JSON-Filter + RPC; ne mijenja naredni korak (Audit-Verdict).
 - [Agent-Prompt Suche/Tabellen/Fehler](research/mcp-search-agent-prompt.md)
   copy-paste opis tabela, suchlesarten i grešaka Ausbildung/Beruf/Freitext.
 - [Runbook Option 1 Setup](runbooks/option-1-mcp-sdk-rpc-setup.md)
@@ -285,14 +299,16 @@ Status-Klicks B7:
 [crm-status-codebefund.md](discovery/crm-status-codebefund.md).
 Landkarte: [crm-work-inventory.md](discovery/crm-work-inventory.md).
 Q17: Heft i stara UI su ravnopravni. Wizard-03-Alltag je potvrđen
-(R1 = stara Hauptsuche). Ostaje OFFEN: Struke/Smjer = Ausbildungsberuf,
-„5 Jahre“ im R1-Filter.
+(R1 = stara Hauptsuche). Struke/Smjer = Ausbildungsberuf. „5 Jahre“
+nije R1-polje. INNER JOIN se ne kopira: bez grupe/obrade ostaju vidljivi.
 C 4–9 je pročitan:
 [crm-notify-codebefund.md](discovery/crm-notify-codebefund.md).
 JSON-Filter Entwurf:
 [crm-json-filter-draft.md](discovery/crm-json-filter-draft.md).
-Provjeren 2026-09-13 (PHP + Heft). Rupe ostaju: Struke/Smjer, „5 Jahre“
-nije R1-polje. Naredni korak: Tool-Namen i sintetički eval, ne MCP-bau.
+Provjeren 2026-09-13 (PHP + Heft). Struke/Smjer = Ausbildungsberuf.
+„5 Jahre“ nije R1-polje. INNER JOIN: sichtbar ohne Gruppe/Bearbeitung.
+Bericht-Audit: Punkte 1–3 bestätigt. Archiv-Satz bleibt.
+Nije korak za imena alata i nije MCP-bau.
 
 Wizard 01 je 2026-09-13 ponovo skenirao **bez** limita 200 linija (RPC 21,
 tabele 1732, UI 2487). `*.sql` i `Info/` isključeni zbog dumpa. Ne vraćati

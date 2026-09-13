@@ -17,6 +17,11 @@ aplikacijskog SDK sklopa na osnovu ove dokumentacije.
 SDK ne mijenja Gate B, ne daje razvojnom Supabase pluginu pristup produkciji
 i ne odobrava migracije, javni endpoint ili vanjske upise.
 
+Službeni `mcp-server-dev` skillovi smiju voditi dizajn alata i remote HTTP
+scaffolda tek nakon ovog plana i
+[MCP server-dev tooling](../agents/mcp-server-dev-tooling.md). Oni ne
+instaliraju runtime niti spajaju developer MCP na produkciju.
+
 ## Preporučeni izbor i alternative
 
 <!-- markdownlint-disable MD013 -->

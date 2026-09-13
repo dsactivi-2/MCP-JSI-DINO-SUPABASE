@@ -27,6 +27,10 @@ isti
 Supabase app/MCP. One ne daju dodatna prava, redundanciju, projektno ograničenje
 ili razdvojene identitete. Jedna aktivna distribucija je funkcionalno dovoljna.
 
+Službeni `mcp-server-dev` skillovi dizajniraju vlastiti Runtime-Such-MCP; oni
+ne zamjenjuju ovaj Gate i ne smiju registrovati generic Postgres MCP na
+produkciju. Vidi [MCP server-dev tooling](mcp-server-dev-tooling.md).
+
 ## Obavezni redoslijed
 
 1. Pročitati [stanje projekta](../project.md), relevantne ADR-ove i odgovarajući
@@ -39,6 +43,29 @@ ili razdvojene identitete. Jedna aktivna distribucija je funkcionalno dovoljna.
    prije implementacije ili promjene dugoročnog pravila.
 5. Odvojiti preporuku iz skilla od potvrđene projektne činjenice. Fizička shema,
    tenant, role i RLS ostaju `DURCH DISCOVERY ZU PRÜFEN` do odobrenog audita.
+
+## Skill pravila u ovom projektu
+
+Vendorizirani skillovi ostaju izvor za Supabase procedure, security checklist i
+Postgres reference. Njihove MCP/CLI prečice ne mijenjaju Gate B, Gate P niti
+ADR-0001. Pri konfliktu vrijede ovaj dokument, [AGENTS.md](../../AGENTS.md) i
+prihvaćeni ADR-ovi.
+
+<!-- markdownlint-disable MD013 -->
+
+| Skill kaže | U ovom projektu |
+| --- | --- |
+| Changelog pa službeni docs prije implementacije | Da. Korak 4 iznad. `search_docs` smije. |
+| Učitati `supabase-postgres-best-practices` prije SQL/sheme/RLS | Da. Samo relevantne `references/`. |
+| Shemu mijenjati preko MCP `execute_sql` ili `supabase db query`, pa tek onda migraciju | Ne na CRM produkciju. Gate B je lokalni `psql`. Plugin SQL čeka Gate P (`NO-GO`). ADR-0004: versionirani SQL kroz lokalne/CI gateove, bez agent applya. |
+| CLI fallback `get_advisors` / `execute_sql` ako `db advisors` / `db query` fali | Nije odobrenje. Ti MCP alati otkrivaju shemu ili izvršavaju SQL. |
+| Nakon fixa test query | Lokalno: `scripts/check-local.sh`. Produkcijski SQL samo uz zasebnu freigabe. |
+| `SECURITY DEFINER` ne koristiti da se popravi RLS; `PUBLIC EXECUTE` je zamka | Usklađeno s Q10.2 nalazima. |
+| Data API grant nije RLS | Već u vendor signalima. |
+| Nikad `service_role` u klijentu | Usklađeno. Runtime bez admin klijenta. |
+| MCP setup preko `.mcp.json` i OAuth na `mcp.supabase.com` | Ne spajati developer plugin na produkcijski CRM projekt. |
+
+<!-- markdownlint-enable MD013 -->
 
 ## Live-MCP gate
 

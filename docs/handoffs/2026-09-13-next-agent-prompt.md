@@ -3,12 +3,13 @@
 
 Datum: 2026-09-13
 
-Zuerst Verifikation, nicht Tool-Namen:
+Handoff:
+[2026-09-13-session-handoff.md](2026-09-13-session-handoff.md)
 
-[2026-09-13-verify-json-filter-review.md](2026-09-13-verify-json-filter-review.md)
-
-Erst nach VERDICT PASS darf
+Paste-Block:
 [2026-09-13-aktueller-session-prompt.md](2026-09-13-aktueller-session-prompt.md)
-genutzt werden (Tool-Namen/Eval).
+
+Bericht-Audit ist ausgeführt:
+[2026-09-13-json-filter-audit.md](../worklogs/2026-09-13-json-filter-audit.md).
 
 Landkarte: [crm-work-inventory.md](../discovery/crm-work-inventory.md).
