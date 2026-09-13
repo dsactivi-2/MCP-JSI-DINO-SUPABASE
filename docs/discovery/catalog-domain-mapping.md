@@ -114,3 +114,6 @@ kodierte Dauer in 5 Jahren), nicht die von–bis-Liste. MySQL-Kommentare und
 
 Menschliches Review dieser Zuordnung. Danach Q8.5 und welche Tabellen der
 erste Such-RPC lesen darf. Kein SQL-Apply, kein Plugin, keine Embeddings.
+
+PHP-Filter auf B2-Namen (ohne Werte):
+[php-filter-catalog-name-map.md](php-filter-catalog-name-map.md).

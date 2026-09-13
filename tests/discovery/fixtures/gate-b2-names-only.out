@@ -1,0 +1,6 @@
+SQL-GATE-B2-002,crm,idk_kandidati,r,x,p,t,f,t,0,LT_1_MIB
+SQL-GATE-B2-002,crm,idk_struke,r,x,p,t,f,t,0,LT_1_MIB
+SQL-GATE-B2-002,crm,idk_skole_smjerovi,r,x,p,t,f,t,0,LT_1_MIB
+SQL-GATE-B2-003,crm,idk_kandidati,1,kandidat_datumrodjenja,text,t,f,,
+SQL-GATE-B2-003,crm,idk_skole_smjerovi,1,ss_naziv,text,t,f,,
+SQL-GATE-B2-003,crm,idk_kandidat_edukacija,1,ke_naziv_kvalifikacije,text,t,f,,

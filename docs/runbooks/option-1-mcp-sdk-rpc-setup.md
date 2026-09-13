@@ -6,6 +6,21 @@ Datum: 2026-09-12
 Status: Evaluations-Setup. Kein AUTO-02-Stack, kein Produktiv-Deploy, kein
 Gate B, kein Zugriff auf das CRM mit echten Kandidaten.
 
+## Ein Befehl
+
+Lokal, außerhalb dieses Dokumentationsrepos, ohne echte DB:
+
+```bash
+$HOME/Code/eval-crm-mcp-option1/install.sh
+```
+
+Das Skript startet Loopback-Postgres 17, spielt das Spielschema ein,
+installiert die gepinnten npm-Pakete und prüft: 401 ohne Bearer, drei
+Tools, nur Eval A bei Elektriker/60 Monate, unbekanntes Feld abgelehnt.
+HTTP lauscht auf `127.0.0.1:18787/mcp` (8787 ist auf diesem Rechner
+belegt). Stopp: `docker compose down` im Eval-Ordner.
+Kein Supabase, kein Pooler, keine Discovery-Rolle.
+
 Grundlage: [Top-3-Vergleich](../research/mcp-autowire-top3-vergleich.md),
 [SDK-Plan](../planning/sdk-integration-plan.md),
 [ADR-0001](../decisions/0001-controlled-query-boundary.md).

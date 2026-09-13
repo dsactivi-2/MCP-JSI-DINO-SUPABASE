@@ -61,6 +61,8 @@ korisnik izričito naloži ažuriranje postojećih.
 
 Otvoreno u mapi ostaje ACT-103 uz INNER JOIN Gruppe/Status i Bericht-Audit
 Punkt 2. JSON-Filter je nacrt, ne ugovor.
+Lokalni dokazni paket za križanje, bez zatvaranja issuea:
+[ACT-103 Vertragspaket](../discovery/act-103-vertragspaket.md).
 
 Pristup servisu slijedi globalno MCP-routing pravilo i
 [tool routing](tool-routing.md). Ova konfiguracija određuje projekt; sama ne
