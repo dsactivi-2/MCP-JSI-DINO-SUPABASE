@@ -137,8 +137,9 @@ Unabhängiger PASS 2026-09-13 nicht haltbar; Archiv-Satz korrigiert.
 ### 4.5 Postgres-Katalog (Gate B2 V3, nicht PHP)
 
 Datei: [catalog-domain-mapping.md](catalog-domain-mapping.md).
-199 Tabellen (B2-005) und 398 Relationen (B2-002, inkl. Views/Sequenzen)
-in `crm` / `crm_api` / `crm_auth`. occupation und
+Zwei Git-Zählungen, nicht verrechnet: Mapping 199 Relationen;
+ADR Q10.2q 398 Relationen / 1960 Spalten. Roh-B2 nicht in Git.
+occupation und
 `job_occupation_map` existieren in Postgres; die alte Filter-UI nutzt sie
 nicht (Q22: jetzt kein Scan-Auftrag). Q8.5.9 steht; von/bis-Spalten
 und physische Jobgruppe bleiben Discovery.

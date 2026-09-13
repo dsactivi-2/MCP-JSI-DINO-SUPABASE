@@ -198,9 +198,10 @@ credentiala.
 
 Prema Q9 prvo se razjašnjavaju sigurnosni preduslovi i odobrenje audita,
 zatim slijedi read-only discovery, a tek potom nastavak intervjua. Korisnikova
-navedena brojka od 179 tabela je DURCH DISCOVERY ZU PRÜFEN. Gate B2 V3 u
-`crm`/`crm_api`/`crm_auth`: **199 tabela** (B2-005) i **398 relacija**
-(B2-002: tabele + viewovi + sekvence). Prva mapa imena na domene:
+navedena brojka od 179 tabela je DURCH DISCOVERY ZU PRÜFEN. Gate B2 V3:
+ADR Q10.2q **398 relacija** i 1960 stupaca; mapping je 2026-09-12 pisao
+**199 relacija**. To su dva git-zapisa. Sirovi B2 nije u Git.
+Raspodjela 12/187 nije mjerenje. Prva mapa imena na domene:
 [katalog-domain mapping](discovery/catalog-domain-mapping.md) (Q16).
 
 Lokalni PHP-CRM (`src/crm`) je Wizard-01-skeniran. Formular

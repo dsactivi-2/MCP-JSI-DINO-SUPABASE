@@ -16,8 +16,8 @@ wieder einbauen.
 `wc -l` der ganzen Datei.
 
 **1732 und 2487 sind Fundstellen, keine Tabellen- oder Feldzahl.** Dieselbe
-Tabelle kann viele Zeilen haben. Das ist nicht Gate B (199 Tabellen /
-398 Relationen in Postgres).
+Tabelle kann viele Zeilen haben. Das ist nicht Gate B. Gate-B-Zahlen
+stehen in ADR-0002 Q10.2q und im Katalog-Mapping, nicht in diesen Zetteln.
 
 Nicht Punkt für Punkt abschreiben. Lesart und Entscheidungen stehen in
 [crm-app-wiring.md](../crm-app-wiring.md) und
