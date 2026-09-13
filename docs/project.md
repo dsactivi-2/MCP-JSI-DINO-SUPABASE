@@ -153,9 +153,8 @@ odobrenje niti zamjena za završnu specifikaciju.
 Q8.4 potvrđuje osnovni koncept kontrolisanih, ponovo upotrebljivih
 Berufssuchprofila. Neekskluzivnost, direktna pretraga zanimanja i neaktivnost
 nenavedenih filtera ostaju potvrđeni. Detaljna filtersemantika i obavezna
-potvrda
-svake nove ili izmijenjene pretrage su VORLÄUFIGER VORSCHLAG zbog nedostajuće
-izvorne liste preporuka. Q8.5 je `TEILWEISE BESTÄTIGT` u ADR-0002: 8.5.1 i
+potvrda svake nove ili izmijenjene pretrage je `BESTÄTIGT` (filteri pa jedna
+pretraga). Q8.5 je `TEILWEISE BESTÄTIGT` u ADR-0002: 8.5.1 i
 8.5.3–8 i 8.5.9 stoje; 8.5.2 ignorisan; R1-godine iz von–bis,
 Job + Jobgruppe. Q4.5 je ukinuta kao prazan
 broj, bez rekonstruisanja nepoznatog pitanja. Interni alati vraćaju i
@@ -213,7 +212,8 @@ Status-Klicks B7:
 Landkarte: [crm-work-inventory.md](discovery/crm-work-inventory.md).
 Q17: Heft i stara UI su ravnopravni. Wizard-03-Alltag je potvrđen
 (R1 = stara Hauptsuche). Struke/Smjer = Ausbildungsberuf.
-Jahresfilter R1: von–bis, Job + Jobgruppe (Q8.5.9).
+Jahresfilter R1: von–bis passender Jobs (Q8.5.9). Elektriker zählt
+elektricar und Elektroinstallateur, nicht Verkäufer.
 PHP-Ist: `lista_kandidata` uvijek `INNER JOIN` grupu i status obrade;
 bez `kg_id`/`status_id` stara pretraga ih baca.
 R1-Soll: taj JOIN se ne kopira; bez grupe/obrade ostaju vidljivi.
@@ -224,7 +224,8 @@ JSON-Filter Entwurf:
 Provjeren 2026-09-13 (PHP + Heft). Struke/Smjer = Ausbildungsberuf.
 Jahresfilter R1: Q8.5.9. INNER JOIN: PHP-Ist da, R1 ne kopira, sichtbar ohne Gruppe/Bearbeitung.
 Bericht-Audit: Punkte 1–3 bestätigt. Archiv-Satz bleibt.
-Ranking `kandidat_id` desc. Export CSV/Excel max. 500. Ein Such-MCP + Tokens.
+Ranking nur `idk_kandidati.kandidat_id` desc. Export CSV/Excel max. 500.
+Ein Such-MCP + Tokens.
 Hosting/SDK-Version offen. Cloudflare möglich, nicht gewählt.
 Nije MCP-scaffold dok korisnik to izričito ne zatraži.
 

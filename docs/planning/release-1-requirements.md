@@ -54,13 +54,13 @@ Dugi redovi su namjerno tabelarni radi potpunog mappinga.
 | REQ-PROF-01 | R1 obavezno | ADR-0003; Q8.4.2 | Data/Product | TAX-01 | DATA-01 | Verzionirani neekskluzivni profili odvajaju tri kategorije; isti pojam pripada dvama profilima i ostaje direktno pretraživ; brisanje članstva ne mijenja druge profile. |
 | REQ-CONTRACT-01 | R1 obavezno | ADR-0001/0004; Brief MH4 | Product/Security | AUTO-02, AUTO-05 | DEC-01 | Jedan odobren input/output/error/cursor ugovor izvodi sheme, validatore i tipove; drift blokira CI; unknown field/type/range/ID se odbija (SCHEMA-01, RANGE-01, CON-01). |
 | REQ-SDK-01 | R1 integracija; biblioteke OFFEN | Q11; SDK plan; ADR-0001/0004 | Security/Operations | AUTO-02, AUTO-03, AUTH-01, AUTO-05, OPS-01, CLIENT-01, REL-01 | DEC-01; odobren stack i scaffold | SDK-01/05/08: usklađene SDK/protokol/runtime verzije, lockfile i alpha odluka; stvarni HTTP/proxy test, upgrade/povratak i podržani klijenti. V1/v2 importi i legacy/novi transport ne miješaju se. |
-| REQ-FILTER-01 | R1 obavezno; detalji OFFEN | Q5, Q8, Q8.5; Brief MH2.1 | Product/Privacy | SEARCH-02 | SEARCH-01, DEC-01 | Dob/ref-datum, iskustvo, zanimanja, aktivnosti, lokacija, jezici, vještine, dostupnost, svježina i text prema odobrenom ugovoru; uključene/isključene granične vrijednosti nezavisno provjerene. Q8.5 se ne pretpostavlja. |
+| REQ-FILTER-01 | R1 obavezno; detalji OFFEN | Q5, Q8, Q8.5; Brief MH2.1 | Product/Privacy | SEARCH-02 | SEARCH-01, DEC-01 | Dob/ref-datum, iskustvo, zanimanja, aktivnosti, lokacija, jezici, vještine, dostupnost, svježina i text prema odobrenom ugovoru; uključene/isključene granične vrijednosti nezavisno provjerene. Q8.5.3–9 BESTÄTIGT (von–bis, Job+Jobgruppe); preostalo von/bis-nazivi i JSON-polje navedenog posla. |
 | REQ-FILTER-02 | R1 obavezno | Q8 potvrđeni dio | Product | SEARCH-02 | SEARCH-01 | Izostavljeno ostaje neaktivno; iskustvo ne aktivira Ausbildung; L-OMIT-01 nikad ne dodaje dob ili jezik. |
-| REQ-FILTER-03 | R1 obavezno | Q7; ADR-0001 | Product | SEARCH-02 | SEARCH-01 | ZERO-01: tačno nula i prijedlog; bez nove pretrage dok korisnik ne potvrdi konkretnu promjenu. Opća potvrda ostaje prijedlog. |
+| REQ-FILTER-03 | R1 obavezno | Q7; ADR-0002 | Product | SEARCH-02 | SEARCH-01 | ZERO-01: tačno nula i prijedlog; bez nove pretrage dok korisnik ne potvrdi konkretnu promjenu. Opća potvrda prije svake pretrage je BESTÄTIGT. |
 | REQ-LANG-01 | R1 obavezno | Brief MH9; A04 | Product/Data | SEARCH-02 | TAX-01, AUTO-05 | L-BS/DE/EN-01 imaju isti nezavisni poslovni oracle; dijakritika, padeži, složenice, skraćenice i greške daju odobren rezultat/pojašnjenje. |
 | REQ-SEARCH-01 | R1 obavezno | ADR-0001; Brief MH3/5 | Data/Security | SEARCH-01 | DATA-01, AUTH-01, AUTO-04, AUTO-05 | Prvi vertikalni slučaj ide validator → autorizacija → RPC → DB filter/rank → MCP izlaz. Nema proizvoljnog SQL-a ni masovnog učitavanja; SQLI-01 ostaje vrijednost. |
 | REQ-SEARCH-02 | R1 obavezno | Brief MH5/7 | Data/Product | SEARCH-02 | SEARCH-01 | Svaki vraćeni ID postoji; matched_fields i match_type su tačni, nedostajuće je null/unknown; hard cap 50 i bajtni limit (RANGE-01, ZERO-01). |
-| REQ-RANK-01 | R1 obavezno | ADR-0001; Brief acceptance | Product/Data | SEARCH-02 | DEC-01, SEARCH-01 | Odobrena DB ranking formula i jedinstveni tie-breaker daju očekivani poredak i pri jednakom scoreu; nema runtime LLM prerangiranja. |
+| REQ-RANK-01 | R1 obavezno | ADR-0002 | Product/Data | SEARCH-02 | SEARCH-01 | Sort samo `crm.idk_kandidati.kandidat_id` silazno (PK, sequenca). ID jedinstven, nema drugog kriterija. Nema runtime LLM prerangiranja. |
 | REQ-PAGE-01 | R1 obavezno | Brief acceptance | Data/Security | SEARCH-02 | SEARCH-01 | PAGE-01/CURSOR-02: duboke stranice bez velikog OFFSET-a, potpis/version/filter/sort/tenant veze; manipulacija i promjena konteksta odbijeni; snapshot garancija dokumentovana. |
 | REQ-TOOL-02 | R1 obavezno | Brief MH3 | Security/Product | TOOL-02 | DATA-01, AUTH-01, AUTO-05 | get_candidate_profile vraća jedan dozvoljeni profil, sigurno tretira nepostojeći/tuđi ID i nema kontakata ni u tekstualnom fallbacku (RLS-01, CONTACT-R1). |
 | REQ-TOOL-03 | R1 obavezno | Brief MH3 | Data/Product | TOOL-03 | TAX-01, AUTH-01, AUTO-05 | get_filter_options ograničeno razrješava dozvoljeno polje, query, pojmove i profile; bez kandidatskih podataka, SQL identifikatora i neograničenih lista. |
@@ -96,9 +96,9 @@ Dugi redovi su namjerno tabelarni radi potpunog mappinga.
 
 ## Otvoreni ugovor nije implementacijska sloboda
 
-Q8.5 je potpuno OFFEN. Q4.5 nema rekonstruisanu formulaciju. Opća potvrda
-pretrage i detaljni operatori ostaju VORLÄUFIGER VORSCHLAG, a Q7 ostaje
-obavezan.
+Q8.5 je TEILWEISE BESTÄTIGT (8.5.3–9). Q4.5 nema rekonstruisanu formulaciju.
+Opća potvrda pretrage je BESTÄTIGT. Detaljni operatori ostaju VORLÄUFIGER
+VORSCHLAG, a Q7 ostaje obavezan.
 DEC-01 mora te statuse razriješiti prije zavisne implementacije. Registar ne
 pretvara JSON primjer, predloženi tip indeksa ili postojeći naziv u dokaz sheme.
 

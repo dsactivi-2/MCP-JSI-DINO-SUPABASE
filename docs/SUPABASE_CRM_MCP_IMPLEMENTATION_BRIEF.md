@@ -188,10 +188,9 @@ TypeScript v2 je kandidat; raniji `@modelcontextprotocol/sdk` primjer pripada
 v1 generaciji. Izbor tačne verzije/protokola i podržanih klijenata prolazi
 AUTO-02. Ni SDK biblioteka ni razvojni Supabase plugin nisu gotov CRM runtime.
 
-VORLÄUFIGER VORSCHLAG za tok potvrde: prije svake nove ili izmijenjene
-pretrage prikazati filtere i zatražiti potvrdu, zatim ponoviti validaciju.
-Opća obaveza potvrde još nije konačna odluka. Q7 zasebno obavezno zahtijeva
-saglasnost prije izvršavanja olabavljene pretrage.
+`BESTÄTIGT` tok potvrde: prije svake nove ili izmijenjene pretrage prikazati
+filtere i zatražiti potvrdu, zatim točno jedna pretraga. Q7 zasebno obavezno
+zahtijeva saglasnost prije izvršavanja olabavljene pretrage.
 
 1. MCP klijent dobija korisnički zahtjev; njegov LLM prepoznaje jezik i
    prevodi namjeru u predložene strukturirane filtere za određeni alat.
@@ -342,7 +341,7 @@ pretpostavljanja kako se danas zovu fizičke tabele:
 | --- | --- |
 | Identitet | Stabilan, nepredvidiv candidate ID; bez emaila ili telefona kao ključa. |
 | Dob | Čuvati datum rođenja ako je zakonito; dob računati na referentni datum, ne pohranjivati kao zastarjeli broj. |
-| Iskustvo | Q8.5 je TEILWEISE BESTÄTIGT u ADR-0002: relevantni poslovi, bez sabiranja preklapanja, tekući posao do danas. Godine nisu R1 filter. Vorabnormalizacija intervala ostaje VORLÄUFIGER VORSCHLAG. |
+| Iskustvo | Q8.5 je TEILWEISE BESTÄTIGT u ADR-0002: relevantni poslovi, bez sabiranja preklapanja, tekući posao do danas. R1-godine iz von–bis (Q8.5.9), Job + Jobgruppe. Vorabnormalizacija intervala ostaje VORLÄUFIGER VORSCHLAG. |
 | Ausbildungsberufe | DURCH DISCOVERY ZU PRÜFEN: postoje li kontrolisani CRM ID-ovi. Njihova upotreba, ako su prikladni, je VORLÄUFIGER VORSCHLAG; ne izvoditi vrijednosti bez odobrenog pravila. |
 | Zanimanja iz iskustva | Kanonski ID i odobreni nazivi/sinonimi na B/H/S, DE i EN, odvojeni od originalnog teksta. |
 | Tätigkeitsarten | Kontrolisani ID-ovi za stvarno obavljane vrste poslova, odvojeni od formalnog zanimanja i obrazovanja. |
@@ -624,7 +623,7 @@ znači da je JSON nacrt konačan niti da su sve provjere neizrazive JSON Schemom
   konačan postupak ostaje OFFEN, bez dozvole za veliki dump;
 - konfliktni i materijalno nejasni filteri vraćaju pitanje za pojašnjenje;
 - u predloženom toku MCP prikazuje filtere prije pretrage i čeka potvrdu;
-  opća obaveza potvrde je VORLÄUFIGER VORSCHLAG, dok Q7 ostaje obavezan;
+  opća obaveza potvrde je `BESTÄTIGT`, dok Q7 ostaje obavezan;
 - filteri se nikada tiho ne prepisuju niti proširuju sinonimima.
 - izostavljena kategorija nije skriveni zadani uslov; pregled mora pokazati koje
   se kategorije ne primjenjuju;
@@ -685,9 +684,9 @@ Plan indeksiranja:
 
 Veliki `OFFSET` treba izbjegavati jer usporava duboke stranice i destabilizira
 rezultate pri paralelnim izmjenama. Release 1 mora imati stabilan cursor i
-deterministički tie-breaker te
-dokaz duboke paginacije bez velikog OFFSET-a; fizička realizacija slijedi
-ugovor i mjerene planove.
+sortiranje po `idk_kandidati.kandidat_id` silazno (ID jedinstven, nema drugog
+kriterija) te dokaz duboke paginacije bez velikog OFFSET-a; fizička
+realizacija slijedi ugovor i mjerene planove.
 
 ### 6. Sigurnost i kontrola pristupa
 
@@ -801,7 +800,7 @@ latenciju, broj vraćenih redova i odluku o prikazu kontakata.
 ### 10. Obavezni ugovor i operativna spremnost
 
 Release 1 obavezno uključuje stabilan potpisan i verzioniran cursor s
-jedinstvenim tie-breakerom, dokumentovanu determinističku DB ranking formulu,
+jedinstvenim sort ključem `idk_kandidati.kandidat_id` silazno,
 verzioniranje/kompatibilnost ugovora, sigurne mašinske greške,
 health/readiness, minimizirane logove i monitoring/alarme **prije rollouta**.
 Reproducibilni sintetički razvojni podaci su obavezni prema ADR-0004.
@@ -961,7 +960,7 @@ SEM-01/02 važe samo u naknadno odobrenoj semantičkoj grani.
 | L-BS-01 | B/H/S | Mehaničar u gradu Sarajevu, 25–35 godina, najmanje 5 godina iskustva, njemački, dostupan sada. | Poslovni oracle LANG-EQ-01; ID-ovi i Q8.5 se finaliziraju nakon discoveryja. |
 | L-DE-01 | Njemački | Mechaniker in der Stadt Sarajevo, 25–35 Jahre alt, mindestens 5 Jahre Berufserfahrung, Deutsch, sofort verfügbar. | Semantički isti filteri kao odobreni B/H/S primjer. |
 | L-EN-01 | Engleski | Mechanics in the city of Sarajevo, aged 25–35, at least 5 years of work experience, German, available now. | Semantički isti filteri kao odobreni B/H/S primjer. |
-| L-OMIT-01 | Izostavljeni filteri | Mechaniker in der Stadt Sarajevo mit mindestens 5 Jahren Berufserfahrung, sofort verfügbar. | Nema dobnog, jezičnog ili Ausbildung filtera; aktivni samo navedeni kriteriji, Q8.5 ostaje OFFEN. |
+| L-OMIT-01 | Izostavljeni filteri | Mechaniker in der Stadt Sarajevo mit mindestens 5 Jahren Berufserfahrung, sofort verfügbar. | Nema dobnog, jezičnog ili Ausbildung filtera; aktivni samo navedeni kriteriji. Godine = Q8.5.9 von–bis za navedeni posao (Mechaniker), ne cijeli životopis. |
 | LANG-02 | Dijakritika | `mehanicar` i `mehaničar`. | Isto mapiranje samo ako taksonomsko pravilo to odobrava. |
 | TYPO-01 | Tipfeler | `mehančar`. | Sigurno pojašnjenje ili dokumentovan partial/fuzzy match. |
 | AMB-01 | Nejasnoća | `Sarajevo`, bez značenja grad/kanton. | Pojašnjenje; nema tihog izbora. |
@@ -1117,9 +1116,9 @@ vlasnika:
    podaci?
 5. Koji izvor je autoritativan kada se CRM polja i CV ne slažu?
 6. Koliko su podaci svježi, kako se ažuriraju i šta znači "dostupan sada"?
-7. Q8.5 je TEILWEISE BESTÄTIGT u ADR-0002 (8.5.1, 8.5.3–8). Godine nisu R1
-   filter. Preostalo: da li kasnija godišnja formula kombinuje Beruf i
-   Tätigkeit, te Vorabnormalizacija intervala.
+7. Q8.5 je TEILWEISE BESTÄTIGT u ADR-0002 (8.5.1, 8.5.3–9). R1-godine iz
+   von–bis, Job + Jobgruppe. Preostalo: tačni von/bis-nazivi, fizička
+   Jobgruppe, te Vorabnormalizacija intervala.
 8. Koliki su stvarni concurrency, obrazac upita, throughput i numerički cilj
    latencije?
 9. Koji pravni osnov, svrhe obrade, retention i pravila brisanja/izvoza vrijede?
@@ -1129,7 +1128,9 @@ vlasnika:
     Groka i drugih klijenata na internu rolu i tenant?
 12. Ko je vlasnik višejezične taksonomije i Berufssuchprofila te ko odobrava
     sinonime, članstva i automatske prijedloge?
-13. Koja je tačna, dokumentovana formula rangiranja i tie-breaker?
+13. Ranking R1 je BESTÄTIGT u ADR-0002: samo
+    `idk_kandidati.kandidat_id` silazno; ID jedinstven, nema drugog
+    kriterija.
 14. Ko smije vidjeti kontakt, ko smije izvoziti i kada je potrebna potvrda?
 15. Koji su zahtjevi dostupnosti, RTO, RPO i disaster-recovery očekivanja?
 16. Zaseban Supabase staging projekt je odbijen. Koji lokalni ili sintetički
@@ -1144,8 +1145,9 @@ vlasnika:
 21. Q4.5 je ukinuta kao prazan broj; izvorni tekst nije rekonstruisan i ne
     smije se izmišljati. Nova numerisana pitanja samo za stvarnu preostalu
     kontakt- ili privatnost-odluku.
-22. Izvorna lista Q8.4 preporuka, detaljni operatori i opća potvrda svake nove
-    ili izmijenjene pretrage ostaju OFFEN; vidi ADR-0002 i audit.
+22. Izvorna lista Q8.4 preporuka i detaljni operatori ostaju OFFEN. Opća
+    potvrda svake nove ili izmijenjene pretrage je BESTÄTIGT (filteri pa jedna
+    pretraga); vidi ADR-0002.
 23. Da li su SEM-UC-01, SEM-UC-02 i DQ-UC-01 dozvoljeni i koji mjerljivi problem
     opravdava vektorski backend? Ako postoji dokaz, koji backend prolazi
     [evaluacijski gate](research/semantic-search-evaluation-gate.md)?
@@ -1165,7 +1167,7 @@ vlasnika:
 | Stored prompt/tool injection | CV i slobodni tekst se tretiraju kao nepouzdani podaci, nikad kao instrukcije. |
 | Privatnost audita | Audit log je zaseban lični podatak: minimiziran, zaštićen i vremenski ograničen. |
 | Backpressure | Queue/concurrency limit štiti DB i vraća kontrolisani retry signal. |
-| Stabilnost paginacije | Cursor veže sort, tie-breaker, filter, tenant i verziju; dokumentuje snapshot semantiku. |
+| Stabilnost paginacije | Cursor veže sort (`kandidat_id` desc), filter, tenant i verziju; dokumentuje snapshot semantiku. |
 | Kompatibilnost migracija | Expand/contract promjene i paralelne verzije sprječavaju prekid aktivnih klijenata. |
 | Data lineage | Svako search polje ima izvor, transformaciju, timestamp, kvalitet i vlasnika. |
 | Saglasnost i svrha | Kandidatova ograničenja i svrha obrade mogu isključiti zapis iz pretrage. |

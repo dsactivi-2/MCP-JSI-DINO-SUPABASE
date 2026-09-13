@@ -37,8 +37,8 @@ Korrekturstand 2026-09-11: Der Nutzer hat die Korrekturen aus dem
 [Auditbericht](../reviews/decision-reconstruction-audit.md) ausdrücklich
 freigegeben. Die Freigabe bestätigt keine unbelegten Detailregeln. Insbesondere
 bleiben Q8.4 grundsätzlich bestätigt, Q8.5 teilweise (nur passende Jobs) und
-die allgemeine
-Bestätigungspflicht vor jeder Suche ein Vorschlag. Die
+Q8.5 später um 8.5.3–9 ergänzt. Die allgemeine Bestätigungspflicht vor jeder
+Suche ist seit 2026-09-13 `BESTÄTIGT` (nicht mehr der Audit-Vorschlag). Die
 <!-- markdownlint-disable-next-line MD013 -->
 [Änderungsmatrix](../reviews/decision-reconstruction-corrections.md) dokumentiert
 die Übernahme und die weiterhin offenen Punkte.
@@ -159,7 +159,8 @@ Empfehlungsliste fehlt. Deshalb ist die genaue Detailsemantik eine
 
 **BESTÄTIGT** – 2026-09-13. Vor jeder neuen oder geänderten Suche werden die
 aktiven Filter angezeigt. Nach ausdrücklicher Bestätigung folgt genau eine
-Datenbanksuche. Q7 bleibt: bei null Treffern erst lockern nach Zustimmung.
+Datenbanksuche. Nutzer 2026-09-13: Punkt 2 so fest. Q7 bleibt: bei null
+Treffern erst lockern nach Zustimmung.
 
 **VORLÄUFIGER VORSCHLAG:** Anzeige aufgelöster Profilmitglieder in der
 Vorschau. R1 hat kein Berufssuchprofil in der Suche. Ob Pflicht- und
@@ -196,8 +197,9 @@ zu jeder einzelnen Fähigkeit ist damit nicht unabhängig rekonstruiert.
 Erfahrungsfreitext vorab auf kontrollierte Berufs- und Tätigkeits-IDs
 normalisieren und nicht bei jeder Suche neu interpretieren. Auch die
 Nichtzählung unaufgelöster Werte als relevante Erfahrung bleibt Teil der
-offenen Q8.5. Vorschau und allgemeine Suchbestätigung haben den unter Q8
-beschriebenen Vorschlagsstatus.
+offenen Q8.5 (von/bis-Spalten, Jobgruppe). Die allgemeine Suchbestätigung
+ist `BESTÄTIGT` (Filter zeigen, dann eine Suche). Nur die
+Profilmitglieder-Vorschau bleibt Vorschlag.
 
 **DURCH DISCOVERY ZU PRÜFEN:** Ob kontrollierte CRM-IDs und entsprechende
 Erfahrungsfreitexte vorhanden sind und wie sie strukturiert sind. Vorhandene
@@ -258,16 +260,32 @@ Zuerst kontrollierte Listen (Aliasse, Berufssuchprofil). KI nur Vorschlag, der
 bestätigt werden muss, bevor er zählt. Keine frei erfundenen Synonyme in der
 live Suche. Passt zu ADR-0003 (Vorschläge nicht selbst publizieren).
 
-**Q8.5.9 – Jahresfilter in R1:** `BESTÄTIGT` – 2026-09-13. Nutzer: R1 soll
-„mindestens X Jahre in diesem Job“ können. Quelle sind von–bis-Daten der
-Lebenslauf-Liste `idk_kandidat_radno_iskustvo`, nicht die Aktenzahlen.
-Es zählen der genannte Job und ähnliche Jobs derselben Jobgruppe
-(Berufssuchprofil / kontrollierte Liste, Q8.5.3–8). Überlappungen nicht
-addieren; laufender Job bis heute. Ohne genannten Job ist das Jahresfeld
-ungültig. `has_work_experience` (ja/nein) bleibt daneben die alte Maske.
-Exakte von/bis-Spaltennamen: `DURCH DISCOVERY ZU PRÜFEN`.
+**Q8.5.9 – Jahresfilter in R1:** `BESTÄTIGT` – 2026-09-13. Nutzer: Wenn der
+Recruiter sagt „Berufserfahrung als Elektriker 3 Jahre“, filtert die neue
+Suche damit. Die alte PHP-Maske kann das nicht; sie hat nur ja/nein.
+Quelle ist die von–bis-Liste in der Kandidatenakte
+(`idk_kandidat_radno_iskustvo`), nicht die Aktenzahlen (Q8.5.2 ignoriert).
+Es zählen der genannte Job, ähnlich geschriebene Berufe, verwandte Berufe
+und Einträge der besprochenen Berufsgruppe (Q8.5.3–8). Jeder passende
+Eintrag hat von–bis; ohne Enddatum bis heute (Q8.5.5). Nur diese Zeiträume
+werden addiert. Ein Job, der nicht zur gesuchten Stelle passt, fällt raus.
+Überlappungen nicht addieren (Q8.5.4). Ohne genannten Job ist das
+Jahresfeld ungültig. `has_work_experience` (ja/nein) bleibt daneben die
+alte Maske. Exakte von/bis-Spaltennamen: `DURCH DISCOVERY ZU PRÜFEN`.
 Die ältere Wizard-03-Zeile „5 Jahre nicht in R1“ ist durch diese Antwort
 ersetzt.
+
+Nutzer 2026-09-13, Beispiel. Suche: Elektriker, mindestens 3 Jahre. Akte:
+
+- elektricar 01.03.2015–01.05.2018 (ähnliche Schreibweise → zählt)
+- Elektroinstallateur 01.05.2018–01.08.2021 (verwandt / Berufsgruppe → zählt)
+- Verkäufer 01.08.2021 bis heute oder Enddatum (passt nicht → zählt nicht)
+
+Kalender der ersten zwei, Grenze 01.05.2018 nicht doppelt: 3 Jahre
+2 Monate und 3 Jahre 3 Monate, zusammen 6 Jahre 5 Monate. Nutzer nannte
+6 Jahre 3 Monate; das ist dieselbe Regel, nur die Monatssumme im Beispiel.
+6 Jahre 5 Monate ist mindestens 3 Jahre: die Person erscheint in der neuen
+Suche. Ohne genannten Job kein Jahresfilter.
 
 Die frühere Vorschlagszeile zu relevanter Erfahrung ist durch Q8.5.3–8 ersetzt.
 
@@ -284,7 +302,8 @@ identisch sind, ist nicht gemessen (keine Zeilen gelesen).
 Katalog: Lebenslauf-Liste = `idk_kandidat_radno_iskustvo` (eine Zeile je Job).
 Kandidatenakte = `idk_kandidati` (eine Zeile je Person), plus zwei Zahlenfelder
 `kandidat_iskustvo_u_struci` und `kandidat_iskustvo_u_struci_trajanje`.
-Gesamt-versus-relevante Jahre bleiben OPEN.
+Gesamt-versus-relevante Jahre: Q8.5.3 entscheidet relevant; die
+gesamte Lebensarbeitszeit zählt nicht.
 
 **Klarstellung Personalakte:** Der Nutzer kennt Kategorie Berufserfahrung als
 mehrere Berufe je mit von–bis. Das ist die Lebenslauf-Liste
@@ -369,7 +388,8 @@ Noch offen unter Q8:
 
 **Status:** `OFFEN`
 
-- Genaue erlaubte Filterlockerungen und deren Bestätigungsablauf.
+- Genaue erlaubte Filterlockerungen (Q7-Feindetail). Die Bestätigung vor
+  jeder neuen Suche ist entschieden.
 - Suchverlauf, gespeicherte Suchen, Audit-Protokoll und Ergebnis-Snapshots.
 - Zugriffsrechte auf Suchverläufe.
 - Darstellung in MCP-Clients und einer möglichen eigenen Oberfläche.
@@ -382,7 +402,7 @@ Noch offen unter Q8:
   gemessen langsam. Nicht jetzt einführen.
 - Tenant-Modell, Hosting (Cloudflare möglich, nicht gewählt), SDK-Version
   und numerische SLOs. Ein Such-MCP mit Tokens je Rolle ist bestätigt (Q11).
-  Ranking R1 ist bestätigt: `kandidat_id` absteigend.
+  Ranking R1 ist bestätigt: nur `idk_kandidati.kandidat_id` absteigend.
 
 ### Q10 – Datenbank-Zielzustand und Übergang
 
@@ -981,6 +1001,13 @@ JMBG in der internen Trefferliste: `BESTÄTIGT` ja. Kein Filter, nicht
 wichtig für Auswahl. Bleibt besonders sensibel. Discovery ohne Werte.
 Ranking R1: `BESTÄTIGT` 2026-09-13. Sortierung nach `kandidat_id`
 absteigend, größte Nummer zuerst (neueste). Ein Kriterium, kein Tie-Breaker.
+Die einzige Ranking-Spalte ist `idk_kandidati.kandidat_id`. Die Basis vergibt
+sie automatisch beim Anlegen. Der Agent nutzt genau diese ID, nicht JMBG,
+nicht `users.id`, nicht Mitarbeiter-IDs. Nutzer 2026-09-13: fest so.
+Nutzer 2026-09-13 Dashboard: Spalte `crm.idk_kandidati.kandidat_id`, Typ
+`int4`, Primary Key, Default
+`nextval('crm.idk_kandidati_kandidat_id_seq'::regclass)`. Kein Identity-Flag;
+die Sequenz vergibt die Zahl.
 
 **ACT-103 Kreuze:** `BESTÄTIGT` – 2026-09-13. Nutzer: **1A 2A 3A**.
 Pflichtartefakt = Inventar + Codebefunde + JSON-Entwurf. INNER JOIN und

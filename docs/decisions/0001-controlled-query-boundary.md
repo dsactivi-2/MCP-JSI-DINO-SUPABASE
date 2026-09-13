@@ -33,8 +33,9 @@ vraća najviše 50 kandidata po stranici, stabilne identifikatore i dokaz
 poklapanja. Projekcija polja ovisi o akteru: interni Vermittler vidi i kontakte;
 Kunde vidi kontakte samo nakon Einstellungsfreigabe.
 
-Fizički view, RPC potpis, auth model, tenant mapiranje i ranking formula bit će
-odlučeni tek nakon read-only audita stvarne sheme.
+Fizički view, RPC potpis, auth model i tenant mapiranje bit će odlučeni tek
+nakon read-only audita stvarne sheme. Ranking R1 je kasnije u ADR-0002:
+samo `idk_kandidati.kandidat_id` silazno.
 
 ## Posljedice
 

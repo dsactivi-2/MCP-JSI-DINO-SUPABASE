@@ -105,5 +105,9 @@ Puni Markdownlint svih root/docs datoteka ostaje dijagnostička provjera iznad.
 Historijski auditi, worklogovi i izvorni statički nalazi ne prepravljaju se radi
 novog zelenog rezultata. Spisak takvih arhivskih izuzetaka je eksplicitan u
 skripti; sve ostale datoteke uključujući nove aktivne dokumente se provjeravaju.
+Test [historical_append_only_test.py](tests/docs/historical_append_only_test.py)
+pada ako se postojeći reviews/worklogs/handoffs/research ili frozen evidence
+izmijene; nova dated datoteka je dozvoljena. Važeći ADR-ovi stoje u
+[docs/decisions/README.md](docs/decisions/README.md).
 Duge usporedne tabele imaju samo lokalnu MD013 iznimku; ostala lint pravila
 ostaju aktivna. Redigirani izlaz ne sadrži stvarni projektni endpoint.

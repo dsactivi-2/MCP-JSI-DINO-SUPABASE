@@ -30,7 +30,7 @@ treba omogućiti ljudsku procjenu prikladnosti kandidata.
 | Smjer | Stara Filter-UI i JSON-ime `smjer` za Ausbildungsberuf. Nije occupation i ne prepisuje Q8.4. |
 | Berufssuchprofil | Imenovana, verzionirana i kontrolisana grupa Ausbildungsberufe, Erfahrungsberufe i Tätigkeitsarten za širu potrebu klijenta; članovi ostaju samostalno pretraživi i mogu pripadati većem broju profila. |
 | Berufserfahrung | Jedno značenje. Ako dva spremišta tvrde da su to godine iskustva, brojevi moraju biti isti; inače Aktenfeld nije ta stavka (Q8.5.1). |
-| Relevante Berufserfahrung | Odgovarajući poslovi i slični u istoj Jobgruppe. Liste prvo; KI samo prijedlog (Q8.5.3–8). R1-filter `min_relevant_experience_years` iz von–bis liste, ne iz Aktenzahlen (Q8.5.9). Preklapanja se ne sabiraju; tekući posao do danas. |
+| Relevante Berufserfahrung | Samo poslovi koji odgovaraju traženom zanimanju: ista/slična riječ, srodan naziv ili ista Berufsgruppe. Nepovezan posao (npr. Verkäufer uz pretragu Elektriker) se ne sabire. Liste prvo; KI samo prijedlog (Q8.5.3–8). R1-filter `min_relevant_experience_years` zbraja von–bis te liste, ne Aktenzahlen (Q8.5.9). Preklapanja se ne sabiraju; tekući posao do danas. |
 | Aktiver Filter | Korisnik ga je izričito naveo ili potvrdio u pregledu; nenavedena kategorija je neaktivna i ne ograničava rezultat. |
 | Profilverwaltungs-MCP | Interna upravljačka granica za nacrte, provjeru i verzionirano objavljivanje Berufssuchprofila; odvojena je od read-only Runtime-Such-MCP-a. |
 | Runtime-Such-MCP | Kontrolisana read-only granica za pretragu, pojedinačni profil i dozvoljene filteropcije; korisnikov identitet i dozvoljeni opseg vrijede za svaki poziv. |
@@ -54,7 +54,7 @@ treba omogućiti ljudsku procjenu prikladnosti kandidata.
 | Messenger-status | `kandidat_status_messenger` (SMS čeka / ulogovan / odbio / profil nedovršen). |
 | DIPL-status | Zasebna skala 0–7 u filteru, nije ista kao obrada. |
 | JSON-Filter | Mali dozvoljeni obrazac iz teksta; Postgres traži (ADR-0001). ENTWURF, nije ugovor. |
-| Ranking R1 | Najveći `kandidat_id` prvi. |
+| Ranking R1 | Jedina sort-kolona: `crm.idk_kandidati.kandidat_id` (`int4`, PK, sequenca `crm.idk_kandidati_kandidat_id_seq`), najveći prvi. Ne JMBG, ne `users.id`. |
 | Export R1 | Recruiter: CSV ili Excel, max. 500, uklj. JMBG i kontakt. Nije Kunde. |
 | Runtime-Such-MCP | Jedan search-MCP, token po ulozi. Hosting/SDK-verzija OFFEN. |
 

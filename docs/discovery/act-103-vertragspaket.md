@@ -68,7 +68,7 @@ Zusätzlich aus ADR-0002 Q18 / Bericht-Audit 2026-09-13:
 | Archiv plus andere Filter | PHP wirft Formularfilter weg; Entwurf lehnt die Mischung ab |
 | Stille PHP-Joins ohne Gruppe/Status | **BESTÄTIGT** nein; sichtbar lassen, nicht INNER JOIN kopieren |
 | Prijave-Labels | DB, kein Dump |
-| Ranking / Cursor-Spalte | größte `kandidat_id` zuerst (`BESTÄTIGT`) |
+| Ranking / Cursor-Spalte | nur `idk_kandidati.kandidat_id`, größte zuerst (`BESTÄTIGT`); nicht JMBG, nicht `users.id` |
 | JMBG in der Trefferliste | intern ja, kein Filter (`BESTÄTIGT`) |
 | Bestätigung vor jeder Suche | `BESTÄTIGT`: Filter zeigen, dann eine Suche |
 | Auth / Hosting / SDK | ein Such-MCP, Tokens je Rolle (`BESTÄTIGT`); Hosting/SDK-Version OFFEN |

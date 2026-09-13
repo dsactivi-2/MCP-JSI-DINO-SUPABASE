@@ -26,7 +26,7 @@ Nutzer 2026-09-13 Punkt 1 **Ja:** Vorbericht-PASS zählt nicht.
 Punkt 3 **Ja:** JSON bleibt Entwurf, kein Vertrag.
 Punkt 2 **Ja:** Archiv-Satz bleibt (Zählfehler nicht kopieren).
 Bestätigung vor jeder Suche: `BESTÄTIGT` (Filter zeigen, dann suchen).
-Ranking: größte `kandidat_id` zuerst. Export: CSV/Excel max. 500 inkl. JMBG/Kontakt.
+Ranking: nur `idk_kandidati.kandidat_id`, größte zuerst. Export: CSV/Excel max. 500 inkl. JMBG/Kontakt.
 Ein Such-MCP, Tokens je Rolle. Hosting/SDK-Version offen.
 Kein Wizard 01/02/04. Kein MCP-Bau, bis der Nutzer das startet.
 

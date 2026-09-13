@@ -171,7 +171,7 @@ Mindestens:
 | --- | --- |
 | Q8.5 Berufserfahrung | Sonst sucht „5 Jahre Elektriker“ falsch. |
 | Welche Tabelle die R1-Akte ist | Sonst doppelte Personen. |
-| Ranking / Tie-Breaker | R1: kandidat_id absteigend (ADR-0002). |
+| Ranking | R1: nur `idk_kandidati.kandidat_id` absteigend (ADR-0002). Kein zweites Kriterium. |
 | Auth-Modell intern | Sonst keine Runtime-Identität. |
 
 Nur ausdrückliche Antworten gelten. Empfehlungen bleiben Vorschlag.

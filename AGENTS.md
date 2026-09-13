@@ -11,6 +11,7 @@ Glossary: [CONTEXT.md](CONTEXT.md).
 PHP map: [crm-work-inventory.md](docs/discovery/crm-work-inventory.md).
 Interview: [ADR-0002](docs/decisions/0002-search-design-interview.md).
 Requirements: [implementation brief](docs/SUPABASE_CRM_MCP_IMPLEMENTATION_BRIEF.md).
+Current ADRs: [docs/decisions/README.md](docs/decisions/README.md).
 
 ## Response style
 
@@ -96,6 +97,7 @@ performance, or restore.
    - Linear → [issue tracker](docs/agents/issue-tracker.md);
    - requirements or acceptance → [brief](docs/SUPABASE_CRM_MCP_IMPLEMENTATION_BRIEF.md).
 3. Read applicable ADRs under [docs/decisions/](docs/decisions/).
+   Current files are the table in [docs/decisions/README.md](docs/decisions/README.md).
 4. Follow the relevant runbook under [docs/runbooks/](docs/runbooks/).
 5. Resolve unknown schema facts through approved read-only discovery.
 6. Draft changes and verification steps.
@@ -170,6 +172,12 @@ understanding, follow ADR-0002's completion procedure.
 - Source code, identifiers, schemas, and code comments use English.
 - Keep project instructions concise and repository-specific.
 - Preserve accepted ADRs and update superseded decisions explicitly.
+- Live status lives in [docs/project.md](docs/project.md). Do not copy it.
+- [docs/reviews/](docs/reviews/), [docs/worklogs/](docs/worklogs/),
+  [docs/handoffs/](docs/handoffs/), [docs/research/](docs/research/) and the
+  frozen evidence list are photos. Add a new dated file; do not edit an old
+  one. [historical_append_only_test.py](tests/docs/historical_append_only_test.py)
+  fails the check if those files change.
 - Add executable commands here only after the selected stack and scaffold make
   them reproducible.
 - Keep generated files, secrets, database exports, and raw audit data out of Git.
@@ -183,7 +191,6 @@ check, the local Python and Fake-`psql` tests, per-file Bash syntax checks, and
 then inspect `git status --short`.
 
 The full lint over every root and `docs/` file stays a separate diagnostic.
-Frozen historical evidence listed in the script keeps its original bytes.
 Command details: [README.md](README.md#provjera-dokumentacije).
 
 For implementation changes, run the repository's actual build, lint, typecheck,

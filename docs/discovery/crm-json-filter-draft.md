@@ -61,7 +61,7 @@ Nachrichten C 4–9 gehören nicht in diesen Filter (Produkt default aus).
 | Ort / Stadt / Wunschort | Wizard 03: erst alte Filter |
 | Skills | Wizard 03 |
 | Berufssuchprofil / occupation | Wizard 03 + Q22 |
-| Erfahrungsjahre | R1: `min_relevant_experience_years` aus von–bis (Q8.5.9). Nicht die Aktenzahlen. |
+| Aktenzahlen `kandidat_iskustvo_u_struci(_trajanje)` | Q8.5.2 ignoriert; Jahre kommen aus von–bis |
 | Freitext-Volltext wie `search.php` | nicht die Kandidatensuche |
 | Messenger-Status, Task-Force | nicht in dieser Filter-Maske; Scan liegt in der Status-Datei |
 | Partner-/QC-/Nalog-Suche | R1 nur Hauptsuche |
@@ -108,7 +108,7 @@ Englische JSON-Namen. PHP-POST nur zur Spur.
 | `driving_license` | `vozacka_dozvola` | Führerschein vorhanden | nur `true`; PHP sucht `Da` im Feld |
 | `driving_categories` | `filter_kategorija_vozacke` | Klassen | Liste; PHP: B zieht höhere mit — später modernisieren |
 | `has_work_experience` | `radno_iskustvo` | mindestens eine Jobzeile | nur `true` (alte Maske ja/nein) |
-| `min_relevant_experience_years` | — | Mindestjahre im genannten Job + Jobgruppe, aus von–bis | ganze Jahre ≥ 1; braucht einen genannten Job |
+| `min_relevant_experience_years` | — | Mindestjahre im genannten Job + ähnliche/verwandte in der Berufsgruppe, aus von–bis | ganze Jahre ≥ 1; braucht einen genannten Job; Verkäufer zählt nicht bei Elektriker |
 | `german` | `znanje_njemacki` | Deutsch | siehe Sprachen |
 | `english` | `znanje_engleski` | Englisch | analog |
 | `groups` | `filter_grupe` | Kandidatengruppe | ID-Liste |
@@ -125,7 +125,7 @@ Englische JSON-Namen. PHP-POST nur zur Spur.
 | `exclude_archived` | Archiv-Cookie | default `true` | `false` nur Archiv (Status 3), ohne andere Filter |
 | `q` | DataTables-Suchbox | Name, Statusname, Gruppe; intern auch E-Mail/Mobil | string, optional |
 | `limit` | — | Seitengröße | 1–50, default 50 |
-| `cursor` | — | nächste Seite | opaque; Ordnung `kandidat_id` absteigend |
+| `cursor` | — | nächste Seite | opaque; Ordnung `idk_kandidati.kandidat_id` absteigend |
 
 ### Sprachen
 
@@ -157,7 +157,9 @@ Weggelassene Felder zählen nicht.
 ```
 
 Kein Ort, keine Skills. Jahre nur über `min_relevant_experience_years`
-(Q8.5.9), nicht als Aktenzahl.
+(Q8.5.9), nicht als Aktenzahl. Beispiel: Suche Elektriker 3 Jahre. Akte
+elektricar 2015–2018 + Elektroinstallateur 2018–2021 zählen; Verkäufer
+danach nicht. Summe der ersten zwei ≥ 3 → Treffer.
 
 ## Treffer (interner Vermittler)
 
@@ -170,7 +172,7 @@ Pool-Suche. Discovery speichert keine Werte. JMBG darf intern in der
 Trefferliste stehen (`BESTÄTIGT`). Kein Filter. Bleibt besonders sensibel.
 
 Zusätzlich später (nicht in diesem Entwurf fest): stabile ID,
-Match-Beweis, `next_cursor`. Ranking R1: größte `kandidat_id` zuerst
+Match-Beweis, `next_cursor`. Ranking R1: größte `idk_kandidati.kandidat_id` zuerst
 (`BESTÄTIGT`). IDs eindeutig, kein zweites Kriterium.
 
 Kunde-Projektion (ohne Kontakt, nur Vorschlag) ist ein anderer
@@ -197,7 +199,7 @@ Alte CRM-RPCs nicht wrappen.
 | Archiv plus andere Filter | PHP wirft Formularfilter weg; Entwurf lehnt die Mischung ab |
 | Stille PHP-Joins ohne Gruppe/Status | **BESTÄTIGT** nein; sichtbar lassen, nicht INNER JOIN kopieren |
 | Prijave-Labels | DB, kein Dump |
-| Ranking / Cursor-Spalte | größte `kandidat_id` zuerst (`BESTÄTIGT`) |
+| Ranking / Cursor-Spalte | nur `idk_kandidati.kandidat_id`, größte zuerst (`BESTÄTIGT`); nicht JMBG, nicht `users.id` |
 | JMBG in der Trefferliste | intern ja, kein Filter (`BESTÄTIGT`) |
 | Bestätigung vor jeder Suche | `BESTÄTIGT`: Filter zeigen, dann eine Suche |
 | Auth / Hosting / SDK | ein Such-MCP, Tokens je Rolle (`BESTÄTIGT`); Hosting/SDK-Version OFFEN |

@@ -1,6 +1,7 @@
 # Korrekturmatrix A01–A12
 
-Stand: 2026-09-11. Arbeitsgrundlage ist der
+Stand: 2026-09-11 (Korrekturrunde). Live-Status nicht hier, sondern in
+ADR-0002 und docs/project.md. Arbeitsgrundlage ist der
 [Audit](../reviews/2026-09-11-project-plan-audit.md) mit seiner
 [Primärprüfung](../research/2026-09-11-plan-best-practice-verification.md).
 Historische Berichte bleiben unverändert. Alle Änderungen dieser Runde sind
@@ -32,10 +33,12 @@ Die Statusspalte enthält den Abschlussstand nach Korrektur und Verifikation.
 
 ## Verbindliche Grenzen
 
-Q8.5 bleibt vollständig `OFFEN`, Q4.5 ohne erfundene Frage. Allgemeine
-Suchbestätigung bleibt `VORLÄUFIGER VORSCHLAG`; Q7-Zustimmung vor Lockerung
-bleibt verbindlich. Änderungsvorschläge an akzeptierten ADRs stehen separat
-unter [Entscheidungsentwürfe](decision-drafts.md).
+Stand dieser Runde 2026-09-11: Q8.5 vollständig `OFFEN`, Q4.5 ohne
+erfundene Frage, allgemeine Suchbestätigung `VORLÄUFIGER VORSCHLAG`.
+Live 2026-09-13 in ADR-0002: Q8.5.3–9 `BESTÄTIGT`, Bestätigung vor jeder
+Suche `BESTÄTIGT`; Q7 vor Lockerung bleibt. Änderungsvorschläge an
+akzeptierten ADRs stehen separat unter
+[Entscheidungsentwürfe](decision-drafts.md).
 
 Der Abschlussnachweis dieser Runde steht im
 [Prüfbericht](../reviews/2026-09-11-local-correction-verification.md).

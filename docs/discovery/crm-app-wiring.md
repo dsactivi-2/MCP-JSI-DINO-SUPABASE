@@ -92,7 +92,7 @@ Nicht wrappen: `crm_api.search_candidates` (im PHP dieser App nicht gefunden; Si
 | Kann die Hauptsuche Ausbildung ohne Erfahrung setzen? | ja: Struke/Schule/Smjer ohne Checkbox Radno iskustvo | `BELEGT DURCH QUELLCODE` |
 | Kann sie Erfahrung ohne Ausbildung setzen? | ja: nur Checkbox Radno iskustvo | `BELEGT DURCH QUELLCODE` |
 | Tätigkeitsart getrennt? | nein in dieser Maske | `OFFEN` / fehlt |
-| Welches Feld zählt Dauer? | Filter zählt **keine** Dauer, nur ob Erfahrung existiert. Aktenfelder `kandidat_iskustvo_u_struci(_trajanje)` und Perioden `idk_kandidat_radno_iskustvo` bleiben Q8.5 | `OFFEN` für „5 Jahre“ |
+| Welches Feld zählt Dauer? | Alte Maske zählt **keine** Dauer, nur ob eine Jobzeile existiert. R1 zählt von–bis passender Jobs (Q8.5.9). Aktenzahlen ignoriert (Q8.5.2). | PHP-Ist: keine Jahre. R1-Soll: Q8.5.9 |
 | Berufssuchprofil = welche Tabelle? | Hauptsuche nutzt `idk_struke` + Schule/Smjer, nicht `occupation` / `idk_nalog_profil` | `OFFEN` für MCP-Profil; UI-Befund `BELEGT` |
 
 ## 5. Personenfelder in der alten Suche
@@ -114,5 +114,5 @@ Nicht wrappen: `crm_api.search_candidates` (im PHP dieser App nicht gefunden; Si
 
 Filter-SQL ist gelesen. JSON-Filter-Entwurf geprüft (nicht Vertrag):
 [crm-json-filter-draft.md](crm-json-filter-draft.md).
-Ranking R1: `kandidat_id` absteigend. Ein Such-MCP, Tokens je Rolle.
+Ranking R1: nur `idk_kandidati.kandidat_id` absteigend. Ein Such-MCP, Tokens je Rolle.
 Hosting/SDK-Version offen. Kein Scaffold, bis der Nutzer es startet.

@@ -20,7 +20,7 @@ Legende: `BELEGT` Katalogname/FK/Schätzung. `ARBEITSANNAHME` fachliche Lesart.
 | Domäne | Physisch (BELEGT) | Schätzung | Lesart |
 | --- | --- | --- | --- |
 | Kandidat | `crm.idk_kandidati` | ~122004 | Kernakte. Intern mit Kontakt; Kunde ohne Kontakt bis Einstellungsfreigabe. Ausweis/Passwort nicht an Kunde. |
-| Berufserfahrung | `crm.idk_kandidat_radno_iskustvo` | ~87844 | Perioden und freie Jobtitel. Q8.5 bleibt OPEN. |
+| Berufserfahrung | `crm.idk_kandidat_radno_iskustvo` | ~87844 | Perioden und freie Jobtitel. Q8.5.3–9 BESTÄTIGT; von/bis-Spalten und physische Jobgruppe offen. |
 | Ausbildungsberuf / Taxonomie | `crm.occupation`, `occupation_alias` | ~702 / ~1241 | Kontrollierte Slugs, BS/DE, Aliasse. |
 | Jobtitel → Taxonomie | `crm.job_occupation_map` | ~87844 | FK auf Erfahrung **und** occupation. |
 | Benannte Position | `crm.idk_kandidat_pozicija` | ~133 | Mehrsprachiger Name. |

@@ -16,7 +16,7 @@ for shell_file in scripts/check-local.sh scripts/discovery/run-gate-b1.sh tests/
   rtk proxy /bin/bash -n "$shell_file"
 done
 
-# Frozen evidence stays byte-identical; the full lint remains a separate diagnostic.
+# Frozen evidence skips lint; append-only lock is tests/docs/historical_append_only_test.py.
 rtk proxy python3 - <<'PY'
 from pathlib import Path
 import subprocess

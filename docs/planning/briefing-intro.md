@@ -61,9 +61,10 @@ Deutsch/Englisch, Gruppe, Bearbeitung, Prijave, Quelle, Staatsangehörigkeit,
 Boravak EU, Struke, Schule, Smjer, DIPL-Status, Nostrifikation. Archiv default
 raus. Leere Felder zählen nicht; gesetzte Felder mit UND.
 
-Nicht in dieser alten Maske, aber fachlich später relevant: drei Berufsschichten,
-Jahres-Erfahrung, Ort, Skills, Freitext, Berufssuchprofil. Occupation liegt in
-Postgres, die alte UI nutzt sie nicht.
+Nicht in dieser alten Maske: drei Berufsschichten, Ort, Skills, Freitext,
+Berufssuchprofil. Jahres-Erfahrung fehlt in der PHP-Maske; R1 ergänzt sie
+(Q8.5.9, von–bis passender Jobs). Occupation liegt in Postgres, die alte UI
+nutzt sie nicht.
 
 ### Manuelle Auslöser
 
@@ -93,8 +94,9 @@ einschaltbar. Kein 1:1-Wrap der alten Sender.
 
 PHP-Suche, Filter-SQL, Status/Klick/Cron und Nachrichten C 4–9 sind gelesen.
 JSON-Filter R1 ist Entwurf, geprüft gegen PHP und Heft. Struke/Smjer =
-Ausbildungsberuf. Jahresfilter R1: Q8.5.9 von–bis. Ranking: größte
-`kandidat_id` zuerst. Ein Such-MCP, Tokens je Rolle. Export: CSV/Excel,
+Ausbildungsberuf. Jahresfilter R1: Q8.5.9 von–bis passender Jobs.
+Ranking: größte `idk_kandidati.kandidat_id` zuerst. Ein Such-MCP, Tokens je
+Rolle. Export: CSV/Excel,
 max. 500, inkl. Kontakt/JMBG. Hosting/SDK-Version offen.
 
 **Kein MCP-Server gebaut.** Bericht-Audit 2026-09-13 ausgeführt. JSON bleibt
