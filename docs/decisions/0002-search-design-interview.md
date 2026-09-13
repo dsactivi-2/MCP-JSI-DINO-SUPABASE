@@ -688,6 +688,8 @@ Nutzerauftrag, B2 und B3 weiterzuführen. Wizard war unnötig: kein Dashboard,
 kein neues Secret. B2 V3 PASS (14 Queries, u. a. 3 Schemas, 398 Relationen,
 1960 Spalten). B3 V3 PASS (11 Queries). Rohdaten nur außerhalb Git. Keine
 Kandidatendaten gelesen.
+Das ist die geltende Katalogzahl. Eine spätere Mapping-Zeile 199 Relationen
+ist nicht dieser Lauf.
 
 **Q10.3 – Kurzfristig Option A, schrittweise zu Option D:** `BESTÄTIGT` – Die
 importierten CRM-Tabellen bleiben in der kurzfristigen Phase unverändert. Für

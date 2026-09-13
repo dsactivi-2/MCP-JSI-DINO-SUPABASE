@@ -6,11 +6,10 @@ Status: erste Zuordnung aus dem Katalog. Keine Datensätze gelesen. Keine
 Foreign Keys erfunden. Schätzungen (`reltuples`) sind keine gezählten Stände.
 
 Quelle: Gate B2 V3, Prüfrolle, Schemata `crm`, `crm_api`, `crm_auth`.
-Zwei Git-Sätze, nicht zusammengerechnet. Diese Datei schrieb 2026-09-12
-**199 Relationen**. ADR-0002 Q10.2q vom B2-Lauf schrieb **398 Relationen**
-und 1960 Spalten. Rohkatalog liegt außerhalb Git. Die Zerlegung 199
-Tabellen + 12 Views + 187 Sequenzen kam später aus einem Docs-Sync, nicht
-aus einer gezählten B2-Datei. Nicht als Messung verwenden.
+Geltende Zählung vom Lauf: **398 Relationen**, 1960 Spalten
+(ADR-0002 Q10.2q). Rohkatalog außerhalb Git. Die ältere Zeile **199
+Relationen** in dieser Datei ist ersetzt. Die spätere Zerlegung 12 Views
+und 187 Sequenzen war kein gezählter B2-Output.
 Der Visualizer-Export bleibt enger und ersetzt dies nicht.
 
 Legende: `BELEGT` Katalogname/FK/Schätzung. `ARBEITSANNAHME` fachliche Lesart.
