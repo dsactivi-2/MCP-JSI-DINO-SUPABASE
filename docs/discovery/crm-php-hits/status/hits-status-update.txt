@@ -1,0 +1,38 @@
+/Users/activi/Downloads/crm-master-3/src/crm/ajax.php:2936:								SET kandidat_status = :kandidat_status
+/Users/activi/Downloads/crm-master-3/src/crm/ajax.php:3116:										SET	kandidat_status_prijave = :kandidat_status_prijave
+/Users/activi/Downloads/crm-master-3/src/crm/ajax.php:3126:										SET	kandidat_status_prijave = :kandidat_status_prijave
+/Users/activi/Downloads/crm-master-3/src/crm/ajax.php:3311:										SET kandidat_status = :kandidat_status
+/Users/activi/Downloads/crm-master-3/src/crm/ajax.php:3452:											SET kandidat_status = :kandidat_status
+/Users/activi/Downloads/crm-master-3/src/crm/ajax.php:3599:											SET kandidat_status = :kandidat_status
+/Users/activi/Downloads/crm-master-3/src/crm/ajax.php:3744:											SET kandidat_status = :kandidat_status
+/Users/activi/Downloads/crm-master-3/src/crm/cron_automatic_go_online.php:47:            $upd_status_prijave = $db->prepare("UPDATE idk_kandidati SET kandidat_status_prijave = 3 WHERE kandidat_id = $kandidat_id");
+/Users/activi/Downloads/crm-master-3/src/crm/kandidati2.php:3324:										SET kandidat_status = :kandidat_status
+/Users/activi/Downloads/crm-master-3/src/crm/cron_ciscenje_projekata.php:76:        $set_status_prijave = $db->prepare("UPDATE idk_kandidati SET kandidat_status_prijave = :status_prijave WHERE kandidat_id = :kandidat_id");
+/Users/activi/Downloads/crm-master-3/src/crm/cron_ciscenje_projekata.php:332:            $set_status_prijave = $db->prepare("UPDATE idk_kandidati SET kandidat_status_prijave = :status_prijave WHERE kandidat_id = :kandidat_id");
+/Users/activi/Downloads/crm-master-3/src/crm/kandidati.php:11817:										SET kandidat_status = :kandidat_status
+/Users/activi/Downloads/crm-master-3/src/crm/do.php:11764:		SET kandidat_status_prijave = :status_prijave_to_be
+/Users/activi/Downloads/crm-master-3/src/crm/do.php:16910:							SET kandidat_status = :kandidat_status
+/Users/activi/Downloads/crm-master-3/src/crm/do.php:17037:							SET kandidat_status = :kandidat_status
+/Users/activi/Downloads/crm-master-3/src/crm/do.php:17142:							SET kandidat_status = :kandidat_status
+/Users/activi/Downloads/crm-master-3/src/crm/do.php:19264:	$upd_status_prijave = $db->prepare("UPDATE idk_kandidati SET kandidat_status_prijave = 3 WHERE kandidat_id = $kandidat_id_go");
+/Users/activi/Downloads/crm-master-3/src/crm/do.php:19427:			SET kandidat_status_prijave = :status_prijave
+/Users/activi/Downloads/crm-master-3/src/crm/do.php:19936:	$update_datum_termina = $db->prepare("UPDATE idk_kandidati SET datum_termina = :datum_termina, kandidat_status_prijave = 15, kandidat_bio_na_terminu = NULL WHERE kandidat_id = :kandidat_id");
+/Users/activi/Downloads/crm-master-3/src/crm/do.php:19969:		$update_termin_check = $db->prepare("UPDATE idk_kandidati SET kandidat_bio_na_terminu = 1, kandidat_status_prijave = 18 WHERE kandidat_id = $kandidat_id");
+/Users/activi/Downloads/crm-master-3/src/crm/do.php:20810:		$update_status_prijave = $db->prepare("UPDATE idk_kandidati SET kandidat_status_prijave = 10 WHERE kandidat_id = :kandidat_id;");
+/Users/activi/Downloads/crm-master-3/src/crm/do.php:22145:	$set_status_prijave = $db->prepare("UPDATE idk_kandidati SET kandidat_status_prijave = :status_prijave WHERE kandidat_id = :kandidat_id");
+/Users/activi/Downloads/crm-master-3/src/crm/cron_bot_obrada.php:83:						SET	kandidat_status = :kandidat_status, kandidat_status_messenger = :kandidat_status_messenger
+/Users/activi/Downloads/crm-master-3/src/crm/harun_test.php:2993:					//$set_status_prijave = $db->prepare("UPDATE idk_kandidati SET kandidat_status_prijave = :status_prijave WHERE kandidat_id = :kandidat_id");
+/Users/activi/Downloads/crm-master-3/src/crm/harun_test.php:3109:						// $set_status_prijave = $db->prepare("UPDATE idk_kandidati SET kandidat_status_prijave = :status_prijave WHERE kandidat_id = :kandidat_id");
+/Users/activi/Downloads/crm-master-3/src/crm/includes/functions.php:11310:				$query_update_sp = $db->prepare("UPDATE idk_kandidati SET kandidat_status_prijave = $status_id WHERE kandidat_id = $kandidat_id");
+/Users/activi/Downloads/crm-master-3/src/crm/includes/functions.php:18872:	$upd_kand_status = $db->prepare("UPDATE idk_kandidati SET kandidat_status_prijave = 12 WHERE kandidat_id = $kandidat_id");
+/Users/activi/Downloads/crm-master-3/src/crm/includes/functions.php:18916:	$upd_kand_status = $db->prepare("UPDATE idk_kandidati SET kandidat_status_prijave = 12 WHERE kandidat_id = $kandidat_id");
+/Users/activi/Downloads/crm-master-3/src/crm/includes/functions.php:19168:			$upd_kand_status = $db->prepare("UPDATE idk_kandidati SET kandidat_status_prijave = 12 WHERE kandidat_id = $kandidat_id");
+/Users/activi/Downloads/crm-master-3/src/crm/includes/functions.php:19647:		UPDATE idk_kandidati set kandidat_status_prijave=:na_status where kandidat_id=:kandidat_id	
+/Users/activi/Downloads/crm-master-3/src/crm/includes/functions.php:22019:		SET kandidat_status_prijave = :kandidat_status_prijave
+/Users/activi/Downloads/crm-master-3/src/crm/public_kandidati_import.php:737:								SET kandidat_status_messenger = :kandidat_status_messenger, kandidat_datumrodjenja = :kandidat_datumrodjenja, kandidat_visitedurl = :kandidat_visitedurl, kandidat_prijava_na = :kandidat_prijava_na, kandidat_partnerid = :kandidat_partnerid, kandidat_partner_status = :kandidat_partner_status, kandidat_porijeklo = :kandidat_porijeklo
+/Users/activi/Downloads/crm-master-3/src/crm/testiranja.php:804:				$query_update_sp = $db->prepare("UPDATE idk_kandidati SET kandidat_status_prijave = $status_id WHERE kandidat_id = $kandidat_id");
+/Users/activi/Downloads/crm-master-3/src/crm/testiranja.php:1055:						SET kandidat_status_prijave = :status_prijave_to_be
+/Users/activi/Downloads/crm-master-3/src/crm/cron_bot_instal.php:73:						SET	kandidat_status = :kandidat_status, kandidat_status_messenger = :kandidat_status_messenger
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/ajax.php:2113:		$upd_status_prijave = $db->prepare("UPDATE idk_kandidati SET kandidat_status_prijave = 5, kandidat_pp_razlog_odbijanja = '$razlog' WHERE kandidat_id = $kandidat_id");
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/ajax.php:7538:				SET kandidat_status_prijave = :status_prijave_to_be
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/ajax.php:8020:		$upd_status_prijave = $db->prepare("UPDATE idk_kandidati SET kandidat_status_prijave = 2 WHERE kandidat_id = $candidate_id");

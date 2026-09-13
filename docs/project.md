@@ -1,8 +1,8 @@
 # Pregled projekta: Supabase CRM MCP
 
-Status: dokumentacijska osnova kompletirana; governance i priprema discoveryja
+Status: dokumentacijska osnova + PHP-Verdrahtung; JSON-Filter Entwurf geprüft
 
-Ažurirano: 2026-09-11
+Ažurirano: 2026-09-13
 
 Primarni jezik dokumentacije: B/H/S latinica
 
@@ -34,6 +34,29 @@ MCP-kompatibilne klijente.
   postupak read-only audita.
 - [Runbook automatizacije baze](runbooks/database-development-automation.md)
   određuje razvojne, CI, performance i release gateove nakon discoveryja.
+- [Runbook CRM-Suchverdrahtung](runbooks/crm-source-wiring-capture.md)
+  vodi mapiranje maske na RPC iz CRM izvornog koda; OrbStack samo kao fallback.
+- [Plan CRM-Verdrahtung](runbooks/crm-wiring-human-plan.md) je ljudska
+  download-uputa: svaki korak, mjesto, naredba i unos u predložak.
+- [Wizards CRM-Verdrahtung](runbooks/crm-wiring-wizards.md) određuje koji
+  wizard kada: 01 sken, zatim Codex ili 02, pa 03 abnahme.
+- [Predložak CRM-Verdrahtung](discovery/crm-app-wiring.template.md) je prazan
+  obrazac.
+- [Inventar CRM-Scan 2026-09-13](discovery/crm-work-inventory.md)
+  Landkarte: was gemappt ist, wo es liegt, was offen ist.
+- [Handoff Scan-to-MCP 2026-09-13](handoffs/2026-09-13-scan-to-mcp.md)
+  Historische Session-Übergabe. Nächster Schritt darin veraltet: Entwurf ist geprüft.
+- [Aktueller Session-Prompt](handoffs/2026-09-13-aktueller-session-prompt.md)
+  Copy-paste für den nächsten Agenten (Tool-Namen / synthetische Eval).
+- [Codebefund PHP-Filter](discovery/crm-app-wiring.md) je lesart
+  `kandidati.php` nakon Wizard 01; Q17 izjednačuje Heft i staru UI.
+- [Codebefund Filter-SQL](discovery/crm-filter-sql-codebefund.md) kako
+  `lista_kandidata` stvarno filtrira.
+- [Codebefund Status/Klick/Cron](discovery/crm-status-codebefund.md) B7
+  i Automatik.
+- [Codebefund C 4–9 Nachrichten](discovery/crm-notify-codebefund.md)
+  Kanal und Auslöser je Wechsel; Produkt default aus.
+- [PHP-Suchzettel](discovery/crm-php-hits/) su sirovi rg-ispisi Wizard 01/04.
 - [Plan automatizacijskih ticketa](planning/release-1-automation-tickets.md)
   daje blockers-first redoslijed prije zasebne Linear freigabe.
 - [SDK integracijski plan](planning/sdk-integration-plan.md) razrađuje MCP,
@@ -49,6 +72,20 @@ MCP-kompatibilne klijente.
 - [Evaluacijski gate semantičke pretrage](research/semantic-search-evaluation-gate.md)
   određuje kako se nakon discoveryja porede nevectorski baseline, `pgvector` i
   Vector Buckets bez prethodnog izbora tehnologije.
+- [Brief za MCP/TypeScript auto-wire istraživanje](research/mcp-autowire-research-brief.md)
+  opisuje bazu, filtere u više nivoa i prompt za pretragu gotovih alata; nije
+  nalaz niti stack odluka.
+- [Nalaz MCP/TypeScript auto-wire](research/mcp-autowire-candidates.md)
+  ocjenjuje gotove MCP/ORM/search alate; nijedan nije siguran runtime Search-MCP.
+- [Usporedba tri ispravna puta](research/mcp-autowire-top3-vergleich.md)
+  poredi RPC, `gen types`+`.rpc()` i pgtyped bez auto-SQL MCP-a.
+- [Agent-Prompt Suche/Tabellen/Fehler](research/mcp-search-agent-prompt.md)
+  copy-paste opis tabela, suchlesarten i grešaka Ausbildung/Beruf/Freitext.
+- [Runbook Option 1 Setup](runbooks/option-1-mcp-sdk-rpc-setup.md)
+  lokalni eval MCP SDK v2 + Zod + sinteticki Postgres RPC; nije produkcija.
+- [End-to-end Runtime-Such-MCP](runbooks/runtime-search-mcp-end-to-end.md)
+  povezuje katalog, Jobstep-maske, ugovor, sinteticki MCP i produkcijski
+  pilot; nije freigabe niti stack odluka.
 - [AGENTS.md](../AGENTS.md) definira pravila rada agenata u repozitoriju.
 
 Ako se dokumenti ne slažu, rad se zaustavlja dok se konflikt ne razriješi
@@ -60,8 +97,9 @@ Raniji [ograničeni Q10.2g audit](reviews/2026-09-11-public-definer-audit.md)
 nalazi dvije SECURITY-DEFINER rutine sa PUBLIC EXECUTE, bez PUBLIC schema
 USAGE; u tom ranijem pozivu definicije nisu pročitane. Sintetički kontraprimjeri
 pokazuju da schema USAGE i promjenjivi read-only default ne dokazuju potpunu
-zabranu trajnih upisa. Predložena V3 iznimka je povučena. Rola još nije
-kreirana. Korisnik je dodatni uski read-only scope izričito odobrio u Q10.2h;
+zabranu trajnih upisa. Predložena V3 iznimka je povučena. U tom trenutku
+rola još nije bila kreirana. Korisnik je dodatni uski read-only scope
+izričito odobrio u Q10.2h;
 Q10.2h je sada izvršen. Dvije definicije ostaju NOT_PROVEN_READ_ONLY, a osam
 pregledanih LO helper funkcija ima PUBLIC EXECUTE. Detalji i 23 sintetičke
 provjere su u [izvještaju](reviews/2026-09-11-public-paths-audit.md).
@@ -173,6 +211,15 @@ S3 Vector Wrapper, embedding pipeline ni produkcijska konfiguracija. Gate prvo
 traži dokaz kvalitetne praznine nakon strukturiranih filtera, taksonomije, FTS-a
 i po potrebi `pg_trgm`, zatim izolirano poređenje s `pgvector`-om i Vector
 Bucketom. Call-memory integracija ostaje izvan opsega ovog projekta.
+Gate B2 V3 pokazuje aditivne embedding tabele ispod 1 MiB bez HNSW/IVFFlat
+indeksa, uz naseljenu occupation taksonomiju. To nije izbor vektorskog backenda
+niti R1 default; v. [evaluacijski gate](research/semantic-search-evaluation-gate.md)
+i Q14 u [ADR-0002](decisions/0002-search-design-interview.md).
+
+Q12/Q13 u ADR-0002 bilježe korisničku namjeru za privilegovani pregled/export i
+kasnije generisanje životopisa. Q4 je 2026-09-12 `ERSETZT`: interni Vermittler
+vidi cijeli pool i kontakte; Kunde vidi kontakte samo u Einstellungsfreigabe.
+Pojmovi User/Superuser nisu razriješeni.
 
 Design intervju o toku pretrage, filterima, potvrdi, historiji i izvozu je u
 toku. Njegove potvrđene, djelimične i otvorene odluke vode se u
@@ -185,10 +232,9 @@ nenavedenih filtera ostaju potvrđeni. Detaljna filtersemantika i obavezna
 potvrda
 svake nove ili izmijenjene pretrage su VORLÄUFIGER VORSCHLAG zbog nedostajuće
 izvorne liste preporuka. Q8.5 je u cijelosti OFFEN. Q4.5 je ukinuta kao prazan
-broj, bez rekonstruisanja nepoznatog pitanja. Release 1 ne vraća kontakte ni
-kroz jedan alat; kontaktna funkcija i CONTACT-02 pripadaju kasnijoj, zasebno
-odobrenoj
-fazi. Mogućnosti za
+broj, bez rekonstruisanja nepoznatog pitanja. Interni alati vraćaju i
+kontakte. CONTACT-02 je Einstellungsfreigabe
+kontakata Kupcu nakon zasuge, ne kasnija interna faza. Mogućnosti za
 izradu i administraciju tih profila obrađene su u
 [Q8.4.2 istraživanju](research/berufssuchprofile-q8-4-2.md); odluka o odvojenom
 administrativnom MCP-u prihvaćena je i razrađena u
@@ -227,7 +273,46 @@ credentiala.
 
 Prema Q9 prvo se razjašnjavaju sigurnosni preduslovi i odobrenje audita,
 zatim slijedi read-only discovery, a tek potom nastavak intervjua. Korisnikova
-navedena brojka od 179 tabela je DURCH DISCOVERY ZU PRÜFEN.
+navedena brojka od 179 tabela je DURCH DISCOVERY ZU PRÜFEN. Gate B2 V3 vidi 199
+relacija u `crm`/`crm_api`/`crm_auth`. Prva mapa imena na domene:
+[katalog-domain mapping](discovery/catalog-domain-mapping.md) (Q16).
+
+Lokalni PHP-CRM (`src/crm`) je Wizard-01-skeniran. Formular
+`kandidati.php?page=list_ajax` je codebefund Hauptsuche. Filter-SQL
+`lista_kandidata` je pročitan:
+[crm-filter-sql-codebefund.md](discovery/crm-filter-sql-codebefund.md).
+Status-Klicks B7:
+[crm-status-codebefund.md](discovery/crm-status-codebefund.md).
+Landkarte: [crm-work-inventory.md](discovery/crm-work-inventory.md).
+Q17: Heft i stara UI su ravnopravni. Wizard-03-Alltag je potvrđen
+(R1 = stara Hauptsuche). Ostaje OFFEN: Struke/Smjer = Ausbildungsberuf,
+„5 Jahre“ im R1-Filter.
+C 4–9 je pročitan:
+[crm-notify-codebefund.md](discovery/crm-notify-codebefund.md).
+JSON-Filter Entwurf:
+[crm-json-filter-draft.md](discovery/crm-json-filter-draft.md).
+Provjeren 2026-09-13 (PHP + Heft). Rupe ostaju: Struke/Smjer, „5 Jahre“
+nije R1-polje. Naredni korak: Tool-Namen i sintetički eval, ne MCP-bau.
+
+Wizard 01 je 2026-09-13 ponovo skenirao **bez** limita 200 linija (RPC 21,
+tabele 1732, UI 2487). `*.sql` i `Info/` isključeni zbog dumpa. Ne vraćati
+200-kapač.
+
+Q20 (2026-09-13): R1-Suche scanniert Filter, alle Status-Ebenen und
+Statuswechsel (Cron und Klicks in `do.php`/`ajax.php`, B7 sehr wichtig).
+Benachrichtigungen 4–9 (C) sind als Codebefund gelesen, sehr wichtig,
+im Produkt default aus.
+Module 11–16 für späteren zweiten MCP; tiefe Scan-Freigabe
+dafür steht aus. Punkt 10 DIPL-Erinnerung ist spätere Option, nicht Jetzt-Scan.
+
+Q21 (2026-09-13): PHP scannen für den Funktionskatalog. Umsetzen modern
+(JSON-Filter, ADR-0001), nicht 1:1 PHP-SQL nach Supabase. Parität der
+Fähigkeiten, nicht der alten Implementierung.
+
+Q22 (2026-09-13): Jetziger Scan = altes Frontend + Businesslogik/Trigger.
+occupation / Akten-Jahre / Stadt-Skills-als-Filter sind jetzt nicht Scan-Ziel.
+
+Filter-SQL der Hauptsuche: [crm-filter-sql-codebefund.md](discovery/crm-filter-sql-codebefund.md).
 
 Prije bazne konekcije dozvoljena je statička, lokalna analiza korisnički
 dostavljenog schema izvoza nakon sigurnosnog preflighta. Ona može suziti popis
@@ -239,7 +324,8 @@ njega je pripremljen minimalni B2 scope samo za `crm`, `crm_api` i `crm_auth`;
 sve ostale sheme ostaju izvan prvog metadata inventara. B1 V2 ostaje neodobren
 postojeći paket, ne automatski sljedeći korak.
 Korisnik je potvrdio da nema namjenske discovery role i naložio njenu izradu
-(Q10.2b). Izabran je bootstrap nove role; ona još nije kreirana. Prije izvedbe
+(Q10.2b). Izabran je bootstrap nove role; kasnije je kreirana
+`dino_crm_discovery_ro_v1` (Gate B1/B2/B3 V3 PASS). Prije izvedbe
 treba ispuniti sigurnosne preduslove prema
 [konsolidovanom pristupnom planu](discovery/access-plan-consolidated.md).
 Q10.2d izuzima isključivo ovu izradu role od prethodnog restore testa. Test

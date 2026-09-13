@@ -63,10 +63,10 @@ DataTables server-side obradi.
 Jednokratni, read-only audit sheme potreban je u razvojnoj fazi. Njegov rezultat
 postaje verzioniran ugovor. Produkcijski MCP ne smije iznova otkrivati shemu pri
 svakom upitu. Minimalni prvi release obuhvata sve stavke označene kao Must-have;
-dodatne optimizacije uvode se tek prema mjerenjima. Release 1 je potpuno bez
-izlaza kontaktnih podataka, uključujući pojedinačni profil. Odobrenje pristupa
-kontaktima
-i CONTACT-02 nisu Must-have za Release 1, nego kasnija zasebno odobrena faza.
+dodatne optimizacije uvode se tek prema mjerenjima. Interni Vermittler vidi
+cijeli pool i sva polja uključujući kontakte. Kunde nikad ne vidi cijeli pool:
+Vorschlagsfreigabe bez kontakata,
+Einstellungsfreigabe (CONTACT-02) s kontaktima tek nakon zasuge.
 Predložene filterdetalje i nepotpuni JSON nacrt ne treba tumačiti kao konačan
 ugovor; Q8.5 je u cijelosti OFFEN.
 
@@ -416,18 +416,17 @@ Produkcijski Runtime-Such-MCP izlaže samo tri osnovna alata:
 | Alat | Namjena | Osnovni izlaz |
 | --- | --- | --- |
 | `search_candidates(filters, sort, limit, cursor)` | Pretraživanje i rangiranje. | Interpretirani filteri, mala stranica sažetaka, match evidence i sljedeći cursor. |
-| `get_candidate_profile(candidate_id)` | Dohvat jednog autoriziranog profila. | Dozvoljeni detalji profila; Release 1 uvijek bez kontakata. |
+| `get_candidate_profile(candidate_id)` | Dohvat jednog autoriziranog profila. | Dozvoljeni detalji prema akteru; interni Vermittler s kontaktima, Kunde bez kontakata do Einstellungsfreigabe. |
 | `get_filter_options(field, query)` | Autocomplete i razrješenje termina ili profila. | Ograničena lista kanonskih opcija, Berufssuchprofila i ID-ova bez kandidatskih podataka. |
 
 <!-- markdownlint-enable MD013 -->
 
 Alati ne prihvataju SQL fragmente, nazive tabela, nazive kolona ni arbitrary
-expression objekte. `get_candidate_profile` ne vraća kontaktne podatke ako
-korisnik
-nema eksplicitnu ulogu i potvrđen poslovni razlog u kasnijoj, zasebno odobrenoj
-fazi. U Releaseu 1 kontakti se ne vraćaju ni uz takvu ulogu ili razlog. Masovni
-export nije dio osnovnog
-search alata.
+expression objekte. `get_candidate_profile` vraća kontakte internom
+Vermittleru (Q4).
+Kunde vidi kontakte samo nakon Einstellungsfreigabe (CONTACT-02).
+Masovni export nije dio osnovnog search alata. Discovery-artefakti
+ne sadrže vrijednosti kontakata.
 
 ### 3.1 Odvojeni Profilverwaltungs-MCP
 
@@ -653,7 +652,8 @@ tipiziranim parametrima ili jednim validiranim `jsonb` argumentom. Funkcija:
 - vraća stabilni candidate ID, match label i matched-field evidence;
 - nameće hard cap od najviše 50 kandidata po stranici;
 - nameće statement timeout i ograničenje ukupne veličine odgovora;
-- ne vraća kontaktne podatke u rezultatima pretrage.
+- projekcija kontakata prati aktera (interni Vermittler da, Kunde ne
+  dok nema Einstellungsfreigabe); discovery bez vrijednosti.
 
 Konceptualni potpis, čija imena i tipovi zavise od audita:
 
@@ -703,10 +703,10 @@ ugovor i mjerene planove.
   promptu,
   logu, repozitoriju ili ovom dokumentu.
 - RLS i tenant scoping u bazi, ne samo u aplikacijskom kodu.
-- Allowlista kolona po alatu i ulozi; deny-by-default za kontaktne i osjetljive
-  podatke.
-- Release 1: bez izlaza kontakata kroz sve alate. Kasnija zasebno odobrena
-  faza: kontaktni gate s privilegijom, potvrdom, svrhom i audit događajem.
+- Allowlista kolona po alatu i ulozi; deny-by-default za osjetljive podatke
+  koje akter ne smije vidjeti.
+- Release 1: interni Vermittler vidi kontakte; Kunde ne, dok nema
+  Einstellungsfreigabe. Discovery/logovi bez kontaktnih vrijednosti.
 - Rate limit po korisniku, tenant-u i klijentu; globalni backpressure za zaštitu
   baze.
 - Statement i end-to-end timeout, limit konkurencije i cancel propagacija.
@@ -778,8 +778,8 @@ Obavezni testovi pokrivaju:
 - prompt/tool injection sadržaj u korisničkom tekstu i pohranjenom CV-u;
 - nepoznata JSON polja, pogrešne tipove, izvanrasponske vrijednosti i prevelike
   liste;
-- RLS/tenant izolaciju, role, kolonske allowliste i zabranu svih kontaktnih
-  izlaza u Releaseu 1; pozitivan kontaktni gate testirati tek u kasnijoj fazi;
+- RLS/tenant izolaciju, role, kolonske allowliste i projekciju kontakata po
+  akteru (Q4); CONTACT-02 za Kunde zasebno;
 - nula rezultata, djelimična poklapanja i stabilnost ranka/paginacije;
 - timeout, rate limit, backpressure, prekinute konekcije i prevelike odgovore;
 - migracijsku kompatibilnost i rollback prethodne verzije ugovora.
@@ -839,8 +839,9 @@ Kasnije, samo uz vlastitu odluku, mjerljivi trigger i verifikaciju:
 5. Read replika ili eksterni search samo uz izmjerena PostgreSQL ograničenja.
 6. Dodatna višejezična narativna objašnjenja; tačan match evidence ostaje
    obavezan.
-7. Kontakti i CSV/PDF export isključivo u kasnijoj, posebno odobrenoj fazi.
-   CONTACT-02 nije Release-1 test; kontaktna zabrana CONTACT-R1 jeste.
+7. CSV/PDF export i kontakt za Kunde ostaju posebna odluka. Interna
+   R1-pretraga uključuje kontakte (Q4, 2026-09-12). CONTACT-R1 je ERSETZT.
+   CONTACT-02 je Einstellungsfreigabe Kupcu.
 
 ## Strategija prelaska baze A prema D
 
@@ -900,7 +901,7 @@ kontrolisana primjena i provjera nakon primjene.
 Minimalni release je prihvatljiv samo kada su svi kriteriji dokazani artefaktom:
 
 - Svaka Must-have stavka primjenjiva na Release 1 ima implementaciju, vlasnika
-  i testni dokaz; kontaktna funkcija i CONTACT-02 su izvan tog opsega.
+  i testni dokaz; CONTACT-02 za Kunde ostaje izvan internog R1-opsega.
 - Nema koda koji runtime korisnički tekst pretvara u proizvoljni SQL.
 - Cijela baza se ne učitava u MCP/LLM; hard cap je najviše 50 kandidata po
   stranici.
@@ -911,8 +912,8 @@ Minimalni release je prihvatljiv samo kada su svi kriteriji dokazani artefaktom:
 - Svaki rezultat postoji u bazi, ima stabilan ID i tačan `matched_fields` dokaz.
 - RLS negativni testovi dokazuju da korisnik jednog tenant-a ne vidi drugi
   tenant.
-- Release 1 ne vraća kontaktne podatke ni kroz search ni kroz pojedinačni
-  profil ili drugi izlaz. Zasebna kontaktna dozvola pripada tek kasnijoj fazi.
+- Release 1 interno vraća kontakte Vermittleru. Kunde ne vidi kontakte
+  dok nema Einstellungsfreigabe. Logovi i discovery bez kontaktnih vrijednosti.
 - SQL i prompt injection suite ne mijenja upit, politiku, alat ili rezultat
   izvan
   tretiranja teksta kao podatka.
@@ -970,9 +971,9 @@ SEM-01/02 važe samo u naknadno odobrenoj semantičkoj grani.
 | SCHEMA-01 | JSON | Dodatno polje `sql`. | Odbijeno zbog `additionalProperties: false`. |
 | RANGE-01 | Limiti | `limit: 5000`. | Odbijeno; hard cap 50. |
 | RLS-01 | Tenant | Actor tenant A traži kandidat iz tenant-a B. | Nula/autorizacijska greška bez potvrde postojanja zapisa. |
-| ROLE-01 | Kontakt | Standardni recruiter traži email/telefon kroz search. | Kontakt nije vraćen; prikazan je siguran permission odgovor. |
+| ROLE-01 | Kontakt | Interni recruiter traži email/telefon kroz search. | Kontakt je vraćen internom Vermittleru (Q4). |
 | CONTACT-02 | Kasnija, zasebno odobrena faza; izvan Releasea 1 | Ovlašten korisnik potvrđuje prikaz jednog kontakta. | Minimalni kontakt, svrha i audit događaj tek nakon posebnog odobrenja. |
-| CONTACT-R1 | Release 1 | Bilo koja rola traži kontakt kroz search ili pojedinačni profil. | Nema izlaza kontaktnih podataka. |
+| CONTACT-R1 | ERSETZT 2026-09-12 | Stara zabrana svih R1-kontakata. | Zamijenjena Q4: interno da, Kunde tek CONTACT-02. |
 | ZERO-01 | Nema rezultata | Validni filter bez poklapanja. | Tačno nula; konkretni prijedlozi ublažavanja, nova pretraga tek nakon saglasnosti; bez izmišljenih rezultata. |
 | PAGE-01 | Paginacija | Podaci se mijenjaju između dvije stranice. | Definisano stabilno cursor ponašanje bez duplikata koliko ugovor garantuje. |
 | CURSOR-02 | Cursor | Izmijenjen ili tuđi cursor. | Sigurna greška; nema podataka. |
@@ -1051,7 +1052,8 @@ restore imaju odvojene dokaze prema automatizacijskom runbooku.
 4. Shadow mod može porediti novi search s postojećim procesom bez prikaza
    korisniku
    i bez širenja pristupa podacima.
-5. Interna pilot grupa dobija read-only search bez kontakata i exporta.
+5. Interna pilot grupa dobija read-only search cijelog poola uključujući
+   kontakte; export ostaje OFFEN.
 6. Svaki D rez se zasebno migrira, poredi i prihvata prije promjene izvora
    čitanja.
 7. Funkcionalnost se širi po tenant-u/roli uz feature flag i aktivne dashboarde.
@@ -1191,7 +1193,7 @@ Ovo je sažetak odluka briefa. Dugoročne arhitekturne odluke održavaju se u
 | D-003 | Prihvaćeno | Runtime LLM ne generiše i ne izvršava proizvoljni SQL. |
 | D-004 | Prihvaćeno | Discovery je jednokratan/kontrolisan read-only proces; runtime koristi stabilan ugovor. |
 | D-005 | Prihvaćeno | Minimalni javni MCP ima tri alata: search, profile i filter options. |
-| D-006 | Prihvaćeno | Hard cap je 50 kandidata po search stranici; Release 1 nema kontaktnih izlaza ni u searchu ni u profilu. |
+| D-006 | Prihvaćeno | Hard cap je 50 kandidata po search stranici; projekcija polja prati aktera (Q4). |
 | D-007 | Prihvaćeno | Minimalni release uključuje sve Must-have stavke. |
 | D-008 | Prihvaćeno | `pgvector`, Vector Buckets, cache, read replika i eksterni search engine nisu zadane komponente. |
 | D-009 | Na odluci | Fizički search view/RPC model nakon audita stvarne sheme i planova. |
@@ -1217,9 +1219,9 @@ alternativu i kriterij ponovnog razmatranja.
 ## Preporučeni minimalni release
 
 Prvi produkcijski release mora uključiti **svaku Must-have stavku primjenjivu
-na Release 1**. Odobrenje pristupa kontaktima i CONTACT-02 su izričito izvan te
-faze; svi alati
-vraćaju podatke bez kontakata. VORLÄUFIGER VORSCHLAG stavke i JSON nacrt
+na Release 1**. Interna pretraga uključuje kontakte. CONTACT-02 je
+Einstellungsfreigabe Kupcu, ne interna zabrana. VORLÄUFIGER VORSCHLAG stavke i
+JSON nacrt
 zahtijevaju finalizaciju prije implementacije. Osnova obuhvata audit i
 data-quality baseline, kanonski model, tri MCP alata, strogi JSON ugovor,
 kontrolisanu RPC pretragu, indekse dokazano potrebne planovima, least-privilege
@@ -1312,9 +1314,8 @@ odlukama; dokument ne pretpostavlja da su opcionalne mogućnosti uključene.
   [evaluacijski gate](research/semantic-search-evaluation-gate.md) i zapisati ADR
   prije izbora ili konfiguracije vektorskog backenda.
 
-- [ ] Implementirati least-privilege, RLS, column allowlist i potpunu
-  zabranu izlaza kontakata u Releaseu 1. Kontaktni gate i CONTACT-02 čekaju
-  kasnije zasebno odobrenje.
+- [ ] Implementirati least-privilege, RLS i column allowlist po akteru:
+  interni pool s kontaktima; Kunde bez kontakata do Einstellungsfreigabe.
 - [ ] Pokrenuti contract, multilingual, injection, RLS, pagination i privacy
   testove.
 - [ ] Benchmarkirati realni volumen/concurrency i usvojiti numeričke SLO/cost

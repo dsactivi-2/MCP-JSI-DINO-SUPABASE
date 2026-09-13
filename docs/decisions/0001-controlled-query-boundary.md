@@ -30,7 +30,8 @@ i timeout te poziva unaprijed definiranu PostgreSQL RPC funkciju.
 
 PostgreSQL autoritativno filtrira, rangira i paginira rezultate. Osnovni search
 vraća najviše 50 kandidata po stranici, stabilne identifikatore i dokaz
-poklapanja, bez kontaktnih podataka.
+poklapanja. Projekcija polja ovisi o akteru: interni Vermittler vidi i kontakte;
+Kunde vidi kontakte samo nakon Einstellungsfreigabe.
 
 Fizički view, RPC potpis, auth model, tenant mapiranje i ranking formula bit će
 odlučeni tek nakon read-only audita stvarne sheme.
@@ -64,5 +65,6 @@ Odluka je ispravno provedena samo ako:
 - RLS negativni testovi sprečavaju cross-tenant pristup;
 - search nikada ne vraća više od 50 kandidata;
 - nula rezultata ostaje nula bez izmišljenih profila;
-- kontaktni podaci zahtijevaju zasebnu autorizaciju;
+- kontaktni podaci zahtijevaju zasebnu autorizaciju po akteru (interni pool
+  s kontaktima; Kunde tek nakon Einstellungsfreigabe);
 - isti ugovor prolazi test u svakom podržanom MCP klijentu.

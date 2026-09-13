@@ -61,7 +61,7 @@ flowchart TD
     M --> V[Poslovna validacija i autorizacija poziva]
     V --> D[DB adapter: odobren identitet i RPC allowlista]
     D --> P[PostgreSQL: prava, filter, ranking, cursor]
-    P --> O[Jedna projekcija: kontaktfrei, cap 50, bajtni limit]
+    P --> O[Jedna projekcija po akteru: Q4, cap 50, bajtni limit]
     O --> C
 ```
 
@@ -152,7 +152,7 @@ SDK provjere razrađuju njihove kriterije iz
 | SDK-04 | AUTO-05; REQ-CONTRACT-01 | Jedan verzionirani input/output/error/cursor ugovor; schema i runtime odbijaju unknown; isti minimizirani rezultat u tekstu/structuredContent; admin tool nije u runtime katalogu. |
 | SDK-05 | OPS-01, CLIENT-01; REQ-SDK-01 | Streamable HTTP kroz stvarni runtime/proxy; za 2026-07-28 pojedinačni POST i request-scoped SSE/JSON, obavezni metadata headers, prekid i siguran retry; stariji session/GET/DELETE samo u zasebnoj kompatibilnoj matrici. Middleware ne troši tijelo dva puta niti blokira response streaming. |
 | SDK-06 | OPS-01/02; REQ-LIMIT-01, REQ-PRIV-02 | Oversize/chunked ulaz odbijen u budžetu; timeout/cancel do DB-a, concurrency/backpressure i rate limit; secret/PII canary odsutan iz odgovora, grešaka, metapodataka i logova. |
-| SDK-07 | SEARCH-01; REQ-SEARCH-01 | Pozitivni i negativni vertikalni slučaj od MCP poziva do kontrolisane RPC u sintetičkoj bazi; nula ostaje nula, cap i kontaktfreiheit provjereni. |
+| SDK-07 | SEARCH-01; REQ-SEARCH-01 | Pozitivni i negativni vertikalni slučaj od MCP poziva do kontrolisane RPC u sintetičkoj bazi; nula ostaje nula, cap i projekcija po akteru (Q4) provjereni. |
 | SDK-08 | AUTO-03, CLIENT-01, REL-01; REQ-SDK-01 | Nadogradnja SDK-a ne mijenja ugovor/prava; prethodna kompatibilna verzija vraća se provjereno; klijentska matrica i sigurnosni testovi ponovljeni. |
 
 <!-- markdownlint-enable MD013 -->

@@ -33,7 +33,7 @@ separate Freigabe erforderlich.
 - Eine zweite prüfende Person ist nicht verpflichtend.
 - Die Datenbank wurde nicht auditiert; physische Struktur, RLS und Tenant-Modell
   sind unbekannt.
-- Release 1 und alle Discovery-Repository-Artefakte bleiben kontaktfrei.
+- Discovery-Repository-Artefakte bleiben ohne Kontaktwerte. Produkt R1 intern sieht Kontakte (Q4).
 - Die SQL-Dateien wurden in dieser Sitzung nur geschrieben und lokal geprüft,
   nicht ausgeführt.
 

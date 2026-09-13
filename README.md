@@ -33,12 +33,30 @@ Pročitati [stanje projekta](docs/project.md), zatim
 | [Q8.4.2 istraživanje](docs/research/berufssuchprofile-q8-4-2.md) | Primarne reference i evaluacija kontrolisanih Berufssuchprofila. |
 | [Audit i matrica korekcija](docs/reviews/decision-reconstruction-corrections.md) | Odobrene dokumentacijske korekcije, evidencija i otvorene odluke; izvorni audit ostaje historijski nalaz. |
 | [Discovery runbook](docs/runbooks/schema-discovery.md) | Preduslovi i postupak odobrenog read-only audita. |
+| [Runbook CRM-Suchverdrahtung](docs/runbooks/crm-source-wiring-capture.md) | Quellcode zuerst: Maske → RPC, Output-Vorlage, OrbStack nur als Fallback. |
+| [Plan CRM-Verdrahtung Schritt für Schritt](docs/runbooks/crm-wiring-human-plan.md) | Download-Anleitung: wo, welcher Befehl, was in die Vorlage. |
+| [Wizards CRM-Verdrahtung](docs/runbooks/crm-wiring-wizards.md) | Welcher Wizard wann; 01 scannen, dann Codex oder 02, danach 03. |
+| [Vorlage CRM-Verdrahtung](docs/discovery/crm-app-wiring.template.md) | Leeres Output-Dokument zum Ausfüllen außerhalb Git. |
+| [Inventar CRM-Scan](docs/discovery/crm-work-inventory.md) | Landkarte: gemappte Daten, Dateien, Lücken, nächster Schritt. |
+| [Codebefund PHP-Filter](docs/discovery/crm-app-wiring.md) | Lesart der alten `kandidati.php`-Filter-UI nach Wizard 01. |
+| [Codebefund Filter-SQL](docs/discovery/crm-filter-sql-codebefund.md) | Wie `lista_kandidata` wirklich filtert. |
+| [PHP-Suchzettel](docs/discovery/crm-php-hits/) | Wizard-01/04-`rg`-Output; nicht abschreiben. |
+| [Codebefund Status/Klick/Cron](docs/discovery/crm-status-codebefund.md) | B7-Klicks, Ebenen, Cron. |
+| [Codebefund C 4–9 Nachrichten](docs/discovery/crm-notify-codebefund.md) | Kanal und Auslöser je Statuswechsel; Produkt default aus. |
+| [JSON-Filter Entwurf R1](docs/discovery/crm-json-filter-draft.md) | Entwurf geprüft, kein Vertrag. Lücken: Struke/Smjer, 5 Jahre nicht in R1. |
+| [Aktueller Session-Prompt](docs/handoffs/2026-09-13-aktueller-session-prompt.md) | Copy-paste für den nächsten Agenten. |
+| [Handoff Scan-to-MCP](docs/handoffs/2026-09-13-scan-to-mcp.md) | Historische Session-Übergabe (Dump/Q4/step1-2). |
 | [Statička CRM schema analiza](docs/discovery/crm-schema-static-analysis.md) | Redigirani inventar lokalnog Schema Visualizer izvoza bez bazne konekcije. |
 | [Statička `crm_auth` analiza](docs/discovery/crm-auth-schema-static-analysis.md) | Redigirani pregled lokalnog auth/role/scope schema izvoza. |
 | [Plan statičke schema analize](docs/discovery/schema-analysis-tasklist.md) | Siguran tok i checklist za lokalni Schema Visualizer export bez bazne konekcije. |
 | [Supabase-Plugin Gate P](docs/discovery/supabase-plugin-read-only-gate-draft.md) | Neizvršivi NO-GO nacrt za eventualni projektno ograničen read-only Plugin pristup. |
 | [Supabase tooling](docs/agents/supabase-tooling.md) | Obavezno usmjeravanje za instalirane Supabase skills i blokirani Live-MCP pristup. |
 | [Istraživanje Supabase alata](docs/research/supabase-werkzeuge-fuer-crm-mcp.md) | Procjena plugina, MCP-a, skillsa, CLI-ja i kasnijih razvojnih alata. |
+| [Brief za MCP/TypeScript auto-wire istraživanje](docs/research/mcp-autowire-research-brief.md) | Agent-prompt: obim baze, filteri u više nivoa i klase gotovih alata. |
+| [Nalaz MCP/TypeScript auto-wire](docs/research/mcp-autowire-candidates.md) | Primarni izvori: nijedan auto-MCP nije siguran runtime; codegen i SDK v2 jesu. |
+| [Usporedba tri ispravna puta](docs/research/mcp-autowire-top3-vergleich.md) | RPC, `gen types`+`.rpc()` i pgtyped: autonomija uz ADR-0001. |
+| [Agent-Prompt Suche/Tabellen/Fehler](docs/research/mcp-search-agent-prompt.md) | Copy-paste: Tabellen, Suchlesarten, Ausbildung/Beruf/Freitext. |
+| [Runbook Option 1 Setup](docs/runbooks/option-1-mcp-sdk-rpc-setup.md) | Lokales Eval: MCP SDK v2, Zod, synthetische Postgres-RPC. |
 | [Optimalni SQL i automatizacijski put](docs/research/optimaler-sql-und-automatisierungsweg.md) | Primarne reference, rangiranje alata i prihvaćeni native-first cilj. |
 | [Gate semantičke pretrage](docs/research/semantic-search-evaluation-gate.md) | Kriteriji, faze i stop-uslovi za poređenje FTS-a, `pgvector`-a i Vector Bucketa. |
 | [Objašnjenje Supabase skillsa](docs/research/supabase-agent-skills-einfach-erklaert.md) | Sadržaj, granice i postupak ažuriranja projektnih kopija skillsa. |

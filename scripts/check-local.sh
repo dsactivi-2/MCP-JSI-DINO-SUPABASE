@@ -8,7 +8,11 @@ for test_file in tests/docs/*_test.py tests/discovery/*_test.py; do
   rtk proxy python3 "$test_file"
 done
 rtk proxy /bin/bash tests/discovery/gate_b1_launcher_test.sh
-for shell_file in scripts/check-local.sh scripts/discovery/run-gate-b1.sh tests/discovery/gate_b1_launcher_test.sh; do
+for shell_file in scripts/check-local.sh scripts/discovery/run-gate-b1.sh tests/discovery/gate_b1_launcher_test.sh \
+  scripts/wizards/crm-wiring-01-locate-and-scan.sh \
+  scripts/wizards/crm-wiring-02-map-search.sh \
+  scripts/wizards/crm-wiring-03-accept.sh \
+  scripts/wizards/crm-wiring-04-status-and-triggers.sh; do
   rtk proxy /bin/bash -n "$shell_file"
 done
 

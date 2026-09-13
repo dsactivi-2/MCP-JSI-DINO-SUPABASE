@@ -24,13 +24,14 @@ smiju postati produkcijska zavisnost bez ponovne provjere aktuelnog statusa.
 | ID | Slučaj upotrebe | Status u ovom projektu |
 | --- | --- | --- |
 | SEM-UC-01 | Eksplicitna semantička pretraga kandidata uz obavezne CRM filtere. | Kandidat za evaluaciju nakon discoveryja. |
-| SEM-UC-02 | Eksplicitno traženje kandidata sličnih odabranom profilu. | Otvorena product odluka; ne smije biti automatski fallback za nula rezultata. |
+| SEM-UC-02 | Eksplicitno traženje kandidata sličnih odabranom profilu. | Extra-modus potvrđen, nije default ni R1 must-have. Isporuka nakon gatea. Nije fallback za nula rezultata. |
 | DQ-UC-01 | Prepoznavanje vjerovatnih duplikata u kontrolisanom back-office postupku. | Dio šireg data-quality cilja; zaseban batch ugovor i ljudski review. |
 | CALL-UC-01 | Spajanje embeddinga razgovora s kandidatskim zapisima. | Izvan opsega ovog CRM releasea; zahtijeva zaseban purpose, privacy i trust-boundary ADR. |
 
 <!-- markdownlint-enable MD013 -->
 
-Release 1 ne vraća kontaktne podatke ni kroz jedan od ovih puteva. Rezultat
+Projekcija kontakata prati Q4 (interno da, Kunde ne).
+Discovery-artefakti bez vrijednosti. Rezultat
 semantičke pretrage ne smije samostalno promijeniti status kandidata, objaviti
 profilno mapiranje, spojiti duplikate ili donijeti odluku o zapošljavanju.
 
@@ -140,6 +141,26 @@ uvodi.
   evaluiranom opcijom;
 - ažurirani MCP/RPC ugovor, test matrica, SLO i rollback samo ako je semantički
   opseg odobren.
+
+## Katalogbefund Gate B2 (2026-09-12)
+
+Status: imena i veličine iz odobrenog katalog-gatea B2 V3; nisu čitani redovi
+kandidata ni tekstovi životopisa.
+
+- Aditivne tabele `crm.candidate_documents`, `crm.candidate_document_text` i
+  `crm.candidate_document_embeddings` (`embedding extensions.vector(1536)`).
+  Svaka je ispod 1 MiB, `reltuples` -1. Nema HNSW/IVFFlat indeksa u katalogu.
+- Postoji trigram indeks `candidate_document_text_search_trgm_idx`.
+- Taksonomija je naseljena: `occupation` ~702, `occupation_alias` ~1241,
+  `job_occupation_map` ~87844. `idk_kandidati` ~122004 (katalogska procjena).
+- RPC-ji `crm_api.search_candidates_by_occupation` i
+  `search_candidates_filtered` postoje. Signatura `search_candidates` nabraja
+  kontaktna polja; to nije R1 MCP ugovor.
+
+Zaključak za ovaj gate: vektorska struktura je pripremljena, ali nije dokazan
+produktivni default. Baseline ostaje kontrolisani occupation/filter put. Prazno
+embedding skelet ne bira backend i ne smije se puniti stvarnim CV tekstom bez
+posebne odluke.
 
 ## Službeni izvori
 

@@ -5,7 +5,9 @@ Repozitorij ima jedan domenski kontekst. Njegov rječnik je u korijenskom
 
 ## Čitanje prije rada
 
-1. Pročitati [stanje projekta](../project.md) i [CONTEXT.md](../../CONTEXT.md).
+1. Pročitati [stanje projekta](../project.md), [CONTEXT.md](../../CONTEXT.md)
+   i [inventar CRM-Scan](../discovery/crm-work-inventory.md) za već mapirane
+   PHP-nalaze.
 2. Pročitati relevantne odluke iz [docs/decisions/](../decisions/), počevši od
    [ADR-0001](../decisions/0001-controlled-query-boundary.md).
 3. Za zahtjeve koristiti

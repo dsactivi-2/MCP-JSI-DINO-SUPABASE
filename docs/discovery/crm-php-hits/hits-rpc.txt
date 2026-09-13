@@ -1,0 +1,21 @@
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/dashboard.php:312:											$('#search_candidates').unbind('click').bind('click', openSearchCandidateModal);
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/profile.php:94:								$('#search_candidates').unbind('click').bind('click', openSearchCandidateModal);
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/ajax.php:7743:	case "get_search_candidates":
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/ajax.php:7747:		$query_get_search_candidates = $db -> prepare("
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/ajax.php:7853:		$query_get_search_candidates -> execute();
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/ajax.php:7854:		if($query_get_search_candidates -> rowCount()){
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/ajax.php:7858:			if($query_get_search_candidates -> rowCount() != 1){
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/ajax.php:7882:			while($row_get_search_candidates = $query_get_search_candidates -> fetch()){
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/ajax.php:7889:				$candidate_name 		= $row_get_search_candidates['kandidat_ime'];
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/ajax.php:7890:				$candidate_lastname 	= $row_get_search_candidates['kandidat_prezime'];
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/ajax.php:7891:				$candidate_status 		= $row_get_search_candidates['kandidat_status_prijave'];
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/ajax.php:7892:				$candidate_id 			= $row_get_search_candidates['kandidat_id'];
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/ajax.php:7893:				$candidate_nalog_id 	= $row_get_search_candidates['kandidat_nalog_id'];
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/ajax.php:7894:				$candidate_is_rejected 	= $row_get_search_candidates['is_rejected'];
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/ajax.php:7895:				$candidate_nalog_name 	= $row_get_search_candidates['nalog_naziv'];
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/ajax.php:7896:				$candidate_key 			= $row_get_search_candidates['kandidat_check'];
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/ajax.php:7897:				$company_name 			= $row_get_search_candidates['company_name'];
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/css/style.css:511:.search_candidates_input{
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/includes/navbar/navbar.php:54:				<button type="button" class="btn" id = "search_candidates" style = "box-shadow: none;">
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/includes/navbar/navbar.php:70:				<input id = "input_candidate_search" type = "text" placeholder = "<?php echo $txtArray["Unesite ime kandidata"][$languageUser]; ?>" class = "search_candidates_input"></input>
+/Users/activi/Downloads/crm-master-3/src/crm/jobstep_pp/includes/navbar/navbar.php:86:					url: 'ajax.php?action=get_search_candidates',

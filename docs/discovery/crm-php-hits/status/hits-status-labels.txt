@@ -1,0 +1,28 @@
+181:		echo '<option value="'.$kg_id.'">'.$kg_title.'</option>';
+199:		echo "<option value='" . $select_row['project_id'] . "'>" . $select_row['project_name'] . "</option>";
+238:		echo "<option value='" . $row['nalog_id'] . "'>" . $row['nalog_broj'] . " - " . $row['nalog_naziv'] . "</option>";
+266:		echo "<option value='" . $row['nalog_id'] . "' ".$selected_or_not.">" . $row['nalog_broj'] . " - " . $row['nalog_naziv'] . "</option>";
+339:function getStatusList(){
+342:	echo '<option value="0" selected>Na provjeri</option>';
+343:	echo '<option value="1" selected>U obradi</option>';
+344:	echo '<option value="2" selected>Obrađen</option>';
+345:	echo '<option value="3" selected>Arhiviran</option>';
+346:	echo '<option value="4" selected>Kontrola</option>';
+347:	echo '<option value="5" selected>Dopuna</option>';
+348:	echo '<option value="6" selected>Odbio Messenger</option>';
+349:	echo '<option value="7" selected>U obradi više od 3 dana</option>';
+350:	echo '<option value="8" selected>Na dopuni više od 3 dana</option>';
+354:function getStatusListNew(){
+357:	echo '<option value="0">Na provjeri</option>';
+358:	echo '<option value="1">U obradi</option>';
+359:	echo '<option value="5">Dopuna</option>';
+360:	echo '<option value="4">Kontrola</option>';
+361:	echo '<option value="2">Obrađen</option>';
+362:	echo '<option value="7">U obradi više od 3 dana</option>';
+363:	echo '<option value="8">Na dopuni više od 3 dana</option>';
+364:	echo '<option value="6">Odbio messenger</option>';
+365:	echo '<option value="3">Arhiviran</option>';
+3790:		echo "<option value='" . $employee['employee_id'] . "'>" . $employee['employee_firstname'] . " " . $employee['employee_lastname'] . "</option>";
+4038:		echo "<option value='" . $employee['kp_id'] . "'>" . $employee['kp_ime'] . "</option>";
+4054:		echo "<option value='" . $row['nalog_id'] . "'>" . $row['nalog_broj'] . " - " . $row['nalog_naziv'] . "</option>";
+4252:		echo "<option value='" . $select_row['project_id'] . "'>" . $select_row['project_name'] . "</option>";

@@ -23,7 +23,14 @@ contains the detailed product and technical baseline.
 
 The repository is in governance and read-only discovery preparation. No
 application stack, package manager, deployment target, database contract, or
-production access workflow has been approved yet.
+production access workflow has been approved yet. PHP search wiring so far
+is indexed in [crm-work-inventory.md](docs/discovery/crm-work-inventory.md);
+C 4–9 is documented in [crm-notify-codebefund.md](docs/discovery/crm-notify-codebefund.md).
+R1 JSON filter draft is
+[crm-json-filter-draft.md](docs/discovery/crm-json-filter-draft.md).
+The draft was reviewed against PHP and Heft on 2026-09-13. Gaps remain:
+Struke/Smjer meaning and “5 Jahre” not in R1. Next step is tool names and
+synthetic eval, not an MCP scaffold.
 
 Local documentation and synthetic discovery checks already exist under
 `scripts/` and `tests/`; `scripts/check-local.sh` is their single entry point.
@@ -39,9 +46,12 @@ establishes them.
   pagination.
 - Never send the full candidate database or bulk candidate records to an LLM.
 - Search responses are capped at 50 candidates per page.
-- Release 1 excludes contact details from every output, including candidate
-  profiles. Contact access and CONTACT-02 belong to a later, separately approved
-  phase.
+- Internal Vermittler roles (Sachbearbeiter, Teamleiter, Inhaber, Entwickler)
+  see the full candidate pool and all candidate fields, including contacts.
+  The developer plugin must never connect to production or a restore clone.
+  A Kunde never sees the whole pool. Vorschlagsfreigabe shows proposed
+  candidates without contacts; Einstellungsfreigabe (CONTACT-02) adds contacts
+  for a candidate only after the Kunde has committed to hiring them.
 - The profile-administration MCP is a separate planned trust boundary from the
   read-only runtime search MCP. It may manage drafts and published profile
   versions only after schema discovery and data-model approval; follow
@@ -146,6 +156,13 @@ in principle. Q4.5 is retired as an empty number, not answered as a domain
 question. Reconstructed filter details and confirmation before every new
 or changed search are `VORLÄUFIGER VORSCHLAG` until evidenced. Label unverified
 physical facts `ARBEITSANNAHME` or `DURCH DISCOVERY ZU PRÜFEN`.
+Heft (ADR-0002) and the live CRM UI/PHP are equal sources (Q17). New code
+facts are not out of scope only because an older interview question omitted
+them.
+Wizard 01 CRM hit lists must not use a 200-line cap; that hid `kandidati.php`.
+Exclude `*.sql` and `Info/` (dump). Current counts: RPC 21, tables 1732, UI 2487.
+PHP is a catalog of CRM capabilities to modernize (Q21), not a 1:1 SQL clone
+onto Supabase. The runtime LLM still emits only a validated JSON filter (ADR-0001).
 When the user confirms shared understanding and
 the interview frontier is empty, follow ADR-0002's completion procedure to
 reconcile accepted ADRs, `CONTEXT.md`, the implementation brief, project status,
