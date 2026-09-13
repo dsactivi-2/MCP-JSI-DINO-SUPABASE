@@ -99,7 +99,7 @@ Der **Kunde** sieht nie den ganzen Pool. Die Freigabe an ihn hat zwei Schritte:
 CONTACT-02 ist die Einstellungsfreigabe der Kontakte an den Kunden, nicht eine
 spätere interne Kontaktphase. Das Entwickler-Plugin an Produktion oder
 Restore-Klon bleibt verboten; Produktsicht ist nicht Plugin-Zugang. Export
-bleibt Q15.6 `OFFEN`.
+in R1 ja neben Blättern; Format und Limit Q15.6 `OFFEN`.
 
 ### Q5 – Altersfilter
 
@@ -157,13 +157,13 @@ Empfehlungsliste fehlt. Deshalb ist die genaue Detailsemantik eine
 
 <!-- markdownlint-enable MD013 -->
 
-**VORLÄUFIGER VORSCHLAG – Soll-Ablauf:** Vor jeder neuen oder geänderten Suche
-werden Filter, Operatoren und aufgelöste Profilmitglieder angezeigt. Nach
-ausdrücklicher Bestätigung und erneuter Servervalidierung folgt genau eine
-Datenbanksuche. Diese allgemeine Bestätigungspflicht und die Ein-Suche-Regel
-sind nicht endgültig bestätigt. Die ausdrücklich belegte Zustimmung vor einer
-gelockerten Suche gemäß Q7 bleibt verbindlich. Ob Pflicht- und Wunschkriterien
-zur ersten Regelversion gehören, bleibt `OFFEN`.
+**BESTÄTIGT** – 2026-09-13. Vor jeder neuen oder geänderten Suche werden die
+aktiven Filter angezeigt. Nach ausdrücklicher Bestätigung folgt genau eine
+Datenbanksuche. Q7 bleibt: bei null Treffern erst lockern nach Zustimmung.
+
+**VORLÄUFIGER VORSCHLAG:** Anzeige aufgelöster Profilmitglieder in der
+Vorschau. R1 hat kein Berufssuchprofil in der Suche. Ob Pflicht- und
+Wunschkriterien zur ersten Regelversion gehören, bleibt `OFFEN`.
 
 **BESTÄTIGT:** „Elektriker mit fünf Jahren Berufserfahrung“ verlangt keine
 entsprechende Ausbildung, wenn Ausbildung nicht genannt wurde. Auch andere
@@ -689,6 +689,12 @@ Identitätsvertrag; `@supabase/middleware` nur bei nachgewiesenem Zusatznutzen.
 Die TypeScript-Variante passt direkt zu diesen JavaScript-Paketen. Dieser
 Vorteil ist keine endgültige Sprach-, Hosting- oder Authentscheidung.
 
+**BESTÄTIGT** – 2026-09-13. R1 Runtime-Suche: **ein** Such-MCP, verschiedene
+Tokens/Scopes je Akteur (interner Vermittler vs. später Kunde). Postgres
+bleibt letzte Sperre. Kein zweiter Such-MCP in R1. Kein generic Postgres-MCP.
+Profilverwaltungs-MCP bleibt getrennt (ADR-0003). Entwickler-Plugin nie auf
+Produktion.
+
 **OFFEN:** Stack-/Versionsauswahl, Alpha-Akzeptanz, OAuth-/Tokenvertrag,
 DB-Identitätsabbildung und praktische Integrationsnachweise. Q9 und Q8.5,
 ADR-0001/0003/0004 sowie bestehende Discovery- und Produktionsfreigaben bleiben
@@ -718,7 +724,7 @@ wie der Plugin-Schlüssel und nicht dasselbe wie PostgreSQL-Superuser.
 
 Q4 `ERSETZT` 2026-09-12: interne Vermittler-Rollen sehen alle Kandidaten und
 alle Felder inklusive Kontakt. Der Kunde erhält Kontakte nur in der
-Einstellungsfreigabe. Ob ein gesonderter Export in R1 liegt, bleibt Q15.6.
+Einstellungsfreigabe. Export in R1: siehe Q15.6.
 
 „User“ und „Superuser“ sind kein Glossarbegriff. Der bestätigte R1-Akteur ist
 der Recruiter (Q2). In `crm_auth` gibt es `roles.role_key` / `role_name`; die
@@ -826,12 +832,13 @@ Keine physischen `role_key`-Werte wurden gelesen.
 
 **Q15.5 – Spätere Kontakte und Export:** `ERSETZT` im Kontaktteil – 2026-09-12
 durch Q4. Interne Rollen inklusive Sachbearbeiter sehen Kontakte von Anfang an.
-Kontakte an den Kunden folgen der Zweistufen-Freigabe. Der **Export** bleibt
-Q15.6 `OFFEN` und ist durch diese Korrektur nicht entschieden.
+Kontakte an den Kunden folgen der Zweistufen-Freigabe.
 
-**Q15.6 – Exportumfang:** `OFFEN` – 2026-09-12 ausdrücklich offengelassen. Keine
-Option A/B/C gewählt. Release 1 hat keinen Export. Späterer Umfang, Limit und
-Format bleiben unentschieden; C (ganzer Bestand) ist nicht bestätigt.
+**Q15.6 – Exportumfang:** `TEILWEISE BESTÄTIGT` – 2026-09-13. Recruiter hat
+**beides:** Blättern (höchstens 50 pro Seite, `kandidat_id` absteigend)
+**und** Datei-Export. Plugin bleibt kein Exportweg. Format, maximale
+Zeilenzahl und Feldmenge (JMBG/Kontakt) bleiben `OFFEN`. Export des
+ganzen Bestands ohne Filter ist nicht bestätigt.
 
 ### Q16 – Nächster Schritt nach den Rechten
 

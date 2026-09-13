@@ -23,6 +23,7 @@ bestätigt. INNER JOIN: nicht übernehmen, ohne Gruppe/Bearbeitung sichtbar.
 Nutzer 2026-09-13 Punkt 1 **Ja:** Vorbericht-PASS zählt nicht.
 Punkt 3 **Ja:** JSON bleibt Entwurf, kein Vertrag.
 Punkt 2 **Ja:** Archiv-Satz bleibt (Zählfehler nicht kopieren).
+Bestätigung vor jeder Suche: `BESTÄTIGT` (Filter zeigen, dann suchen).
 Kein Tool-Namen. Kein Wizard 01/02/04. Kein MCP-Bau.
 
 ## 2. Verbindliche Quellen (nicht ins Doku-Git kopieren)
@@ -49,7 +50,7 @@ Architektur: [ADR-0001](../decisions/0001-controlled-query-boundary.md).
 | Q4 | `ERSETZT` 2026-09-12 | Interner Vermittler sieht Pool + Kontakte. Kunde nie den ganzen Pool. Vorschlagsfreigabe ohne Kontakt, Einstellungsfreigabe = CONTACT-02. Plugin nie auf Produktion. Discovery ohne Datensatz-Dump. |
 | Q8.4 | bestätigt im Prinzip | drei Berufsschichten + Berufssuchprofile, auch wenn die alte Maske sie nicht so trennt |
 | Q8.5 | `TEILWEISE` | 8.5.3–8 bestätigt; „5 Jahre“ nicht in R1 (`BESTÄTIGT` nein) |
-| Q15.6 | `OFFEN` | Export |
+| Q15.6 | `TEILWEISE` | Blättern und Datei-Export; Format/Limit OFFEN |
 | Q17 | `BESTÄTIGT` | Heft und alte UI/PHP gleichberechtigt; Heft ist keine Whitelist |
 | Q18 | `TEILWEISE` | Codebefund + Alltag bestätigt; Struke/Smjer = Ausbildungsberuf; 5 Jahre nicht in R1; INNER JOIN nicht kopieren |
 | Q19 | `TEILWEISE` | Status-Ebenen und Automatik als Codebefund |
@@ -151,6 +152,7 @@ ohne Werte. Alte „R1 ohne Kontakt“-Zeilen sind `ERSETZT`.
 | [crm-status-codebefund.md](crm-status-codebefund.md) | Status, Klick, Cron |
 | [crm-notify-codebefund.md](crm-notify-codebefund.md) | C 4–9 Kanal + Auslöser |
 | [crm-json-filter-draft.md](crm-json-filter-draft.md) | R1 JSON-Filter Entwurf |
+| [act-103-vertragspaket.md](act-103-vertragspaket.md) | ACT-103 Pack, kein Vertrag; drei Fragen zum Ankreuzen |
 | [2026-09-13-json-filter-draft.md](../worklogs/2026-09-13-json-filter-draft.md) | Worklog JSON-Entwurf |
 | [2026-09-13-json-filter-verify.md](../worklogs/2026-09-13-json-filter-verify.md) | Worklog erster PASS, nicht Schluss |
 | [2026-09-13-json-filter-audit.md](../worklogs/2026-09-13-json-filter-audit.md) | Worklog Bericht-Audit |
@@ -181,6 +183,7 @@ Lokal, nicht Git: `/private/tmp/dino-crm-wiring.env`,
 | `scripts/discovery/step1-source-lock.sh` | PASS; prüft noch den Website-Dump (Lücke) |
 | `scripts/discovery/step2-search-wiring.py` | PASS; CSS-IDs sind keine Tabellen |
 | `scripts/check-local.sh` | Doku-Gate |
+| `scripts/discovery/build-act-103-vertragspaket.py` | ACT-103 Pack aus Inventar, JSON-Entwurf, ADR-0002 |
 
 ## 7. Bewusst nicht gemacht / verboten
 
@@ -203,8 +206,8 @@ Lokal, nicht Git: `/private/tmp/dino-crm-wiring.env`,
 | Q8.5 | `TEILWEISE`; Jahre nicht in R1 | ADR-0002 |
 | JSON-Filter R1 | Entwurf, kein Vertrag; ohne Gruppe/Bearbeitung sichtbar | crm-json-filter-draft.md |
 | Bericht-Audit JSON-PASS | Punkte 1–3 bestätigt | json-filter-audit.md |
-| JSON/MCP/RPC, Auth, Hosting | nicht gewählt | Brief, SDK-Plan |
-| Export | Q15.6 | ADR-0002 |
+| JSON/MCP/RPC, Auth, Hosting | ein Such-MCP + Tokens; Hosting/SDK-Version OFFEN | ADR-0002 Q11 |
+| Export | R1: blättern und Datei; Format/Limit OFFEN | ADR-0002 Q15.6 |
 | step1 Website-Dump | Script-Lücke | Handoff |
 | Zwei SQL in `databaseDump` | Init-Risiko | Handoff |
 | 11–16 zweiter MCP | merken, nicht tief | Q20 |

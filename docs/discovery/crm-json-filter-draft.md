@@ -96,7 +96,8 @@ Struke/Smjer: JSON nutzt die PHP-Namen. PHP-Pfad ist Struke →
 | `crm_api.search_candidates` | nicht wrappen |
 | Identität / Rolle | nicht im Filter; kommt aus Auth. Interne sehen Kontakte (Q4) |
 
-Bestätigung vor jeder Suche: Heft `VORLÄUFIGER VORSCHLAG`, nicht R1-Pflicht.
+Bestätigung vor jeder Suche: `BESTÄTIGT` 2026-09-13. Erst Filter zeigen,
+dann eine Datenbanksuche.
 
 ## Filterfelder
 
@@ -196,8 +197,9 @@ Alte CRM-RPCs nicht wrappen.
 | Prijave-Labels | DB, kein Dump |
 | Ranking / Cursor-Spalte | OFFEN |
 | JMBG in der Trefferliste | PHP ja; R1-Ausgabe unbestätigt |
-| Bestätigung vor jeder Suche | VORLÄUFIGER VORSCHLAG |
-| Auth / Hosting / SDK | nicht gewählt |
+| Bestätigung vor jeder Suche | `BESTÄTIGT`: Filter zeigen, dann eine Suche |
+| Auth / Hosting / SDK | ein Such-MCP, Tokens je Rolle (`BESTÄTIGT`); Hosting/SDK-Version OFFEN |
+| Export | Datei neben Blättern (`BESTÄTIGT`); Format/Limit OFFEN |
 
 ## Nächster Schritt
 
