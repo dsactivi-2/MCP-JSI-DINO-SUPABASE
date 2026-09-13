@@ -25,6 +25,8 @@ Repozitorij ima jedan domenski kontekst. Njegov rječnik je u korijenskom
 ## Održavanje
 
 - U issueima, specifikacijama i kodu koristiti pojmove iz domenskog rječnika.
+- U chatu s korisnikom prvo rečenica iz stvarnog svijeta (stara lista /
+  nova pretraga), zatim pojam iz rječnika ako treba.
 - Novi razriješeni domenski pojam dodati u `CONTEXT.md`; trenutni status i
   otvorene uslove održavati u `docs/project.md`.
 - Dugoročne arhitekturne odluke zapisivati isključivo u `docs/decisions/`.

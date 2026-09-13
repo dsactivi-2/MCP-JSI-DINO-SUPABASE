@@ -40,7 +40,14 @@ navodi stvarne rezultate i otvorene granice.
 
 ## Provjera dokumentacije
 
-Iz korijena repozitorija, uz već dostupan `markdownlint-cli2`:
+Jedini obavezni ulaz iz korijena:
+
+```bash
+rtk proxy /bin/bash scripts/check-local.sh
+```
+
+Pojedinačne naredbe ispod su dijagnostika, ne zamjena. Uz već dostupan
+`markdownlint-cli2`:
 
 ```bash
 rtk proxy markdownlint-cli2 '*.md' 'docs/**/*.md'
