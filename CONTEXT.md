@@ -30,7 +30,7 @@ treba omogućiti ljudsku procjenu prikladnosti kandidata.
 | Smjer | Stara Filter-UI i JSON-ime `smjer` za Ausbildungsberuf. Nije occupation i ne prepisuje Q8.4. |
 | Berufssuchprofil | Imenovana, verzionirana i kontrolisana grupa Ausbildungsberufe, Erfahrungsberufe i Tätigkeitsarten za širu potrebu klijenta; članovi ostaju samostalno pretraživi i mogu pripadati većem broju profila. |
 | Berufserfahrung | Jedno značenje. Ako dva spremišta tvrde da su to godine iskustva, brojevi moraju biti isti; inače Aktenfeld nije ta stavka (Q8.5.1). |
-| Relevante Berufserfahrung | Odgovarajući poslovi: sličan natpis i srodni nazivi. Liste prvo; KI samo prijedlog uz potvrdu (Q8.5.3–8). Preklapanja se ne sabiraju; tekući posao do danas. Zettel 2 se ne koristi. |
+| Relevante Berufserfahrung | Odgovarajući poslovi i slični u istoj Jobgruppe. Liste prvo; KI samo prijedlog (Q8.5.3–8). R1-filter `min_relevant_experience_years` iz von–bis liste, ne iz Aktenzahlen (Q8.5.9). Preklapanja se ne sabiraju; tekući posao do danas. |
 | Aktiver Filter | Korisnik ga je izričito naveo ili potvrdio u pregledu; nenavedena kategorija je neaktivna i ne ograničava rezultat. |
 | Profilverwaltungs-MCP | Interna upravljačka granica za nacrte, provjeru i verzionirano objavljivanje Berufssuchprofila; odvojena je od read-only Runtime-Such-MCP-a. |
 | Runtime-Such-MCP | Kontrolisana read-only granica za pretragu, pojedinačni profil i dozvoljene filteropcije; korisnikov identitet i dozvoljeni opseg vrijede za svaki poziv. |

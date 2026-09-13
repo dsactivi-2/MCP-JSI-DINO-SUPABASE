@@ -209,14 +209,15 @@ Status-Klicks B7:
 [crm-status-codebefund.md](discovery/crm-status-codebefund.md).
 Landkarte: [crm-work-inventory.md](discovery/crm-work-inventory.md).
 Q17: Heft i stara UI su ravnopravni. Wizard-03-Alltag je potvrđen
-(R1 = stara Hauptsuche). Struke/Smjer = Ausbildungsberuf. „5 Jahre“
-nije R1-polje. INNER JOIN se ne kopira: bez grupe/obrade ostaju vidljivi.
+(R1 = stara Hauptsuche). Struke/Smjer = Ausbildungsberuf.
+Jahresfilter R1: von–bis, Job + Jobgruppe (Q8.5.9). INNER JOIN se ne
+kopira: bez grupe/obrade ostaju vidljivi.
 C 4–9 je pročitan:
 [crm-notify-codebefund.md](discovery/crm-notify-codebefund.md).
 JSON-Filter Entwurf:
 [crm-json-filter-draft.md](discovery/crm-json-filter-draft.md).
 Provjeren 2026-09-13 (PHP + Heft). Struke/Smjer = Ausbildungsberuf.
-„5 Jahre“ nije R1-polje. INNER JOIN: sichtbar ohne Gruppe/Bearbeitung.
+Jahresfilter R1: Q8.5.9. INNER JOIN: sichtbar ohne Gruppe/Bearbeitung.
 Bericht-Audit: Punkte 1–3 bestätigt. Archiv-Satz bleibt.
 Nije korak za imena alata i nije MCP-bau.
 

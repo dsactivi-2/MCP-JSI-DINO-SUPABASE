@@ -36,10 +36,10 @@ kreuzt nur die drei offenen ACT-103-Fragen.
 | --- | --- | --- |
 | Q4 | `ERSETZT` 2026-09-12 | Interner Vermittler sieht Pool + Kontakte. Kunde nie den ganzen Pool. Vorschlagsfreigabe ohne Kontakt, Einstellungsfreigabe = CONTACT-02. Plugin nie auf Produktion. Discovery ohne Datensatz-Dump. |
 | Q8.4 | bestätigt im Prinzip | drei Berufsschichten + Berufssuchprofile, auch wenn die alte Maske sie nicht so trennt |
-| Q8.5 | `TEILWEISE` | 8.5.3–8 bestätigt; „5 Jahre“ nicht in R1 (`BESTÄTIGT` nein) |
+| Q8.5 | `TEILWEISE` | 8.5.3–8 und 8.5.9: R1-Jahre aus von–bis, Job + Jobgruppe |
 | Q15.6 | `TEILWEISE` | Blättern und Datei; CSV+Excel; max. 500; JMBG+Kontakt; nicht ganzer Bestand |
 | Q17 | `BESTÄTIGT` | Heft und alte UI/PHP gleichberechtigt; Heft ist keine Whitelist |
-| Q18 | `TEILWEISE` | Codebefund + Alltag bestätigt; Struke/Smjer = Ausbildungsberuf; 5 Jahre nicht in R1; INNER JOIN nicht kopieren |
+| Q18 | `TEILWEISE` | Codebefund + Alltag; Struke/Smjer = Ausbildungsberuf; R1-Jahre Q8.5.9; INNER JOIN nicht kopieren |
 | Q19 | `TEILWEISE` | Status-Ebenen und Automatik als Codebefund |
 | Q20 | `TEILWEISE` | Jetzt: Filter, alle Status, Auslöser, A, B7, C 4–9 Codebefund. Produkt default aus. 10 und 11–16 später |
 | Q21 | `BESTÄTIGT` | Funktionen erfassen, modern umsetzen, nicht 1:1 PHP-SQL |
@@ -53,7 +53,7 @@ Zusätzlich aus ADR-0002 Q18 / Bericht-Audit 2026-09-13:
 - JSON bleibt Entwurf, kein Vertrag. Punkt 3 **Ja**.
 - Vorbericht-PASS zählt nicht. Punkt 1 **Ja**.
 - Struke/Smjer = Ausbildungsberuf; JSON-Namen bleiben struke / smjer.
-- 5 Jahre ist kein R1-Feld. Q8.5.3-8 gelten erst, wenn Jahre ein Filter werden.
+- Jahresfilter R1 Q8.5.9: von–bis, Job + Jobgruppe. Alte UI bleibt ja/nein.
 - Ranking R1: größte kandidat_id zuerst.
 - JMBG intern in der Trefferliste ja, kein Filter, Discovery ohne Werte.
 
@@ -62,7 +62,7 @@ Zusätzlich aus ADR-0002 Q18 / Bericht-Audit 2026-09-13:
 | Thema | Stand im JSON-Entwurf |
 | --- | --- |
 | Struke/Smjer = Ausbildungsberuf? | **BESTÄTIGT**; JSON bleibt `struke` / `smjer` |
-| Wie „5 Jahre“ im Filter zählen | **kein** R1-Feld (`BESTÄTIGT`); Q8.5.3–8 unberührt |
+| Wie „mindestens X Jahre“ zählen | **R1** Q8.5.9: von–bis, Job + Jobgruppe; Q8.5.3–8 |
 | Messenger / Task-Force im JSON | nicht in der Maske; Q19 fein **OFFEN** |
 | Archiv plus andere Filter | PHP wirft Formularfilter weg; Entwurf lehnt die Mischung ab |
 | Stille PHP-Joins ohne Gruppe/Status | **BESTÄTIGT** nein; sichtbar lassen, nicht INNER JOIN kopieren |

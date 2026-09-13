@@ -258,6 +258,17 @@ Zuerst kontrollierte Listen (Aliasse, Berufssuchprofil). KI nur Vorschlag, der
 bestätigt werden muss, bevor er zählt. Keine frei erfundenen Synonyme in der
 live Suche. Passt zu ADR-0003 (Vorschläge nicht selbst publizieren).
 
+**Q8.5.9 – Jahresfilter in R1:** `BESTÄTIGT` – 2026-09-13. Nutzer: R1 soll
+„mindestens X Jahre in diesem Job“ können. Quelle sind von–bis-Daten der
+Lebenslauf-Liste `idk_kandidat_radno_iskustvo`, nicht die Aktenzahlen.
+Es zählen der genannte Job und ähnliche Jobs derselben Jobgruppe
+(Berufssuchprofil / kontrollierte Liste, Q8.5.3–8). Überlappungen nicht
+addieren; laufender Job bis heute. Ohne genannten Job ist das Jahresfeld
+ungültig. `has_work_experience` (ja/nein) bleibt daneben die alte Maske.
+Exakte von/bis-Spaltennamen: `DURCH DISCOVERY ZU PRÜFEN`.
+Die ältere Wizard-03-Zeile „5 Jahre nicht in R1“ ist durch diese Antwort
+ersetzt.
+
 Die frühere Vorschlagszeile zu relevanter Erfahrung ist durch Q8.5.3–8 ersetzt.
 
 **ARBEITSANNAHME / DURCH DISCOVERY ZU PRÜFEN:** Erfahrungsbezeichnungen könnten
@@ -344,12 +355,13 @@ nicht als beantwortet.
 **Status:** `TEILWEISE BESTÄTIGT`
 
 Live-Stand in Q8.5: 8.5.1 und 8.5.3–8 `BESTÄTIGT`; 8.5.2 `IGNORIERT`;
-Jahre sind kein R1-Filter. Überlappung und Enddatum ohne Ende sind beantwortet.
+8.5.9 `BESTÄTIGT`: R1-Jahresfilter aus von–bis, Job + Jobgruppe.
+Überlappung und Enddatum ohne Ende sind beantwortet.
 
 Noch offen unter Q8, nicht für R1:
 
-- Ob eine spätere Jahres-Filterformel Beruf und Tätigkeit kombinieren muss,
-  sobald Jahre überhaupt ein Filter werden.
+- Exakte von/bis-Spaltennamen in `idk_kandidat_radno_iskustvo`.
+- Welche physische Jobgruppe (Berufssuchprofil-Tabelle) die Ähnlichkeit liefert.
 
 ### Weitere offene Entscheidungen
 
@@ -923,8 +935,9 @@ Datensatz-Dump.
 - Ort, Skills, Berufssuchprofil in R1-Suche: `BESTÄTIGT` nein, erst nur
   die alten Filter (passt zu Q22 als Scan; das ist jetzt auch der
   Produktumfang der ersten Suche).
-- Q8.5 / „5 Jahre“ in R1: `BESTÄTIGT` nein. Alte UI nur ja/nein.
-  Q8.5.3–8 unberührt, gelten erst wenn Jahre später ein Filter werden.
+  - Q8.5 / Jahresfilter in R1: `BESTÄTIGT` 2026-09-13 ja, über von–bis der
+    passenden und gruppenähnlichen Jobs (Q8.5.9). Alte UI bleibt ja/nein;
+    R1 ergänzt das. Aktenzahlen nicht verwenden.
 - Q8.4 drei Berufsschichten bleibt bestätigt, nicht neu befragt.
 - Struke/Smjer in der alten Maske = Ausbildungsberuf: `BESTÄTIGT`
   2026-09-13. JSON-Namen bleiben `struke` / `smjer`. Nicht Q8.4
@@ -938,12 +951,14 @@ nicht übernehmen. Andere Filter gelten weiter.
 
 **Update 2026-09-13 JSON-Filter:** Entwurf nur der alten Filter:
 [crm-json-filter-draft.md](../discovery/crm-json-filter-draft.md).
-Kein Runtime-MCP. Berufssuchprofil/Ort/Skills/Jahre nicht in R1.
+Kein Runtime-MCP. Berufssuchprofil, Ort und Skills nicht in R1.
+Jahre in R1 über Q8.5.9.
 
 **Update 2026-09-13 JSON-Filter-Prüfung:** Entwurf gegen PHP
 `lista_kandidata` und Heft geprüft. Die Maskenfelder decken sich.
-Struke/Smjer = Ausbildungsberuf: `BESTÄTIGT`. „5 Jahre“ nicht in R1:
-`BESTÄTIGT` nein. Q8.5.3–8 unberührt. JSON-Namen `struke` / `smjer`.
+Struke/Smjer = Ausbildungsberuf: `BESTÄTIGT`. Jahresfilter R1 Q8.5.9:
+von–bis, Job + Jobgruppe. Alte UI bleibt ja/nein. JSON-Namen
+`struke` / `smjer`.
 Kein Vertrag, kein MCP.
 Bericht-Audit 2026-09-13: Vorbericht-PASS nicht haltbar. Archiv-Satz in
 [crm-json-filter-draft.md](../discovery/crm-json-filter-draft.md) getrennt.

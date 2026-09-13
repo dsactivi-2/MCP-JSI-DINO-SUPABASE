@@ -18,8 +18,9 @@ ist bestätigt (R1 = alte Hauptsuche). JSON-Filter ist Entwurf, kein Vertrag.
 MCP-Bau ist **nicht** dran.
 
 JSON-Filter-Entwurf ist 2026-09-13 gegen PHP und Heft geprüft.
-Struke/Smjer = Ausbildungsberuf: bestätigt. „5 Jahre“ nicht in R1:
-bestätigt. INNER JOIN: nicht übernehmen, ohne Gruppe/Bearbeitung sichtbar.
+Struke/Smjer = Ausbildungsberuf: bestätigt. Jahresfilter R1: von–bis im
+genannten Job + Jobgruppe (Q8.5.9).
+INNER JOIN: nicht übernehmen, ohne Gruppe/Bearbeitung sichtbar.
 Nutzer 2026-09-13 Punkt 1 **Ja:** Vorbericht-PASS zählt nicht.
 Punkt 3 **Ja:** JSON bleibt Entwurf, kein Vertrag.
 Punkt 2 **Ja:** Archiv-Satz bleibt (Zählfehler nicht kopieren).
@@ -49,10 +50,10 @@ Architektur: [ADR-0001](../decisions/0001-controlled-query-boundary.md).
 | --- | --- | --- |
 | Q4 | `ERSETZT` 2026-09-12 | Interner Vermittler sieht Pool + Kontakte. Kunde nie den ganzen Pool. Vorschlagsfreigabe ohne Kontakt, Einstellungsfreigabe = CONTACT-02. Plugin nie auf Produktion. Discovery ohne Datensatz-Dump. |
 | Q8.4 | bestätigt im Prinzip | drei Berufsschichten + Berufssuchprofile, auch wenn die alte Maske sie nicht so trennt |
-| Q8.5 | `TEILWEISE` | 8.5.3–8 bestätigt; „5 Jahre“ nicht in R1 (`BESTÄTIGT` nein) |
+| Q8.5 | `TEILWEISE` | 8.5.3–8 und 8.5.9: R1-Jahre aus von–bis, Job + Jobgruppe |
 | Q15.6 | `TEILWEISE` | Blättern und Datei; CSV+Excel; max. 500; JMBG+Kontakt; nicht ganzer Bestand |
 | Q17 | `BESTÄTIGT` | Heft und alte UI/PHP gleichberechtigt; Heft ist keine Whitelist |
-| Q18 | `TEILWEISE` | Codebefund + Alltag bestätigt; Struke/Smjer = Ausbildungsberuf; 5 Jahre nicht in R1; INNER JOIN nicht kopieren |
+| Q18 | `TEILWEISE` | Codebefund + Alltag; Struke/Smjer = Ausbildungsberuf; R1-Jahre Q8.5.9; INNER JOIN nicht kopieren |
 | Q19 | `TEILWEISE` | Status-Ebenen und Automatik als Codebefund |
 | Q20 | `TEILWEISE` | Jetzt: Filter, alle Status, Auslöser, A, B7, C 4–9 Codebefund. Produkt default aus. 10 und 11–16 später |
 | Q21 | `BESTÄTIGT` | Funktionen erfassen, modern umsetzen, nicht 1:1 PHP-SQL |
@@ -122,11 +123,11 @@ Produkt: default aus, einschaltbar.
 ### 4.6 JSON-Filter R1
 
 Datei: [crm-json-filter-draft.md](crm-json-filter-draft.md).
-Nur alte Kandidati-Filter. Unbekannte Felder ablehnen. Leer = tot. UND
-zwischen Kategorien. Cap 50. Keine Jahre, kein Ort, keine Skills, kein
-Berufssuchprofil. C 4–9 nicht in diesem Filter.
+Nur alte Kandidati-Filter plus Q8.5.9-Jahre. Unbekannte Felder ablehnen.
+Leer = tot. UND zwischen Kategorien. Cap 50. Kein Ort, keine Skills, kein
+Berufssuchprofil als Suchfeld. C 4–9 nicht in diesem Filter.
 2026-09-13 gegen PHP/Heft geprüft. Struke/Smjer = Ausbildungsberuf.
-„5 Jahre“ nicht im R1-JSON.
+`min_relevant_experience_years` in R1 (Q8.5.9).
 Unabhängiger PASS 2026-09-13 nicht haltbar; Archiv-Satz korrigiert.
 
 ### 4.5 Postgres-Katalog (Gate B2 V3, nicht PHP)
@@ -204,8 +205,8 @@ Lokal, nicht Git: `/private/tmp/dino-crm-wiring.env`,
 | C 4–9 Codebefund | gelesen | crm-notify-codebefund.md |
 | Restliche `do.php`-Cases ohne Statuswort | Lücke | Status-Datei |
 | Prijave-Labels | DB, kein Dump | Status-Datei |
-| Wizard 03 Alltag | bestätigt; Struke/Smjer = Ausbildungsberuf; 5 Jahre nicht in R1; INNER JOIN nicht kopieren | ADR-0002 Q18 |
-| Q8.5 | `TEILWEISE`; Jahre nicht in R1 | ADR-0002 |
+| Wizard 03 Alltag | Struke/Smjer = Ausbildungsberuf; R1-Jahre Q8.5.9; INNER JOIN nicht kopieren | ADR-0002 Q18 |
+| Q8.5 | `TEILWEISE`; R1-Jahre aus von–bis, Job + Jobgruppe | ADR-0002 Q8.5.9 |
 | JSON-Filter R1 | Entwurf, kein Vertrag; ohne Gruppe/Bearbeitung sichtbar | crm-json-filter-draft.md |
 | Bericht-Audit JSON-PASS | Punkte 1–3 bestätigt | json-filter-audit.md |
 | JSON/MCP/RPC, Auth, Hosting | ein Such-MCP + Tokens; Hosting/SDK-Version OFFEN | ADR-0002 Q11 |

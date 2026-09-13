@@ -169,7 +169,7 @@ def main() -> None:
         "- JSON bleibt Entwurf, kein Vertrag. Punkt 3 **Ja**.",
         "- Vorbericht-PASS zählt nicht. Punkt 1 **Ja**.",
         "- Struke/Smjer = Ausbildungsberuf; JSON-Namen bleiben struke / smjer.",
-        "- 5 Jahre ist kein R1-Feld. Q8.5.3-8 gelten erst, wenn Jahre ein Filter werden.",
+        "- Jahresfilter R1 Q8.5.9: von–bis, Job + Jobgruppe. Alte UI bleibt ja/nein.",
         "- Ranking R1: größte kandidat_id zuerst.",
         "- JMBG intern in der Trefferliste ja, kein Filter, Discovery ohne Werte.",
         "",

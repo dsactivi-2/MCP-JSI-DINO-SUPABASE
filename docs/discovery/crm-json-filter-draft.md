@@ -20,7 +20,7 @@ Recruiter-Maske, nicht occupation, nicht Ort, nicht Skills.
 | Lücke | Stand | Nicht tun |
 | --- | --- | --- |
 | Struke/Smjer = Ausbildungsberuf? | Wizard 03 **BESTÄTIGT** 2026-09-13. PHP filtert über Schul-Smjer-Namen in `idk_kandidat_edukacija.ke_naziv_kvalifikacije`. | JSON nicht in `ausbildungsberuf` umbenennen; Q8.4 nicht überschreiben |
-| „5 Jahre“ / Jahres-Erfahrung | **nicht in R1**, Nutzer 2026-09-13 **BESTÄTIGT** nein. Alte UI nur ja/nein (`has_work_experience`). Q8.5.3–8 bleiben für später. | kein `years`-Feld erfinden; Zettel-2-Aktenzahlen nicht als Filter |
+| „mindestens X Jahre“ in dem Job | **R1-Feld** `min_relevant_experience_years` (Q8.5.9). Von–bis der Lebenslauf-Liste; Job + ähnliche in der Jobgruppe. Alte UI bleibt ja/nein daneben. | keine Aktenzahlen; ohne genannten Job ablehnen |
 
 PHP-Nuancen, die der Entwurf **nicht** 1:1 kopiert (Q21), aber kennt:
 
@@ -61,7 +61,7 @@ Nachrichten C 4–9 gehören nicht in diesen Filter (Produkt default aus).
 | Ort / Stadt / Wunschort | Wizard 03: erst alte Filter |
 | Skills | Wizard 03 |
 | Berufssuchprofil / occupation | Wizard 03 + Q22 |
-| Erfahrungsjahre / „5 Jahre“ | **kein R1-Feld** (`BESTÄTIGT`); alte UI nur ja/nein; Q8.5.3–8 gelten erst, wenn Jahre ein Filter werden |
+| Erfahrungsjahre | R1: `min_relevant_experience_years` aus von–bis (Q8.5.9). Nicht die Aktenzahlen. |
 | Freitext-Volltext wie `search.php` | nicht die Kandidatensuche |
 | Messenger-Status, Task-Force | nicht in dieser Filter-Maske; Scan liegt in der Status-Datei |
 | Partner-/QC-/Nalog-Suche | R1 nur Hauptsuche |
@@ -70,8 +70,7 @@ Nachrichten C 4–9 gehören nicht in diesen Filter (Produkt default aus).
 
 Q8.5.3–8 (nur passende Jobs, Überlappung nicht addieren, aktueller Job
 bis heute, ähnliche Schreibweisen, Listen zuerst) bleiben bestätigt.
-Sie gelten, **wenn** später Jahres-Erfahrung ein Filter wird. In R1 setzen
-sie keinen Jahresfilter.
+Sie gelten für `min_relevant_experience_years` (Q8.5.9).
 
 Struke/Smjer: JSON nutzt die PHP-Namen. PHP-Pfad ist Struke →
 `idk_skole_smjerovi.ss_naziv` → gleiches Smjer-LIKE auf
@@ -108,7 +107,8 @@ Englische JSON-Namen. PHP-POST nur zur Spur.
 | `age.min` / `age.max` | `starost_od` / `starost_do` | Alter | ganze Jahre; nur beide Grenzen; PHP nur Geburtsjahr |
 | `driving_license` | `vozacka_dozvola` | Führerschein vorhanden | nur `true`; PHP sucht `Da` im Feld |
 | `driving_categories` | `filter_kategorija_vozacke` | Klassen | Liste; PHP: B zieht höhere mit — später modernisieren |
-| `has_work_experience` | `radno_iskustvo` | mindestens eine Jobzeile | nur `true`, **keine** Jahre |
+| `has_work_experience` | `radno_iskustvo` | mindestens eine Jobzeile | nur `true` (alte Maske ja/nein) |
+| `min_relevant_experience_years` | — | Mindestjahre im genannten Job + Jobgruppe, aus von–bis | ganze Jahre ≥ 1; braucht einen genannten Job |
 | `german` | `znanje_njemacki` | Deutsch | siehe Sprachen |
 | `english` | `znanje_engleski` | Englisch | analog |
 | `groups` | `filter_grupe` | Kandidatengruppe | ID-Liste |
@@ -147,6 +147,7 @@ Weggelassene Felder zählen nicht.
   "age": { "min": 22, "max": 45 },
   "driving_license": true,
   "has_work_experience": true,
+  "min_relevant_experience_years": 5,
   "german": { "min_listening": "B1" },
   "processing_status": [1, 2],
   "struke": [12],
@@ -155,7 +156,8 @@ Weggelassene Felder zählen nicht.
 }
 ```
 
-Kein Berufssuchprofil, keine Jahre, keine Stadt.
+Kein Ort, keine Skills. Jahre nur über `min_relevant_experience_years`
+(Q8.5.9), nicht als Aktenzahl.
 
 ## Treffer (interner Vermittler)
 
@@ -190,7 +192,7 @@ Alte CRM-RPCs nicht wrappen.
 | Thema | Stand |
 | --- | --- |
 | Struke/Smjer = Ausbildungsberuf? | **BESTÄTIGT**; JSON bleibt `struke` / `smjer` |
-| Wie „5 Jahre“ im Filter zählen | **kein** R1-Feld (`BESTÄTIGT`); Q8.5.3–8 unberührt |
+| Wie „mindestens X Jahre“ zählen | **R1** Q8.5.9: von–bis, Job + Jobgruppe; Q8.5.3–8 |
 | Messenger / Task-Force im JSON | nicht in der Maske; Q19 fein **OFFEN** |
 | Archiv plus andere Filter | PHP wirft Formularfilter weg; Entwurf lehnt die Mischung ab |
 | Stille PHP-Joins ohne Gruppe/Status | **BESTÄTIGT** nein; sichtbar lassen, nicht INNER JOIN kopieren |
@@ -204,6 +206,6 @@ Alte CRM-RPCs nicht wrappen.
 ## Nächster Schritt
 
 Bericht-Audit Punkte 1–3 bestätigt. Archiv-Satz bleibt: PHP-Zählfehler
-nicht nachbauen. Struke/Smjer = Ausbildungsberuf. „5 Jahre“ nicht in R1.
+nicht nachbauen. Struke/Smjer = Ausbildungsberuf. Jahresfilter R1: Q8.5.9.
 Ohne Gruppe/Bearbeitung sichtbar. JSON bleibt Entwurf, kein Vertrag.
 Nicht Tool-Namen, keine Produktion, kein MCP-Bau, kein Wizard 01/04.
