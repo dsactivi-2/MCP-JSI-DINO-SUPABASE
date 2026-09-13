@@ -839,9 +839,9 @@ Kontakte an den Kunden folgen der Zweistufen-Freigabe.
 **und** Datei-Export. Plugin bleibt kein Exportweg. Dateityp: CSV und
 Excel, Recruiter wählt (`BESTÄTIGT` 2026-09-13). Limit: höchstens 500
 Zeilen pro Datei, gleiche Ordnung wie Blättern (`kandidat_id` absteigend).
-Mehr Treffer bleiben über Seiten erreichbar. Feldmenge (JMBG/Kontakt in
-der Datei) bleibt `OFFEN`. Export des ganzen Bestands ohne Filter ist
-nicht bestätigt.
+Mehr Treffer bleiben über Seiten erreichbar. Datei wie interne Trefferliste:
+inkl. JMBG und Kontakt (`BESTÄTIGT` 2026-09-13). Nur Recruiter-Export, nicht
+Kunde. Export des ganzen Bestands ohne Filter ist nicht bestätigt.
 
 ### Q16 – Nächster Schritt nach den Rechten
 

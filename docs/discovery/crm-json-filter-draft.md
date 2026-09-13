@@ -199,7 +199,7 @@ Alte CRM-RPCs nicht wrappen.
 | JMBG in der Trefferliste | PHP ja; R1-Ausgabe unbestätigt |
 | Bestätigung vor jeder Suche | `BESTÄTIGT`: Filter zeigen, dann eine Suche |
 | Auth / Hosting / SDK | ein Such-MCP, Tokens je Rolle (`BESTÄTIGT`); Hosting/SDK-Version OFFEN |
-| Export | CSV/Excel, Recruiter wählt; max. 500 Zeilen; Felder in der Datei OFFEN |
+| Export | CSV/Excel, Recruiter wählt; max. 500; inkl. JMBG und Kontakt; nicht Kunde |
 
 ## Nächster Schritt
 

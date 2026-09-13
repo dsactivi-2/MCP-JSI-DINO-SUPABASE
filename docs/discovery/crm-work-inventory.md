@@ -50,7 +50,7 @@ Architektur: [ADR-0001](../decisions/0001-controlled-query-boundary.md).
 | Q4 | `ERSETZT` 2026-09-12 | Interner Vermittler sieht Pool + Kontakte. Kunde nie den ganzen Pool. Vorschlagsfreigabe ohne Kontakt, Einstellungsfreigabe = CONTACT-02. Plugin nie auf Produktion. Discovery ohne Datensatz-Dump. |
 | Q8.4 | bestätigt im Prinzip | drei Berufsschichten + Berufssuchprofile, auch wenn die alte Maske sie nicht so trennt |
 | Q8.5 | `TEILWEISE` | 8.5.3–8 bestätigt; „5 Jahre“ nicht in R1 (`BESTÄTIGT` nein) |
-| Q15.6 | `TEILWEISE` | Blättern und Datei; CSV+Excel; max. 500 Zeilen; Dateifelder OFFEN |
+| Q15.6 | `TEILWEISE` | Blättern und Datei; CSV+Excel; max. 500; JMBG+Kontakt; nicht ganzer Bestand |
 | Q17 | `BESTÄTIGT` | Heft und alte UI/PHP gleichberechtigt; Heft ist keine Whitelist |
 | Q18 | `TEILWEISE` | Codebefund + Alltag bestätigt; Struke/Smjer = Ausbildungsberuf; 5 Jahre nicht in R1; INNER JOIN nicht kopieren |
 | Q19 | `TEILWEISE` | Status-Ebenen und Automatik als Codebefund |
@@ -209,7 +209,7 @@ Lokal, nicht Git: `/private/tmp/dino-crm-wiring.env`,
 | JSON-Filter R1 | Entwurf, kein Vertrag; ohne Gruppe/Bearbeitung sichtbar | crm-json-filter-draft.md |
 | Bericht-Audit JSON-PASS | Punkte 1–3 bestätigt | json-filter-audit.md |
 | JSON/MCP/RPC, Auth, Hosting | ein Such-MCP + Tokens; Hosting/SDK-Version OFFEN | ADR-0002 Q11 |
-| Export | R1: blättern und CSV/Excel max. 500; Dateifelder OFFEN | ADR-0002 Q15.6 |
+| Export | R1: blättern und CSV/Excel max. 500 inkl. JMBG/Kontakt | ADR-0002 Q15.6 |
 | step1 Website-Dump | Script-Lücke | Handoff |
 | Zwei SQL in `databaseDump` | Init-Risiko | Handoff |
 | 11–16 zweiter MCP | merken, nicht tief | Q20 |

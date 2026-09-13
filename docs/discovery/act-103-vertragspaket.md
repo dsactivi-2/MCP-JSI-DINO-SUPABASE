@@ -37,7 +37,7 @@ kreuzt nur die drei offenen ACT-103-Fragen.
 | Q4 | `ERSETZT` 2026-09-12 | Interner Vermittler sieht Pool + Kontakte. Kunde nie den ganzen Pool. Vorschlagsfreigabe ohne Kontakt, Einstellungsfreigabe = CONTACT-02. Plugin nie auf Produktion. Discovery ohne Datensatz-Dump. |
 | Q8.4 | bestätigt im Prinzip | drei Berufsschichten + Berufssuchprofile, auch wenn die alte Maske sie nicht so trennt |
 | Q8.5 | `TEILWEISE` | 8.5.3–8 bestätigt; „5 Jahre“ nicht in R1 (`BESTÄTIGT` nein) |
-| Q15.6 | `TEILWEISE` | Blättern und Datei; CSV+Excel; max. 500 Zeilen; Dateifelder OFFEN |
+| Q15.6 | `TEILWEISE` | Blättern und Datei; CSV+Excel; max. 500; JMBG+Kontakt; nicht ganzer Bestand |
 | Q17 | `BESTÄTIGT` | Heft und alte UI/PHP gleichberechtigt; Heft ist keine Whitelist |
 | Q18 | `TEILWEISE` | Codebefund + Alltag bestätigt; Struke/Smjer = Ausbildungsberuf; 5 Jahre nicht in R1; INNER JOIN nicht kopieren |
 | Q19 | `TEILWEISE` | Status-Ebenen und Automatik als Codebefund |
@@ -71,7 +71,7 @@ Zusätzlich aus ADR-0002 Q18 / Bericht-Audit 2026-09-13:
 | JMBG in der Trefferliste | PHP ja; R1-Ausgabe unbestätigt |
 | Bestätigung vor jeder Suche | `BESTÄTIGT`: Filter zeigen, dann eine Suche |
 | Auth / Hosting / SDK | ein Such-MCP, Tokens je Rolle (`BESTÄTIGT`); Hosting/SDK-Version OFFEN |
-| Export | CSV/Excel, Recruiter wählt; max. 500 Zeilen; Felder in der Datei OFFEN |
+| Export | CSV/Excel, Recruiter wählt; max. 500; inkl. JMBG und Kontakt; nicht Kunde |
 
 - JSON-Filter R1: **ENTWURF**, geprüft, kein Vertrag.
 - Q15.6 Export: siehe ADR-0002. Nicht eine der drei ACT-103-Fragen unten.
