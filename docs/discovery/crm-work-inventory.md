@@ -137,7 +137,8 @@ Unabhängiger PASS 2026-09-13 nicht haltbar; Archiv-Satz korrigiert.
 Datei: [catalog-domain-mapping.md](catalog-domain-mapping.md).
 ~199 Relationen in `crm` / `crm_api` / `crm_auth`. occupation und
 `job_occupation_map` existieren in Postgres; die alte Filter-UI nutzt sie
-nicht (Q22: jetzt kein Scan-Auftrag). Q8.5 bleibt offen.
+nicht (Q22: jetzt kein Scan-Auftrag). Q8.5.9 steht; von/bis-Spalten
+und physische Jobgruppe bleiben Discovery.
 
 Kontakt in diesem Katalog: interne Produktsicht laut Q4 ja; Discovery
 ohne Werte. Alte „R1 ohne Kontakt“-Zeilen sind `ERSETZT`.
@@ -168,6 +169,7 @@ ohne Werte. Alte „R1 ohne Kontakt“-Zeilen sind `ERSETZT`.
 | [2026-09-13-session-handoff.md](../handoffs/2026-09-13-session-handoff.md) | Aktueller Session-Handoff |
 | [2026-09-13-aktueller-session-prompt.md](../handoffs/2026-09-13-aktueller-session-prompt.md) | Paste-Prompt nächste Session |
 | [2026-09-13-next-agent-prompt.md](../handoffs/2026-09-13-next-agent-prompt.md) | Zeigt auf Handoff und ADR-0002 |
+| [2026-09-13-act-100-linear-sync.md](../worklogs/2026-09-13-act-100-linear-sync.md) | Linear ACT-100 Beschreibung nachgezogen |
 | [crm-wiring-wizards.md](../runbooks/crm-wiring-wizards.md) | Welcher Wizard wann |
 | Worklogs 2026-09-12/13 | Rescan, B7, C 4–9 |
 

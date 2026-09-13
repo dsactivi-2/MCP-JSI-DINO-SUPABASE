@@ -870,7 +870,8 @@ Kunde. Export des ganzen Bestands ohne Filter ist nicht bestätigt.
 
 **Antwort:** `BESTÄTIGT` – 2026-09-12. Das Sinnvollere: zuerst Mapping. Option A.
 Erste Zuordnung: [Katalog zu Domäne](../discovery/catalog-domain-mapping.md).
-Q8.5.3 ist bestätigt; Überlappung und Enddaten bleiben OPEN.
+Q8.5.3–8 und 8.5.9 stehen. Overlap und Enddatum sind beantwortet;
+offen bleiben von/bis-Spalten und die physische Jobgruppe.
 
 ### Q17 – Quellenrang: Heft und alte CRM-UI
 

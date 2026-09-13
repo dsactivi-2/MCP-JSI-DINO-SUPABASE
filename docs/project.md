@@ -156,7 +156,8 @@ nenavedenih filtera ostaju potvrđeni. Detaljna filtersemantika i obavezna
 potvrda
 svake nove ili izmijenjene pretrage su VORLÄUFIGER VORSCHLAG zbog nedostajuće
 izvorne liste preporuka. Q8.5 je `TEILWEISE BESTÄTIGT` u ADR-0002: 8.5.1 i
-8.5.3–8 stoje; 8.5.2 ignorisan; godine nisu R1 filter. Q4.5 je ukinuta kao prazan
+8.5.3–8 i 8.5.9 stoje; 8.5.2 ignorisan; R1-godine iz von–bis,
+Job + Jobgruppe. Q4.5 je ukinuta kao prazan
 broj, bez rekonstruisanja nepoznatog pitanja. Interni alati vraćaju i
 kontakte. CONTACT-02 je Einstellungsfreigabe
 kontakata Kupcu nakon zasuge, ne kasnija interna faza. Mogućnosti za

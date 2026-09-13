@@ -18,14 +18,13 @@ Lies zuerst docs/project.md, docs/discovery/crm-work-inventory.md, docs/decision
 
 JSON-Filter bleibt ENTWURF, kein Vertrag. Du baust kein MCP, bis der Nutzer das ausdrücklich startet.
 
-Schon bestätigt in ADR-0002, nicht neu aufrollen: Bericht-Audit (alter PASS zählt nicht; Archiv-Zählfehler nicht nachbauen); Struke/Smjer = Ausbildungsberuf (JSON-Namen struke/smjer); Jahresfilter R1 Q8.5.9 von-bis Job+Jobgruppe; INNER JOIN nicht kopieren; JMBG intern ja, kein Filter; Ranking größte kandidat_id zuerst; Filter zeigen dann eine Suche; ein Such-MCP Tokens je Rolle; Export Blättern plus CSV/Excel max. 500 inkl. JMBG/Kontakt, nicht Kunde.
+Schon bestätigt in ADR-0002, nicht neu aufrollen: Bericht-Audit (alter PASS zählt nicht; Archiv-Zählfehler nicht nachbauen); Struke/Smjer = Ausbildungsberuf (JSON-Namen struke/smjer); Jahresfilter R1 Q8.5.9 von-bis Job+Jobgruppe, Overlap nicht addieren, aktueller Job bis heute; INNER JOIN nicht kopieren; JMBG intern ja, kein Filter; Ranking größte kandidat_id zuerst; Filter zeigen dann eine Suche; ein Such-MCP Tokens je Rolle; Export Blättern plus CSV/Excel max. 500 inkl. JMBG/Kontakt, nicht Kunde.
 
-ACT-103 Done (1A 2A 3A). ACT-100 In Progress; Linear-Text dort ist alt, nicht ohne Auftrag schreiben. Offen: JSON-Vertrag AUTO-02; JSON-Feld für den genannten Job bei Jahren; Hosting/SDK-Version (Cloudflare möglich, nicht gewählt), Tenant, SLOs. Worker-RAM später; kein Redis/Iris in R1.
+ACT-103 Done (1A 2A 3A). ACT-100 In Progress, weil JSON kein Vertrag ist. Linear-Text ACT-100 ist nachgezogen. Offen: JSON-Vertrag AUTO-02; JSON-Feld für den genannten Job bei Jahren; von/bis-Spalten und physische Jobgruppe; Hosting/SDK-Version (Cloudflare möglich, nicht gewählt), Tenant, SLOs. Worker-RAM später; kein Redis/Iris in R1.
 
 Arbeitsverzeichnis: /Users/activi/Documents/ChatGPT/Dino problem baza crm
 Branch: codex/supabase-crm-auth-discovery
-HEAD: 777fbd4, origin gleich. Dirty Tree (33 Dateien): nicht committen, nicht stashen, nicht resetten, außer der Nutzer sagt es.
-check-local.sh zuletzt Exit 0, 753 Links.
+Letzter Push: ca1caae. Lokale Doku-Hygiene danach: nicht committen, nicht stashen, nicht resetten, außer der Nutzer sagt es.
 
 PHP nur /Users/activi/Downloads/crm-master-3/src/crm. Dump nicht lesen.
 

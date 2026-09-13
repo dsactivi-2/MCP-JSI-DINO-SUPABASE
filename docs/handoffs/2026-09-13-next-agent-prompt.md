@@ -15,3 +15,4 @@ Live: [ADR-0002](../decisions/0002-search-design-interview.md),
 [docs/project.md](../project.md).
 
 JSON bleibt Entwurf. Kein MCP-Scaffold ohne ausdrücklichen Nutzerauftrag.
+Q8.5.9 gilt: R1-Jahre von–bis, Job + Jobgruppe.

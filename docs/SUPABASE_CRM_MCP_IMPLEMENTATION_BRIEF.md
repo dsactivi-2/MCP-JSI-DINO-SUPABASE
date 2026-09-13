@@ -69,7 +69,7 @@ Vorschlagsfreigabe bez kontakata,
 Einstellungsfreigabe (CONTACT-02) s kontaktima tek nakon zasuge.
 Predložene filterdetalje i nepotpuni JSON nacrt ne treba tumačiti kao konačan
 ugovor; Q8.5 je TEILWEISE BESTÄTIGT u ADR-0002: 8.5.1 i 8.5.3–8 stoje;
-8.5.2 ignorisan; godine nisu R1 filter.
+8.5.2 ignorisan; 8.5.9 R1-godine iz von–bis, Job + Jobgruppe.
 
 Prihvaćeni razvojni put iz
 [ADR-0004](decisions/0004-automated-database-development.md) automatizira SQL

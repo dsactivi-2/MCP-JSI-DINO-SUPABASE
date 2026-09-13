@@ -26,7 +26,8 @@ Live-Stand für Korrekturen (nicht raten):
   B1 V3 PASS; B2 V3 PASS; B3 V3 PASS; Rohdaten außerhalb Git;
   keine Kandidatenzeilen. Der Satz zu fehlenden B2/B3-Launchern
   in `docs/project.md` ist alt.
-- Nächster Fachschritt bleibt beim Nutzer; in Linear ist ACT-103 offen.
+- Nächster Fachschritt bleibt beim Nutzer. ACT-103 war damals offen;
+  heute Done (1A 2A 3A). Q8.5.9 hat "Jahre sind kein R1-Filter" ersetzt.
 
 ## Welle 1
 

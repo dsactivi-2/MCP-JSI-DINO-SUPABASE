@@ -2,7 +2,7 @@
 
 Ovaj repozitorij koristi postojeći namjenski projekt **Dino problem baza CRM**.
 Identitet projekta i pripadnost timu potvrđeni su read-only provjerom
-2026-09-10. Live inventar issuea osvježen je 2026-09-13.
+2026-09-10. Live inventar issuea i opis ACT-100 osvježeni su 2026-09-13.
 
 Wayfinder mapa **ACT-100**–**ACT-109** postoji od 2026-09-12. Naslovi još
 koriste Jobstep/OrbStack framing. Izričite odgovore za izvor, opseg skena i
@@ -46,7 +46,7 @@ korisnik izričito naloži ažuriranje postojećih.
 
 | Issue | Uloga | Stanje pri syncu |
 | --- | --- | --- |
-| [ACT-100](https://linear.app/activi/issue/ACT-100/lokalen-crm-scan-in-den-runtime-suchvertrag-ubersetzen) | wayfinder:map, roditelj | In Progress nakon synca |
+| [ACT-100](https://linear.app/activi/issue/ACT-100/lokalen-crm-scan-in-den-runtime-suchvertrag-ubersetzen) | wayfinder:map, roditelj | In Progress: JSON-Entwurf, nije ugovor |
 | [ACT-101](https://linear.app/activi/issue/ACT-101/erlaubten-scan-umfang-festlegen) | opseg skena | Done: nema kandidatskih redova |
 | [ACT-102](https://linear.app/activi/issue/ACT-102/verdrahtungsbegriff-festlegen) | pojam Verdrahtung | Done: Q20/Q21 slojevi |
 | [ACT-103](https://linear.app/activi/issue/ACT-103/pflichtartefakt-des-scans-festlegen) | obavezni artefakt | Done 2026-09-13: 1A 2A 3A |
@@ -59,13 +59,14 @@ korisnik izričito naloži ažuriranje postojećih.
 
 <!-- markdownlint-enable MD013 -->
 
-Lokal 2026-09-13 križevi **1A 2A 3A**. Linear-komentar i status Done
-2026-09-13. JSON-Filter je nacrt, ne ugovor. Paket:
+Lokal 2026-09-13 križevi **1A 2A 3A**. ACT-101–109 Done. ACT-103 Done.
+JSON-Filter je nacrt, ne ugovor. Paket:
 [ACT-103 Vertragspaket](../discovery/act-103-vertragspaket.md).
 
-ACT-100 ostaje In Progress (JSON nije ugovor). Linear-opis ACT-100 još
-sadrži stare rečenice (Jahre nicht in R1, INNER JOIN offen); repo je
-noviji. Opis se ne dira bez extra Linear-Write.
+ACT-100 ostaje In Progress, jer JSON nije ugovor (AUTO-02). Linear-opis
+ACT-100 je 2026-09-13 usklađen: Q8.5.9, INNER JOIN ne kopirati, Archiv-Satz
+za ACT-103 zatvoren, Q15.6 djelimično. Komentar
+`18d4c8a3-a194-4d8a-a86c-f6d113ec9c42`.
 
 Pristup servisu slijedi globalno MCP-routing pravilo i
 [tool routing](tool-routing.md). Ova konfiguracija određuje projekt; sama ne
